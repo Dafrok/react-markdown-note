@@ -4,8 +4,9 @@
   "description": "notepad",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --port 3000 --inline --content-base ../",
+    "start": "npm run webpack && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --port 3000 --inline --content-base ../",
     "webpack": "webpack",
     "browser-sync": "browser-sync start --server '../' --files '../static/**'"
   },

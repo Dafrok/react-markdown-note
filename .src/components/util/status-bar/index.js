@@ -1,6 +1,4 @@
 import React from 'react'
-import MainHeader from './headers/main.js'
-import EditorHeader from './headers/editor.js'
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -9,7 +7,7 @@ export default class Header extends React.Component {
   render() {
     return (
       <section className="status-bar">
-        <MainHeader />
+        {this.props.children}
       </section>
     );
   }

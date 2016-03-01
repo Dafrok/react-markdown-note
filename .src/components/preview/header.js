@@ -2,9 +2,10 @@ import React from 'react'
 import AppBar from 'material-ui/lib/app-bar'
 import IconButton from 'material-ui/lib/icon-button';
 import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
-import ContentSave from 'material-ui/lib/svg-icons/content/save';
-
-export default class EditorHeader extends React.Component {
+import EditorModeEdit from 'material-ui/lib/svg-icons/editor/mode-edit';
+import {Link} from 'react-router'
+import {Actions} from '../../stores/nav.js'
+export default class Header extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -14,9 +15,9 @@ export default class EditorHeader extends React.Component {
   render() {
     return (
         <AppBar
-          title='Editor'
-          iconElementLeft={<IconButton><NavigationClose /></IconButton>}
-          iconElementRight={<IconButton><ContentSave /></IconButton>}
+          title='Preview'
+          onLeftIconButtonTouchTap={this.toggleNav}
+          iconElementRight={<IconButton><EditorModeEdit /></IconButton>}
           />
     );
   }

@@ -2,20 +2,23 @@ import './stylus/main.styl'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import StatusBar from './components/status-bar.js'
-import Nav from './components/nav.js'
-import ArticleList from './components/article-list.js'
-import Editor from './components/editor.js'
+import {Router, Route, RouteHandle, hashHistory, IndexRoute} from 'react-router'
+import App from './components/app.js'
+import ArticleList from './components/article-list'
+import About from './components/about'
+import Preview from './components/preview'
+import Editor from './components/editor'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin();
 
 ReactDOM.render(
-  <app>
-    <StatusBar/>
-    <Nav />
-    <section className="content">
-      <Editor />
-      <ArticleList />
-    </section>
-  </app>,
+  <Router history={hashHistory}>
+    <Route path="/" component={App}>
+      <IndexRoute component={ArticleList}/>
+      <Route path="editor" component={Editor}/>
+      <Route path="article-list" component={ArticleList} />
+      <Route path="preview" component={Preview}/>
+      <Route path="about" component={About}/>
+    </Route>
+  </Router>,
   document.getElementById('app'))

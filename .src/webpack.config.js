@@ -1,7 +1,7 @@
 const path = require('path')
 const autoprefixer = require('autoprefixer')
 const webpack = require('webpack');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   context: path.join(__dirname, ''),
   entry: [
@@ -11,12 +11,12 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, '../static/'),
-    publicPath: "../",
+    publicPath: "http://localhost:3000/static",
     filename: 'app.js'
   },
   module: {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "react-hot!babel", include: path.join(__dirname, './')},
+      { test: /\.js$/, exclude: /node_modules/, loader: "react-hot!babel", include: path.join(__dirname, '../')},
       { test: /\.styl$/, exclude: /node_modules/, loader: "style!css!postcss!stylus"}
     ]
   },
@@ -25,6 +25,11 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"development"'
     }),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new HtmlWebpackPlugin({
+      filename: '../index.html',
+      title: 'React Markdown Notepad',
+      template: './templates/index.html'
+    })
   ]
 }

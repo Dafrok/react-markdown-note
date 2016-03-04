@@ -5985,7 +5985,7 @@ webpackJsonp([0],[
 
 	var _recycle2 = _interopRequireDefault(_recycle);
 
-	var _reactTapEventPlugin = __webpack_require__(549);
+	var _reactTapEventPlugin = __webpack_require__(550);
 
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 
@@ -36425,7 +36425,10 @@ webpackJsonp([0],[
 
 	    _this.delete = function (id) {
 	      // console.log(id)
-	      _connect2.default.child('note').child(_connect2.default.getAuth().auth.uid).child(id).remove();
+	      _connect2.default.child('note').child(_connect2.default.getAuth().auth.uid).child(id).once('value', function (snapshot) {
+	        _connect2.default.child('recycle').child(_connect2.default.getAuth().auth.uid).push(snapshot.val());
+	        _connect2.default.child('note').child(_connect2.default.getAuth().auth.uid).child(id).remove();
+	      });
 	      _this.getList();
 	    };
 
@@ -46041,30 +46044,34 @@ webpackJsonp([0],[
 	      _connect2.default.unauth();
 	    };
 
-	    _this.close = function () {
-	      // Actions.toggleNav(false)
-	      _this.setState({ open: false });
+	    _this.onStatusChange = function (data) {
+	      _this.setState({ open: data });
 	    };
 
 	    _this.state = {
-	      open: true
+	      open: false
 	    };
-	    // Reflux.listenTo(NavStore)
+	    _reflux2.default.listenTo(_nav2.default);
 	    return _this;
 	  }
 
 	  _createClass(Header, [{
+	    key: 'close',
+	    value: function close() {
+	      _nav.Actions.toggleNav(false);
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.unsubscribe = _nav2.default.listen(this.onStatusChange);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.unsubscribe();
+	    }
+	  }, {
 	    key: 'render',
-
-	    // onStatusChange = data => {
-	    //   this.setState({open: data})
-	    // }
-	    // componentDidMount () {
-	    //   this.unsubscribe = NavStore.listen(this.onStatusChange)
-	    // }
-	    // componentWillUnmount () {
-	    //   this.unsubscribe()
-	    // }
 	    value: function render() {
 	      return _react2.default.createElement(
 	        _leftNav2.default,
@@ -53683,6 +53690,10 @@ webpackJsonp([0],[
 
 	var _moreVert2 = _interopRequireDefault(_moreVert);
 
+	var _delete = __webpack_require__(549);
+
+	var _delete2 = _interopRequireDefault(_delete);
+
 	var _iconMenu = __webpack_require__(401);
 
 	var _iconMenu2 = _interopRequireDefault(_iconMenu);
@@ -53772,6 +53783,12 @@ webpackJsonp([0],[
 	          this.state.articles.map(function (item, index) {
 	            return _react2.default.createElement(_listItem2.default, {
 	              key: item.id,
+	              key: item.id,
+	              rightIconButton: _react2.default.createElement(
+	                _iconButton2.default,
+	                null,
+	                _react2.default.createElement(_delete2.default, null)
+	              ),
 	              primaryText: item.summary,
 	              secondaryText: item.time
 	            });
@@ -53794,20 +53811,61 @@ webpackJsonp([0],[
 /* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var defaultClickRejectionStrategy = __webpack_require__(550);
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(138);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsPureRenderMixin = __webpack_require__(363);
+
+	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
+
+	var _svgIcon = __webpack_require__(394);
+
+	var _svgIcon2 = _interopRequireDefault(_svgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ActionDelete = _react2.default.createClass({
+	  displayName: 'ActionDelete',
+
+	  mixins: [_reactAddonsPureRenderMixin2.default],
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      _svgIcon2.default,
+	      this.props,
+	      _react2.default.createElement('path', { d: 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z' })
+	    );
+	  }
+	});
+
+	exports.default = ActionDelete;
+	module.exports = exports['default'];
+
+/***/ },
+/* 550 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var defaultClickRejectionStrategy = __webpack_require__(551);
 
 	module.exports = function injectTapEventPlugin (strategyOverrides) {
 	  strategyOverrides = strategyOverrides || {}
 	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
 
 	  __webpack_require__(92).injection.injectEventPluginsByName({
-	    "TapEventPlugin":       __webpack_require__(551)(shouldRejectClick)
+	    "TapEventPlugin":       __webpack_require__(552)(shouldRejectClick)
 	  });
 	};
 
 
 /***/ },
-/* 550 */
+/* 551 */
 /***/ function(module, exports) {
 
 	module.exports = function(lastTouchEvent, clickTimestamp) {
@@ -53818,7 +53876,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 551 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -53846,10 +53904,10 @@ webpackJsonp([0],[
 	var EventPluginUtils = __webpack_require__(94);
 	var EventPropagators = __webpack_require__(157);
 	var SyntheticUIEvent = __webpack_require__(171);
-	var TouchEventUtils = __webpack_require__(552);
+	var TouchEventUtils = __webpack_require__(553);
 	var ViewportMetrics = __webpack_require__(102);
 
-	var keyOf = __webpack_require__(553);
+	var keyOf = __webpack_require__(554);
 	var topLevelTypes = EventConstants.topLevelTypes;
 
 	var isStartish = EventPluginUtils.isStartish;
@@ -53995,7 +54053,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 552 */
+/* 553 */
 /***/ function(module, exports) {
 
 	/**
@@ -54043,7 +54101,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 553 */
+/* 554 */
 /***/ function(module, exports) {
 
 	/**

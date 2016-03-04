@@ -14,6 +14,7 @@ import Header from '../util/header'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
 import connect from '../../lib/connect.js'
+import dateFormat from '../../lib/date-format.js'
 
 export default class Recycle extends React.Component {
   constructor(props) {
@@ -54,13 +55,13 @@ export default class Recycle extends React.Component {
           this.state.articles.map((item, index) => {
             return (<ListItem
               key={item.id}
-              key={item.id}
-              rightIconButton={<IconButton>
-                <ActionDelete />
-              </IconButton>}
-              primaryText={item.summary}
-              secondaryText={item.time}
+              rightIcon={
+                <ActionDelete onTouchTap={this.delete}/>
+              }
+              primaryText={item.title}
+              secondaryText={dateFormat(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')}
             />)
+
           })
         }
       </List>

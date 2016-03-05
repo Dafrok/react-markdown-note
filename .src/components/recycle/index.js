@@ -10,7 +10,7 @@ import ActionDelete from 'material-ui/lib/svg-icons/action/delete';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import {Link} from 'react-router'
-import Header from '../util/header'
+import Header from './header'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
 import connect from '../../lib/connect.js'
@@ -23,8 +23,8 @@ export default class Recycle extends React.Component {
       articles: []
     }
   }
-  delete = id => {
-    connect.child('recycle').child(connect.getAuth().auth.uid).remove()
+  recover = id => {
+    // connect.child('recycle').child(connect.getAuth().auth.uid).remove()
     this.getList()
   }
   getList = () => {
@@ -56,7 +56,7 @@ export default class Recycle extends React.Component {
             return (<ListItem
               key={item.id}
               rightIcon={
-                <ActionDelete onTouchTap={this.delete}/>
+                <ActionDelete onTouchTap={this.recover}/>
               }
               primaryText={item.title}
               secondaryText={dateFormat(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')}

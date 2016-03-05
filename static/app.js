@@ -25904,7 +25904,7 @@ webpackJsonp([0],[
 
 
 	// module
-	exports.push([module.id, "*:not(input) {\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\n* {\n  box-sizing: border-box;\n}\nbody {\n  padding: 0;\n  margin: 0;\n  font-family: PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;\n}\n.status-bar {\n  position: fixed;\n  left: 0;\n  right: 0;\n  top: 0;\n  height: 64px;\n  z-index: 1;\n}\n.content {\n  padding-top: 64px;\n}\n.navigator a {\n  width: 100%;\n  height: 100%;\n  display: block;\n}\n", ""]);
+	exports.push([module.id, "*:not(input,\ntextarea) {\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\n* {\n  box-sizing: border-box;\n}\nbody {\n  padding: 0;\n  margin: 0;\n  font-family: PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;\n}\n.status-bar {\n  position: fixed;\n  left: 0;\n  right: 0;\n  top: 0;\n  height: 64px;\n  z-index: 1;\n}\n.content {\n  padding-top: 64px;\n}\n.navigator a {\n  width: 100%;\n  height: 100%;\n  display: block;\n}\n", ""]);
 
 	// exports
 
@@ -51085,11 +51085,14 @@ webpackJsonp([0],[
 	            _cardActions2.default,
 	            null,
 	            _react2.default.createElement(_textField2.default, {
-	              style: { minHeight: 60 },
 	              hintText: 'Notepad',
-	              multiLine: true,
 	              fullWidth: true,
 	              underlineShow: false,
+	              multiLine: true,
+	              onFocus: function onFocus(e) {
+	                e.preventDefault();
+	                e.stopPropagation();
+	              },
 	              onChange: this.changeNote,
 	              value: this.state.note
 	            })

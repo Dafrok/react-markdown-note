@@ -14,6 +14,7 @@ import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
 import connect from '../../lib/connect.js'
 import dateFormat from '../../lib/date-format.js'
+import ActionDelete from 'material-ui/lib/svg-icons/action/delete';
 
 
 
@@ -74,10 +75,13 @@ export default class ArticleList extends React.Component {
           this.state.articles.map((item, index) => {
             return (<ListItem
               key={item.id}
-              rightIconButton={<IconMenu iconButtonElement={iconButtonElement}>
-                  <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>Edit</MenuItem>
-                  <MenuItem onTouchTap={e => {this.delete(item.id)}}>Delete</MenuItem>
-                </IconMenu>}
+              rightIcon={
+                <ActionDelete onTouchTap={e => {
+                  e.stopPropagation()
+                  e.preventDefault()
+                  this.delete(item.id)}
+                }/>
+              }
               primaryText={item.title}
               secondaryText={dateFormat(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')}
               linkButton={true} containerElement={<Link to={{pathname: `/preview/${item.id}`}}/>}

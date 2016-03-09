@@ -23,7 +23,9 @@ export default class MainHeader extends React.Component {
   closeConfirm = () => {
     this.setState({open: false})
   }
-  toggleNav () {
+  toggleNav (e) {
+    e.stopPropagation()
+    e.preventDefault()
     Actions.toggleNav()
   }
   deleteAll = () => {

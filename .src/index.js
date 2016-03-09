@@ -12,7 +12,8 @@ import Login from './components/login'
 import Recycle from './components/recycle'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import connect from './lib/connect.js'
-
+var FastClick = require('fastclick');
+FastClick.attach(document.body);
 injectTapEventPlugin();
 
 const needLogin = (nextState, replace) => {

@@ -36417,7 +36417,13 @@ webpackJsonp([0],[
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ArticleList).call(this, props));
 
-	    _this.componentDidMount = function () {
+	    _this.delete = function (id) {
+	      // console.log(id)
+	      _connect2.default.child('note').child(_connect2.default.getAuth().auth.uid).child(id).remove();
+	      _this.getList();
+	    };
+
+	    _this.getList = function () {
 	      _connect2.default.child('note').child(_connect2.default.getAuth().auth.uid).orderByChild('time').once("value", function (snapshot) {
 	        var list = [];
 	        snapshot.forEach(function (snap) {
@@ -36431,6 +36437,10 @@ webpackJsonp([0],[
 	      });
 	    };
 
+	    _this.componentDidMount = function () {
+	      _this.getList();
+	    };
+
 	    _this.state = {
 	      articles: []
 	    };
@@ -36440,6 +36450,8 @@ webpackJsonp([0],[
 	  _createClass(ArticleList, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -36465,7 +36477,9 @@ webpackJsonp([0],[
 	                ),
 	                _react2.default.createElement(
 	                  _menuItem2.default,
-	                  { containerElement: _react2.default.createElement(_reactRouter.Link, { to: { pathname: '/editor/' + item.id } }) },
+	                  { onTouchTap: function onTouchTap(e) {
+	                      _this2.delete(item.id);
+	                    } },
 	                  'Delete'
 	                )
 	              ),
@@ -51029,10 +51043,10 @@ webpackJsonp([0],[
 	var Editor = function (_React$Component) {
 	  _inherits(Editor, _React$Component);
 
-	  function Editor(props) {
+	  function Editor(props, context) {
 	    _classCallCheck(this, Editor);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Editor).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Editor).call(this, props, context));
 
 	    _this.changeNote = function (e) {
 	      _this.setState({ note: e.target.value });
@@ -51082,7 +51096,7 @@ webpackJsonp([0],[
 	        _react2.default.createElement(
 	          _statusBar2.default,
 	          null,
-	          _react2.default.createElement(_header2.default, { note: this.state.note, postKey: this.state.postKey, setPostKey: this.setPostKey, history: this.props.history })
+	          _react2.default.createElement(_header2.default, { note: this.state.note, postKey: this.state.postKey, setPostKey: this.setPostKey, router: this.context.router })
 	        ),
 	        _react2.default.createElement(
 	          _card2.default,
@@ -51108,6 +51122,12 @@ webpackJsonp([0],[
 	}(_react2.default.Component);
 
 	exports.default = Editor;
+
+
+	Editor.contextTypes = {
+	  router: _react2.default.PropTypes.object
+	};
+
 	exports.default = Editor;
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(311); if (makeExportsHot(module, __webpack_require__(138))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
@@ -52792,9 +52812,7 @@ webpackJsonp([0],[
 	          summary: _this.props.note.substr(0, 10),
 	          time: _wilddog2.default.ServerValue.TIMESTAMP
 	        }).key();
-	        //   this.props.setPostKey(postKey)
-	        console.log(_this.props);
-	        _this.props.history.pushState(null, '/editor/' + postKey);
+	        _this.props.router.push('/editor/' + postKey);
 	      }
 	    };
 
@@ -52881,7 +52899,6 @@ webpackJsonp([0],[
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -52949,7 +52966,6 @@ webpackJsonp([0],[
 
 	    _this.login = function (e) {
 	      e.preventDefault();
-	      console.log(_this.props.history);
 	      _connect2.default.authWithPassword({
 	        email: _this.state.account,
 	        password: _this.state.password
@@ -52963,8 +52979,7 @@ webpackJsonp([0],[
 	              console.log("Error logging user in:", error);
 	          }
 	        } else {
-	          console.log(_this.context);
-	          _this.context.push('/article-list');
+	          _this.context.router.push('/article-list');
 	          // console.log("Authenticated successfully with payload:", authData)
 	        }
 	      });
@@ -53029,6 +53044,10 @@ webpackJsonp([0],[
 
 	  return Login;
 	}(_react2.default.Component);
+
+	Login.contextTypes = {
+	  router: _react2.default.PropTypes.object
+	};
 
 	exports.default = Login;
 

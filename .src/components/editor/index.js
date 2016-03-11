@@ -24,21 +24,21 @@ export default class Editor extends React.Component {
   toggleNav () {
     Actions.toggleNav()
   }
-  componentWillReceiveProps () {
-    this.setState({
-      postKey: null,
-      note: ''
-    })
+  componentWillUnmount = () => {
+      this.setState({
+          postKey: null,
+          note: ''
+      })
   }
   componentDidMount = () => {
-    if (this.props.params.noteId !== '0') {
-      connect.child('note').child(connect.getAuth().auth.uid).child(this.props.params.noteId).once('value', snapshot => {
-        this.setState({
-          postKey: snapshot.key(),
-          note: snapshot.val().note
-        })
-      })
-    }
+      if (this.props.params.noteId !== '0') {
+          connect.child('note').child(connect.getAuth().auth.uid).child(this.props.params.noteId).once('value', snapshot => {
+              this.setState({
+                  postKey: snapshot.key(),
+                  note: snapshot.val().note
+              })
+          })
+      }
   }
   render() {
     return (
@@ -68,4 +68,4 @@ Editor.contextTypes = {
     router: React.PropTypes.object
 }
 
-export default Editor;
+export default Editor

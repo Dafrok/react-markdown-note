@@ -21,7 +21,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "react-hot!babel", include: path.join(__dirname, '../')},
+      { test: /\.js$/, exclude: /node_modules/, loader: "react-hot!babel", include: path.join(__dirname, './')},
       { test: /\.styl$/, exclude: /node_modules/, loader: "style!css!postcss!stylus"},
       { test: /\.css$/, exclude: /node_modules/, loader: "style!css"}
     ],

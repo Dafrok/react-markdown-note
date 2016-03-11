@@ -51057,6 +51057,7 @@ webpackJsonp([0],[
 	    };
 
 	    _this.componentWillUnmount = function () {
+	      console.log(_this.props.params.noteId);
 	      _this.setState({
 	        postKey: null,
 	        note: ''

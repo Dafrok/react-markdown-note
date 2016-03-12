@@ -8,6 +8,7 @@ import ArticleList from './components/article-list'
 import About from './components/about'
 import Preview from './components/preview'
 import Editor from './components/editor'
+import Login from './components/login'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 injectTapEventPlugin();
 
@@ -19,6 +20,7 @@ ReactDOM.render(
       <Route path="article-list" component={ArticleList} />
       <Route path="preview" component={Preview}/>
       <Route path="about" component={About}/>
+      <Route path="login" component={Login}/>
     </Route>
   </Router>,
   document.getElementById('app'))

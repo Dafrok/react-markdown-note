@@ -11,6 +11,7 @@ import MenuItem from 'material-ui/lib/menus/menu-item';
 import {Link} from 'react-router'
 import Header from './header.js'
 import StatusBar from '../util/status-bar'
+import Navigator from '../util/navigator'
 
 const iconButtonElement = (
   <IconButton
@@ -31,6 +32,8 @@ const rightIconMenu = (
 
 const ArticleList = () => (
   <div>
+
+  <Navigator />
   <StatusBar>
     <Header />
   </StatusBar>

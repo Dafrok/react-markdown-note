@@ -36,7 +36,7 @@ export default class Header extends React.Component {
         <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/editor" />}>New Note</MenuItem>
         <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/article-list" />}>My Notes</MenuItem>
         <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/about" />}>About</MenuItem>
-        <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/logout" />}>Logout</MenuItem>
+        <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/login" />}>Logout</MenuItem>
       </LeftNav>
     );
   }

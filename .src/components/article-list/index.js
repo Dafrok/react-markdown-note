@@ -37,7 +37,12 @@ export default class ArticleList extends React.Component {
       articles: []
     }
   }
-  componentDidMount = () => {
+  delete = id => {
+    // console.log(id)
+    connect.child('note').child(connect.getAuth().auth.uid).child(id).remove()
+    this.getList()
+  }
+  getList = () => {
     connect.child('note').child(connect.getAuth().auth.uid).orderByChild('time').once("value", snapshot => {
       let list = []
       snapshot.forEach(snap => {
@@ -48,7 +53,10 @@ export default class ArticleList extends React.Component {
       this.setState({articles: list})
     }, errorObject => {
       console.log("The read failed: " + errorObject.code);
-    });
+    })
+  }
+  componentDidMount = () => {
+    this.getList()
   }
   render () {
     return (
@@ -64,7 +72,7 @@ export default class ArticleList extends React.Component {
               key={item.id}
               rightIconButton={<IconMenu iconButtonElement={iconButtonElement}>
                   <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>Edit</MenuItem>
-                  <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>Delete</MenuItem>
+                  <MenuItem onTouchTap={e => {this.delete(item.id)}}>Delete</MenuItem>
                 </IconMenu>}
               primaryText={item.summary}
               secondaryText={item.time}

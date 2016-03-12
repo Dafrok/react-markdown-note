@@ -15,7 +15,7 @@ injectTapEventPlugin();
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      <IndexRoute component={ArticleList}/>
+      <IndexRoute component={Login}/>
       <Route path="editor" component={Editor}/>
       <Route path="article-list" component={ArticleList} />
       <Route path="preview" component={Preview}/>

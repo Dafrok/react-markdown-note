@@ -5,7 +5,10 @@ import Navigator from '../util/navigator'
 import Card from 'material-ui/lib/card/card'
 import CardActions from 'material-ui/lib/card/card-actions'
 import TextField from 'material-ui/lib/text-field'
-import RaisedButton from 'material-ui/lib/raised-button';
+import RaisedButton from 'material-ui/lib/raised-button'
+import Wilddog from 'wilddog'
+import {Actions} from '../../stores/auth.js'
+
 export default class About extends React.Component {
   constructor(props) {
     super(props)
@@ -21,7 +24,25 @@ export default class About extends React.Component {
     this.setState({password: e.target.value})
   }
   login = () => {
-    console.log(this.state.account, this.state.password)
+    let wilddog = new Wilddog('https://wild-tiger-8739.wilddogio.com/')
+    wilddog.authWithPassword({
+      email    : this.state.account,
+      password : this.state.password
+    }, function(error, authData) {
+      if (error) {
+        switch (error.code) {
+          case "INVALID_EMAIL":
+            console.log("The specified user account email is invalid.")
+            break;
+          default:
+            console.log("Error logging user in:", error)
+        }
+      } else {
+        // Actions.onLogin(authData.token)
+        global.authData = authData
+        console.log("Authenticated successfully with payload:", authData)
+      }
+    })
   }
   render() {
     return (

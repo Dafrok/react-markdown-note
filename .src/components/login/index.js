@@ -6,7 +6,7 @@ import Card from 'material-ui/lib/card/card'
 import CardActions from 'material-ui/lib/card/card-actions'
 import TextField from 'material-ui/lib/text-field'
 import RaisedButton from 'material-ui/lib/raised-button'
-import Wilddog from 'wilddog'
+import connect from '../../lib/connect.js'
 import {Actions} from '../../stores/auth.js'
 
 export default class About extends React.Component {
@@ -23,9 +23,9 @@ export default class About extends React.Component {
   changePassword = e => {
     this.setState({password: e.target.value})
   }
-  login = () => {
-    let wilddog = new Wilddog('https://wild-tiger-8739.wilddogio.com/')
-    wilddog.authWithPassword({
+  login = e => {
+    e.preventDefault()
+    connect.authWithPassword({
       email    : this.state.account,
       password : this.state.password
     }, function(error, authData) {
@@ -38,8 +38,6 @@ export default class About extends React.Component {
             console.log("Error logging user in:", error)
         }
       } else {
-        // Actions.onLogin(authData.token)
-        global.authData = authData
         console.log("Authenticated successfully with payload:", authData)
       }
     })
@@ -47,12 +45,14 @@ export default class About extends React.Component {
   render() {
     return (
       <div>
+      <Navigator />
       <StatusBar>
         <Header />
       </StatusBar>
       <div>
       <Card>
         <CardActions>
+          <form onSubmit={this.login}>
             <TextField
               hintText="Account"
               fullWidth={true}
@@ -68,7 +68,8 @@ export default class About extends React.Component {
               onChange={this.changePassword}
               value={this.state.password}
             />
-            <RaisedButton onClick={this.login} label="Login" fullWidth={true} primary={true} />
+            <RaisedButton onClick={this.login} label="Login" fullWidth={true} primary={true} type="submit" />
+          </form>
         </CardActions>
       </Card>
       </div>

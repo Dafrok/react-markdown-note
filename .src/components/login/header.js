@@ -5,19 +5,9 @@ import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 import ContentSave from 'material-ui/lib/svg-icons/content/save';
 import {Link} from 'react-router'
 import {Actions} from '../../stores/nav.js'
-import connect from '../../lib/connect.js'
-
 export default class EditorHeader extends React.Component {
   constructor(props) {
     super(props)
-  }
-  save = () => {
-    if (this.props.postKey) {
-      connect.child('note').child(connect.getAuth().auth.uid).child(this.props.postKey).set({note: this.props.note})
-    } else {
-      const postKey = connect.child('note').child(connect.getAuth().auth.uid).push({note: this.props.note}).key()
-      this.props.setPostKey(postKey)
-    }
   }
   toggleNav () {
     Actions.toggleNav()
@@ -25,9 +15,8 @@ export default class EditorHeader extends React.Component {
   render() {
     return (
         <AppBar
-          title='Editor'
-          onLeftIconButtonTouchTap={this.toggleNav}
-          iconElementRight={<IconButton onTouchTap={this.save}><ContentSave /></IconButton>}
+          title='Login'
+          showMenuIconButton={false}
           />
     );
   }

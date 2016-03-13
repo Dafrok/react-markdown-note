@@ -10,16 +10,23 @@ import Preview from './components/preview'
 import Editor from './components/editor'
 import Login from './components/login'
 import injectTapEventPlugin from 'react-tap-event-plugin'
+import connect from './lib/connect.js'
 injectTapEventPlugin();
+
+const needLogin = (nextState, replaceState) => {
+  if (!connect.getAuth()) {
+    replaceState({nextPathname: nextState.location.pathname}, '/login')
+  }
+}
 
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Login}/>
-      <Route path="editor" component={Editor}/>
-      <Route path="article-list" component={ArticleList} />
-      <Route path="preview" component={Preview}/>
-      <Route path="about" component={About}/>
+      <Route path="editor" component={Editor} onEnter={needLogin}/>
+      <Route path="article-list" component={ArticleList} onEnter={needLogin}/>
+      <Route path="preview" component={Preview} onEnter={needLogin}/>
+      <Route path="about" component={About} onEnter={needLogin}/>
       <Route path="login" component={Login}/>
     </Route>
   </Router>,

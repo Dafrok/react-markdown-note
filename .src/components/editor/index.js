@@ -5,10 +5,21 @@ import CardActions from 'material-ui/lib/card/card-actions'
 import StatusBar from '../util/status-bar'
 import Header from './header.js'
 import Navigator from '../util/navigator'
+import connect from '../../lib/connect.js'
 
 export default class Editor extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      postKey: null,
+      note: ''
+    }
+  }
+  changeNote = e => {
+    this.setState({note: e.target.value})
+  }
+  setPostKey = key => {
+    this.setState({postKey: key})
   }
   toggleNav () {
     Actions.toggleNav()
@@ -18,7 +29,7 @@ export default class Editor extends React.Component {
       <div>
       <Navigator />
       <StatusBar>
-        <Header />
+        <Header note={this.state.note} postKey={this.state.postKey} setPostKey={this.setPostKey}/>
       </StatusBar>
       <Card>
         <CardActions>
@@ -27,6 +38,8 @@ export default class Editor extends React.Component {
               multiLine={true}
               fullWidth={true}
               underlineShow={false}
+              onChange={this.changeNote}
+              value={this.state.note}
             />
         </CardActions>
       </Card>

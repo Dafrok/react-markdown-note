@@ -13,9 +13,9 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import connect from './lib/connect.js'
 injectTapEventPlugin();
 
-const needLogin = (nextState, replaceState) => {
+const needLogin = (nextState, replace) => {
   if (!connect.getAuth()) {
-    replaceState({nextPathname: nextState.location.pathname}, '/login')
+    replace('/login')
   }
 }
 

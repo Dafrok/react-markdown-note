@@ -12,6 +12,7 @@ import {Link} from 'react-router'
 import Header from './header.js'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
+import connect from '../../lib/connect.js'
 
 const iconButtonElement = (
   <IconButton
@@ -30,53 +31,44 @@ const rightIconMenu = (
   </IconMenu>
 )
 
-const ArticleList = () => (
-  <div>
+export default class ArticleList extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      articles: {}
+    }
+  }
+  componentDidMount = () => {
+    connect.child('note').child(connect.getAuth().auth.uid).orderByChild('time').once("value", snapshot => {
+      console.log(snapshot.val())
+      this.setState({articles:  snapshot.val()})
+    }, errorObject => {
+      console.log("The read failed: " + errorObject.code);
+    });
+  }
+  render () {
+    return (
+      <div>
 
-  <Navigator />
-  <StatusBar>
-    <Header />
-  </StatusBar>
-  <List>
-    <ListItem
-      rightIconButton={rightIconMenu}
-      primaryText="Brendan Lim"
-      secondaryText="2012-3-23"
-      linkButton={true} containerElement={<Link to="/preview" />}
-    />
-    <ListItem
-      rightIconButton={rightIconMenu}
-      primaryText="Brendan Lim"
-      secondaryText="2012-3-23"
-    />
-    <ListItem
-      rightIconButton={rightIconMenu}
-      primaryText="Brendan Lim"
-      secondaryText="2012-3-23"
-    />
-    <ListItem
-      rightIconButton={rightIconMenu}
-      primaryText="Brendan Lim"
-      secondaryText="2012-3-23"
-    />
-    <ListItem
-      rightIconButton={rightIconMenu}
-      primaryText="Brendan Lim"
-      secondaryText="2012-3-23"
-    />
-    <ListItem
-      rightIconButton={rightIconMenu}
-      primaryText="Brendan Lim"
-      secondaryText="2012-3-23"
-    />
-    <ListItem
-      rightIconButton={rightIconMenu}
-      primaryText="Brendan Lim"
-      secondaryText="2012-3-23"
-    />
-  </List>
-  </div>
-
-);
+      <Navigator />
+      <StatusBar>
+        <Header />
+      </StatusBar>
+      <List>
+        {
+          Object.keys(this.state.articles).map(key => {
+            return (<ListItem
+              rightIconButton={rightIconMenu}
+              primaryText={this.state.articles[key].summary}
+              secondaryText={this.state.articles[key].time}
+              linkButton={true} containerElement={<Link to="/preview" />}
+            />)
+          })
+        }
+      </List>
+      </div>
+    )
+  }
+}
 
 export default ArticleList;

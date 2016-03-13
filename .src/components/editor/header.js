@@ -6,6 +6,7 @@ import ContentSave from 'material-ui/lib/svg-icons/content/save';
 import {Link} from 'react-router'
 import {Actions} from '../../stores/nav.js'
 import connect from '../../lib/connect.js'
+import Wilddog from 'wilddog'
 
 export default class EditorHeader extends React.Component {
   constructor(props) {
@@ -13,9 +14,17 @@ export default class EditorHeader extends React.Component {
   }
   save = () => {
     if (this.props.postKey) {
-      connect.child('note').child(connect.getAuth().auth.uid).child(this.props.postKey).set({note: this.props.note})
+      connect.child('note').child(connect.getAuth().auth.uid).child(this.props.postKey).set({
+        note: this.props.note,
+        summary: this.props.note.substr(0, 10),
+        time: Wilddog.ServerValue.TIMESTAMP
+      })
     } else {
-      const postKey = connect.child('note').child(connect.getAuth().auth.uid).push({note: this.props.note}).key()
+      const postKey = connect.child('note').child(connect.getAuth().auth.uid).push({
+        note: this.props.note,
+        summary: this.props.note.substr(0, 10),
+        time: Wilddog.ServerValue.TIMESTAMP
+      }).key()
       this.props.setPostKey(postKey)
     }
   }

@@ -5,6 +5,7 @@ import MenuItem from 'material-ui/lib/menus/menu-item'
 import NavStore from '../../../stores/nav.js'
 import {Actions} from '../../../stores/nav.js'
 import {Link} from 'react-router'
+import connect from '../../../lib/connect.js'
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -13,6 +14,9 @@ export default class Header extends React.Component {
       open: false
     }
     Reflux.listenTo(NavStore)
+  }
+  logout = e => {
+    connect.unauth()
   }
   close () {
     Actions.toggleNav(false)
@@ -36,7 +40,7 @@ export default class Header extends React.Component {
         <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/editor" />}>New Note</MenuItem>
         <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/article-list" />}>My Notes</MenuItem>
         <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/about" />}>About</MenuItem>
-        <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/login" />}>Logout</MenuItem>
+        <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/login" onClick={this.logout} />}>{connect.getAuth() ? 'Logout' : 'Login'}</MenuItem>
       </LeftNav>
     );
   }

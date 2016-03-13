@@ -14,10 +14,11 @@ import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
 import connect from '../../lib/connect.js'
 
+
+
 const iconButtonElement = (
   <IconButton
     touch={true}
-    tooltip="more"
     tooltipPosition="bottom-left"
   >
     <MoreVertIcon color={Colors.grey400} />
@@ -35,13 +36,18 @@ export default class ArticleList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      articles: {}
+      articles: []
     }
   }
   componentDidMount = () => {
     connect.child('note').child(connect.getAuth().auth.uid).orderByChild('time').once("value", snapshot => {
-      console.log(snapshot.val())
-      this.setState({articles:  snapshot.val()})
+      let list = []
+      snapshot.forEach(snap => {
+        let value = snap.val()
+        value.id = snap.key()
+        list.unshift(value)
+      })
+      this.setState({articles: list})
     }, errorObject => {
       console.log("The read failed: " + errorObject.code);
     });
@@ -49,19 +55,19 @@ export default class ArticleList extends React.Component {
   render () {
     return (
       <div>
-
       <Navigator />
       <StatusBar>
         <Header />
       </StatusBar>
       <List>
         {
-          Object.keys(this.state.articles).map(key => {
+          this.state.articles.map(item => {
             return (<ListItem
+              key={item.id}
               rightIconButton={rightIconMenu}
-              primaryText={this.state.articles[key].summary}
-              secondaryText={this.state.articles[key].time}
-              linkButton={true} containerElement={<Link to="/preview" />}
+              primaryText={item.summary}
+              secondaryText={item.time}
+              linkButton={true} containerElement={<Link to={{pathname:"/preview", query: {id: item.id}}} />}
             />)
           })
         }

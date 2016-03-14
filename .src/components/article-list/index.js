@@ -61,7 +61,7 @@ export default class ArticleList extends React.Component {
               rightIconButton={rightIconMenu}
               primaryText={this.state.articles[key].summary}
               secondaryText={this.state.articles[key].time}
-              linkButton={true} containerElement={<Link to="/preview" />}
+              linkButton={true} containerElement={<Link to={{pathname: `/preview/${key}`}}/>}
             />)
           })
         }

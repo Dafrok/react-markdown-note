@@ -25,7 +25,7 @@ ReactDOM.render(
       <IndexRoute component={Login}/>
       <Route path="editor" component={Editor} onEnter={needLogin}/>
       <Route path="article-list" component={ArticleList} onEnter={needLogin}/>
-      <Route path="preview" component={Preview} onEnter={needLogin}/>
+      <Route path="preview/:noteId" component={Preview} onEnter={needLogin}/>
       <Route path="about" component={About} onEnter={needLogin}/>
       <Route path="login" component={Login}/>
     </Route>

@@ -61,13 +61,13 @@ export default class ArticleList extends React.Component {
       </StatusBar>
       <List>
         {
-          this.state.articles.map(item => {
+          this.state.articles.map((item, index) => {
             return (<ListItem
               key={item.id}
               rightIconButton={rightIconMenu}
-              primaryText={this.state.articles[key].summary}
-              secondaryText={this.state.articles[key].time}
-              linkButton={true} containerElement={<Link to={{pathname: `/preview/${key}`}}/>}
+              primaryText={item.summary}
+              secondaryText={item.time}
+              linkButton={true} containerElement={<Link to={{pathname: `/preview/${item.id}`}}/>}
             />)
           })
         }

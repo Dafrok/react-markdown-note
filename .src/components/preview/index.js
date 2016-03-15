@@ -3,6 +3,7 @@ import Header from './header.js'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
 import Paper from 'material-ui/lib/paper'
+import marked from 'marked'
 import connect from '../../lib/connect.js'
 
 export default class Preview extends React.Component {
@@ -25,7 +26,7 @@ export default class Preview extends React.Component {
         <StatusBar>
           <Header />
         </StatusBar>
-        <Paper style={{padding: 10}}>{this.state.note}</Paper>
+        <Paper style={{padding: 20}} dangerouslySetInnerHTML={{__html: marked(this.state.note)}}></Paper>
       </div>
     );
   }

@@ -11,6 +11,7 @@ import Editor from './components/editor'
 import Login from './components/login'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import connect from './lib/connect.js'
+
 injectTapEventPlugin();
 
 const needLogin = (nextState, replace) => {

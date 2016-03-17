@@ -22,7 +22,8 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: "react-hot!babel", include: path.join(__dirname, '../')},
-      { test: /\.styl$/, exclude: /node_modules/, loader: "style!css!postcss!stylus"}
+      { test: /\.styl$/, exclude: /node_modules/, loader: "style!css!postcss!stylus"},
+      { test: /\.css$/, exclude: /node_modules/, loader: "style!css"}
     ],
     noParse: [
       // /wilddog-web\.js$/
@@ -38,7 +39,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: '../index.html',
       title: 'React Markdown Notepad',
-      template: './templates/index.html'
+      template: './static/index.html'
     })
   ]
 }

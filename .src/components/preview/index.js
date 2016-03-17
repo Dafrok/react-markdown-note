@@ -1,3 +1,5 @@
+import '../../static/github-markdown.css'
+import '../../static/highlight.css'
 import React from 'react'
 import Header from './header.js'
 import StatusBar from '../util/status-bar'
@@ -15,7 +17,6 @@ export default class Preview extends React.Component {
   }
   componentDidMount = () => {
       connect.child('note').child(connect.getAuth().auth.uid).child(this.props.params.noteId).once('value', snapshot => {
-          console.log(snapshot.val())
           this.setState({note: snapshot.val().note})
       })
   }
@@ -26,7 +27,7 @@ export default class Preview extends React.Component {
         <StatusBar>
           <Header />
         </StatusBar>
-        <Paper style={{padding: 20}} dangerouslySetInnerHTML={{__html: marked(this.state.note)}}></Paper>
+        <Paper className="markdown-body" style={{padding: 20}} dangerouslySetInnerHTML={{__html: marked(this.state.note)}}></Paper>
       </div>
     );
   }

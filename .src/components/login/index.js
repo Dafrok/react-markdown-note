@@ -25,10 +25,11 @@ export default class About extends React.Component {
   }
   login = e => {
     e.preventDefault()
+    console.log(this.props.history)
     connect.authWithPassword({
       email    : this.state.account,
       password : this.state.password
-    }, function(error, authData) {
+    }, (error, authData) => {
       if (error) {
         switch (error.code) {
           case "INVALID_EMAIL":
@@ -38,7 +39,8 @@ export default class About extends React.Component {
             console.log("Error logging user in:", error)
         }
       } else {
-        console.log("Authenticated successfully with payload:", authData)
+        this.props.history.pushState(null, '/article-list')
+        // console.log("Authenticated successfully with payload:", authData)
       }
     })
   }

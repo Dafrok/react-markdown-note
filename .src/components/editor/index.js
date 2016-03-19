@@ -24,6 +24,22 @@ export default class Editor extends React.Component {
   toggleNav () {
     Actions.toggleNav()
   }
+  componentWillUnmount = () => {
+      this.setState({
+          postKey: null,
+          note: ''
+      })
+  }
+  componentDidMount = () => {
+      if (this.props.params.noteId) {
+          connect.child('note').child(connect.getAuth().auth.uid).child(this.props.params.noteId).once('value', snapshot => {
+              this.setState({
+                  postKey: snapshot.key(),
+                  note: snapshot.val().note
+              })
+          })
+      }
+  }
   render() {
     return (
       <div>

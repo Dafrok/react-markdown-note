@@ -25,12 +25,12 @@ const iconButtonElement = (
   </IconButton>
 )
 
-const rightIconMenu = (
-  <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem>Edit</MenuItem>
-    <MenuItem>Delete</MenuItem>
-  </IconMenu>
-)
+// const rightIconMenu = (
+//   <IconMenu iconButtonElement={iconButtonElement}>
+//     <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>>Edit</MenuItem>
+//     <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>>Delete</MenuItem>
+//   </IconMenu>
+// )
 
 export default class ArticleList extends React.Component {
   constructor(props) {
@@ -64,7 +64,10 @@ export default class ArticleList extends React.Component {
           this.state.articles.map((item, index) => {
             return (<ListItem
               key={item.id}
-              rightIconButton={rightIconMenu}
+              rightIconButton={<IconMenu iconButtonElement={iconButtonElement}>
+                  <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>Edit</MenuItem>
+                  <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>Delete</MenuItem>
+                </IconMenu>}
               primaryText={item.summary}
               secondaryText={item.time}
               linkButton={true} containerElement={<Link to={{pathname: `/preview/${item.id}`}}/>}

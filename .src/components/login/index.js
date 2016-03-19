@@ -27,8 +27,8 @@ export default class About extends React.Component {
     e.preventDefault()
     console.log(this.props.history)
     connect.authWithPassword({
-      email    : this.state.account,
-      password : this.state.password
+      email: this.state.account,
+      password: this.state.password
     }, (error, authData) => {
       if (error) {
         switch (error.code) {

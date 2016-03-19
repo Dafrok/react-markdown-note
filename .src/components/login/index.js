@@ -9,9 +9,10 @@ import RaisedButton from 'material-ui/lib/raised-button'
 import connect from '../../lib/connect.js'
 import {Actions} from '../../stores/auth.js'
 
-export default class Login extends React.Component {
-  constructor(props) {
-    super(props)
+class Login extends React.Component {
+  constructor(props, context) {
+    super(props, context)
+    console.log(context)
     this.state = {
       account: '',
       password: ''
@@ -25,7 +26,6 @@ export default class Login extends React.Component {
   }
   login = e => {
     e.preventDefault()
-    console.log(this.props.history)
     connect.authWithPassword({
       email: this.state.account,
       password: this.state.password
@@ -39,8 +39,7 @@ export default class Login extends React.Component {
             console.log("Error logging user in:", error)
         }
       } else {
-        console.log(this.context)
-        this.context.push('/article-list')
+        this.context.router.push('/article-list')
         // console.log("Authenticated successfully with payload:", authData)
       }
     })
@@ -80,3 +79,9 @@ export default class Login extends React.Component {
     );
   }
 }
+
+Login.contextTypes = {
+    router: React.PropTypes.object
+}
+
+export default Login

@@ -8,8 +8,8 @@ import Navigator from '../util/navigator'
 import connect from '../../lib/connect.js'
 
 export default class Editor extends React.Component {
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
     this.state = {
       postKey: null,
       note: ''
@@ -45,7 +45,7 @@ export default class Editor extends React.Component {
       <div>
       <Navigator />
       <StatusBar>
-        <Header note={this.state.note} postKey={this.state.postKey} setPostKey={this.setPostKey} history={this.props.history}/>
+        <Header note={this.state.note} postKey={this.state.postKey} setPostKey={this.setPostKey} router={this.context.router}/>
       </StatusBar>
       <Card>
         <CardActions>
@@ -62,6 +62,10 @@ export default class Editor extends React.Component {
       </div>
     );
   }
+}
+
+Editor.contextTypes = {
+    router: React.PropTypes.object
 }
 
 export default Editor;

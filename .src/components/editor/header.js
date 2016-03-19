@@ -25,9 +25,7 @@ export default class EditorHeader extends React.Component {
         summary: this.props.note.substr(0, 10),
         time: Wilddog.ServerValue.TIMESTAMP
       }).key()
-    //   this.props.setPostKey(postKey)
-      console.log(this.props)
-      this.props.history.pushState(null, `/editor/${postKey}`)
+      this.props.router.push(`/editor/${postKey}`)
     }
   }
   toggleNav () {

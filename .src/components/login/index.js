@@ -9,7 +9,7 @@ import RaisedButton from 'material-ui/lib/raised-button'
 import connect from '../../lib/connect.js'
 import {Actions} from '../../stores/auth.js'
 
-export default class About extends React.Component {
+export default class Login extends React.Component {
   constructor(props) {
     super(props)
     this.state = {

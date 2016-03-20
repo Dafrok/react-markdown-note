@@ -25,12 +25,10 @@ const iconButtonElement = (
   </IconButton>
 )
 
-// const rightIconMenu = (
-//   <IconMenu iconButtonElement={iconButtonElement}>
-//     <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>>Edit</MenuItem>
-//     <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>>Delete</MenuItem>
-//   </IconMenu>
-// )
+const RightIconMenu = props => (<IconMenu iconButtonElement={iconButtonElement}>
+    <MenuItem containerElement={<Link to={{pathname: `/editor/${props.id}`}}/>}>Edit</MenuItem>
+    <MenuItem containerElement={<Link to={{pathname: `/editor/${props.id}`}}/>}>Delete</MenuItem>
+  </IconMenu>)
 
 export default class ArticleList extends React.Component {
   constructor(props) {

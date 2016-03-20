@@ -37,7 +37,7 @@ export default class Header extends React.Component {
         width={200}
         open={this.state.open}
         onRequestChange={open => Actions.toggleNav(open)}>
-        <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/editor" />}>New Note</MenuItem>
+        <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/editor/0" />}>New Note</MenuItem>
         <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/article-list" />}>My Notes</MenuItem>
         <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/about" />}>About</MenuItem>
         <MenuItem onTouchTap={this.close} linkButton={true} containerElement={<Link to="/login" onClick={this.logout} />}>{connect.getAuth() ? 'Logout' : 'Login'}</MenuItem>

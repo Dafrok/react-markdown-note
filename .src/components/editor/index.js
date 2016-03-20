@@ -31,7 +31,7 @@ export default class Editor extends React.Component {
       })
   }
   componentDidMount = () => {
-      if (this.props.params.noteId) {
+      if (this.props.params.noteId !== '0') {
           connect.child('note').child(connect.getAuth().auth.uid).child(this.props.params.noteId).once('value', snapshot => {
               this.setState({
                   postKey: snapshot.key(),
@@ -45,7 +45,7 @@ export default class Editor extends React.Component {
       <div>
       <Navigator />
       <StatusBar>
-        <Header note={this.state.note} postKey={this.state.postKey} setPostKey={this.setPostKey}/>
+        <Header note={this.state.note} postKey={this.state.postKey} setPostKey={this.setPostKey} history={this.props.history}/>
       </StatusBar>
       <Card>
         <CardActions>

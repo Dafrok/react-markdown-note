@@ -39,7 +39,8 @@ export default class About extends React.Component {
             console.log("Error logging user in:", error)
         }
       } else {
-        this.props.history.pushState(null, '/article-list')
+        console.log(this.context)
+        this.context.push('/article-list')
         // console.log("Authenticated successfully with payload:", authData)
       }
     })

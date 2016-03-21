@@ -24,6 +24,7 @@ ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Login}/>
+      <Route path="editor" component={Editor} onEnter={needLogin}/>
       <Route path="editor/:noteId" component={Editor} onEnter={needLogin}/>
       <Route path="article-list" component={ArticleList} onEnter={needLogin}/>
       <Route path="preview/:noteId" component={Preview} onEnter={needLogin}/>

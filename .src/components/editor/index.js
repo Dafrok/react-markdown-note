@@ -25,7 +25,6 @@ export default class Editor extends React.Component {
     Actions.toggleNav()
   }
   componentWillReceiveProps = nextProps => {
-    console.log(nextProps)
     const id = nextProps.params.noteId
     if (id) {
         connect.child('note').child(connect.getAuth().auth.uid).child(id).once('value', snapshot => {

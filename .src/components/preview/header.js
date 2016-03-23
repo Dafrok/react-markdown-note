@@ -5,18 +5,20 @@ import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
 import EditorModeEdit from 'material-ui/lib/svg-icons/editor/mode-edit';
 import {Link} from 'react-router'
 import {Actions} from '../../stores/nav.js'
+import IconBack from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-left'
+
 export default class Header extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
-  }
-  toggleNav () {
-    Actions.toggleNav()
   }
   render() {
     return (
         <AppBar
           title='Preview'
-          onLeftIconButtonTouchTap={this.toggleNav}
+          iconElementLeft={<IconButton onTouchTap={this.context.router.goBack}><IconBack /></IconButton>}
           iconElementRight={<IconButton><EditorModeEdit /></IconButton>}
           />
     );

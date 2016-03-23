@@ -1,14 +1,18 @@
 import React from 'react'
 import AppBar from 'material-ui/lib/app-bar'
-import IconButton from 'material-ui/lib/icon-button';
-import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
-import ContentSave from 'material-ui/lib/svg-icons/content/save';
+import IconButton from 'material-ui/lib/icon-button'
+import NavigationClose from 'material-ui/lib/svg-icons/navigation/close'
+import ContentSave from 'material-ui/lib/svg-icons/content/save'
+import IconBack from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-left'
 import {Link} from 'react-router'
 import {Actions} from '../../stores/nav.js'
 import connect from '../../lib/connect.js'
 import Wilddog from 'wilddog'
 
 export default class EditorHeader extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props)
   }
@@ -28,14 +32,11 @@ export default class EditorHeader extends React.Component {
       this.props.router.push(`/editor/${postKey}`)
     }
   }
-  toggleNav () {
-    Actions.toggleNav()
-  }
   render() {
     return (
         <AppBar
           title='Editor'
-          onLeftIconButtonTouchTap={this.toggleNav}
+          iconElementLeft={<IconButton onTouchTap={this.context.router.goBack}><IconBack /></IconButton>}
           iconElementRight={<IconButton onTouchTap={this.save}><ContentSave /></IconButton>}
           />
     );

@@ -14,12 +14,15 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props)
   }
+  edit = () => {
+      this.context.router.push(`/editor/${this.props.id}`)
+  }
   render() {
     return (
         <AppBar
           title='Preview'
           iconElementLeft={<IconButton onTouchTap={this.context.router.goBack}><IconBack /></IconButton>}
-          iconElementRight={<IconButton><EditorModeEdit /></IconButton>}
+          iconElementRight={<IconButton onTouchTap={this.edit}><EditorModeEdit/></IconButton>}
           />
     );
   }

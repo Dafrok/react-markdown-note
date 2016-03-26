@@ -9,7 +9,7 @@ import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import {Link} from 'react-router'
-import Header from '../util/header.js'
+import Header from '../util/header'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
 import connect from '../../lib/connect.js'
@@ -64,4 +64,4 @@ export default class Recycle extends React.Component {
   }
 }
 
-export default ArticleList;
+export default Recycle;

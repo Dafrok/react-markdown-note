@@ -74,7 +74,7 @@ export default class ArticleList extends React.Component {
                   <MenuItem containerElement={<Link to={{pathname: `/editor/${item.id}`}}/>}>Edit</MenuItem>
                   <MenuItem onTouchTap={e => {this.delete(item.id)}}>Delete</MenuItem>
                 </IconMenu>}
-              primaryText={item.summary}
+              primaryText={item.title}
               secondaryText={item.time}
               linkButton={true} containerElement={<Link to={{pathname: `/preview/${item.id}`}}/>}
             />)

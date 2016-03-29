@@ -35929,7 +35929,21 @@ webpackJsonp([0],[
 	                )
 	              ),
 	              primaryText: item.title,
-	              secondaryText: item.time,
+	              secondaryText: function (date, fmt) {
+	                var o = {
+	                  "M+": date.getMonth() + 1,
+	                  "d+": date.getDate(),
+	                  "h+": date.getHours(),
+	                  "m+": date.getMinutes(),
+	                  "s+": date.getSeconds(),
+	                  "q+": Math.floor((date.getMonth() + 3) / 3),
+	                  "S": date.getMilliseconds()
+	                };
+	                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+	                for (var k in o) {
+	                  if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+	                }return fmt;
+	              }(new Date(item.time), 'yyyy-MM-dd hh:mm:ss'),
 	              linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: { pathname: '/preview/' + item.id } })
 	            });
 	          })
@@ -43245,6 +43259,8 @@ webpackJsonp([0],[
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _class, _temp;
+
 	var _react = __webpack_require__(138);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -43271,13 +43287,19 @@ webpackJsonp([0],[
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var MainHeader = function (_React$Component) {
+	var MainHeader = (_temp = _class = function (_React$Component) {
 	  _inherits(MainHeader, _React$Component);
 
 	  function MainHeader(props) {
 	    _classCallCheck(this, MainHeader);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MainHeader).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MainHeader).call(this, props));
+
+	    _this.newNote = function () {
+	      _this.context.router.push('/editor');
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(MainHeader, [{
@@ -43293,7 +43315,7 @@ webpackJsonp([0],[
 	        onLeftIconButtonTouchTap: this.toggleNav,
 	        iconElementRight: _react2.default.createElement(
 	          _iconButton2.default,
-	          null,
+	          { onTouchTap: this.newNote },
 	          _react2.default.createElement(_add2.default, null)
 	        )
 	      });
@@ -43301,8 +43323,9 @@ webpackJsonp([0],[
 	  }]);
 
 	  return MainHeader;
-	}(_react2.default.Component);
-
+	}(_react2.default.Component), _class.contextTypes = {
+	  router: _react2.default.PropTypes.object.isRequired
+	}, _temp);
 	exports.default = MainHeader;
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(310); if (makeExportsHot(module, __webpack_require__(138))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "header.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }

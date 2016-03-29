@@ -35928,7 +35928,7 @@ webpackJsonp([0],[
 	                  'Delete'
 	                )
 	              ),
-	              primaryText: item.summary,
+	              primaryText: item.title,
 	              secondaryText: item.time,
 	              linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: { pathname: '/preview/' + item.id } })
 	            });
@@ -45354,27 +45354,27 @@ webpackJsonp([0],[
 	          } },
 	        _react2.default.createElement(
 	          _menuItem2.default,
-	          { onTouchTap: this.close, linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/editor/0' }) },
+	          { linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/editor' }) },
 	          'New Note'
 	        ),
 	        _react2.default.createElement(
 	          _menuItem2.default,
-	          { onTouchTap: this.close, linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/article-list' }) },
+	          { linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/article-list' }) },
 	          'My Notes'
 	        ),
 	        _react2.default.createElement(
 	          _menuItem2.default,
-	          { onTouchTap: this.close, linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/recycle' }) },
+	          { linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/recycle' }) },
 	          'Recycle'
 	        ),
 	        _react2.default.createElement(
 	          _menuItem2.default,
-	          { onTouchTap: this.close, linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/about' }) },
+	          { linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/about' }) },
 	          'About'
 	        ),
 	        _react2.default.createElement(
 	          _menuItem2.default,
-	          { onTouchTap: this.close, linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/login', onClick: this.logout }) },
+	          { linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/login', onClick: this.logout }) },
 	          _connect2.default.getAuth() ? 'Logout' : 'Login'
 	        )
 	      );
@@ -52175,13 +52175,13 @@ webpackJsonp([0],[
 	      if (_this.props.postKey) {
 	        _connect2.default.child('note').child(_connect2.default.getAuth().auth.uid).child(_this.props.postKey).set({
 	          note: _this.props.note,
-	          summary: _this.props.note.substr(0, 10),
+	          title: _this.props.note.match(/^(?=# ).*/g) ? _this.props.note.match(/^(?=# ).*/g)[0].split('# ')[1] : 'No Title',
 	          time: _wilddog2.default.ServerValue.TIMESTAMP
 	        });
 	      } else {
 	        var postKey = _connect2.default.child('note').child(_connect2.default.getAuth().auth.uid).push({
 	          note: _this.props.note,
-	          summary: _this.props.note.substr(0, 10),
+	          title: _this.props.note.match(/^(?=# ).*/g) ? _this.props.note.match(/^(?=# ).*/g)[0].split('# ')[1] : 'No Title',
 	          time: _wilddog2.default.ServerValue.TIMESTAMP
 	        }).key();
 	        _this.props.router.push('/editor/' + postKey);

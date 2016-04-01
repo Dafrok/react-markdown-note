@@ -20,13 +20,13 @@ export default class EditorHeader extends React.Component {
     if (this.props.postKey) {
       connect.child('note').child(connect.getAuth().auth.uid).child(this.props.postKey).set({
         note: this.props.note,
-        summary: this.props.note.substr(0, 10),
+        title: this.props.note.match(/^(?=# ).*/g) ? this.props.note.match(/^(?=# ).*/g)[0].split('# ')[1] : 'No Title',
         time: Wilddog.ServerValue.TIMESTAMP
       })
     } else {
       const postKey = connect.child('note').child(connect.getAuth().auth.uid).push({
         note: this.props.note,
-        summary: this.props.note.substr(0, 10),
+        title: this.props.note.match(/^(?=# ).*/g) ? this.props.note.match(/^(?=# ).*/g)[0].split('# ')[1] : 'No Title',
         time: Wilddog.ServerValue.TIMESTAMP
       }).key()
       this.props.router.push(`/editor/${postKey}`)

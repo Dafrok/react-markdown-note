@@ -58,7 +58,6 @@ export default class Editor extends React.Component {
         <CardActions>
           <TextField
               hintText="Notepad"
-              multiLine={true}
               fullWidth={true}
               underlineShow={false}
               onChange={this.changeNote}

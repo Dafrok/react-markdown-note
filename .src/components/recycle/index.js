@@ -6,13 +6,15 @@ import Avatar from 'material-ui/lib/avatar';
 import Colors from 'material-ui/lib/styles/colors';
 import IconButton from 'material-ui/lib/icon-button';
 import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
+import ContentUndo from 'material-ui/lib/svg-icons/content/undo';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import {Link} from 'react-router'
-import Header from '../util/header'
+import Header from './header'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
 import connect from '../../lib/connect.js'
+import dateFormat from '../../lib/date-format.js'
 
 export default class Recycle extends React.Component {
   constructor(props) {
@@ -21,8 +23,12 @@ export default class Recycle extends React.Component {
       articles: []
     }
   }
-  delete = id => {
-    connect.child('recycle').child(connect.getAuth().auth.uid).remove()
+  recover = id => {
+    // connect.child('recycle').child(connect.getAuth().auth.uid).remove()
+    connect.child('recycle').child(connect.getAuth().auth.uid).child(id).once('value', snapshot => {
+        connect.child('note').child(connect.getAuth().auth.uid).push(snapshot.val())
+        connect.child('recycle').child(connect.getAuth().auth.uid).child(id).remove()
+    })
     this.getList()
   }
   getList = () => {
@@ -53,8 +59,11 @@ export default class Recycle extends React.Component {
           this.state.articles.map((item, index) => {
             return (<ListItem
               key={item.id}
-              primaryText={item.summary}
-              secondaryText={item.time}
+              rightIcon={
+                <ContentUndo onTouchTap={() => {this.recover(item.id)}}/>
+              }
+              primaryText={item.title}
+              secondaryText={dateFormat(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')}
             />)
           })
         }

@@ -21,9 +21,6 @@ export default class Editor extends React.Component {
   setPostKey = key => {
     this.setState({postKey: key})
   }
-  toggleNav () {
-    Actions.toggleNav()
-  }
   componentWillReceiveProps = nextProps => {
     const id = nextProps.params.noteId
     if (id) {

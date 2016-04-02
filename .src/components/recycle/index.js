@@ -6,6 +6,7 @@ import Avatar from 'material-ui/lib/avatar';
 import Colors from 'material-ui/lib/styles/colors';
 import IconButton from 'material-ui/lib/icon-button';
 import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
+import ActionDelete from 'material-ui/lib/svg-icons/action/delete';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import {Link} from 'react-router'
@@ -53,6 +54,10 @@ export default class Recycle extends React.Component {
           this.state.articles.map((item, index) => {
             return (<ListItem
               key={item.id}
+              key={item.id}
+              rightIconButton={<IconButton>
+                <ActionDelete />
+              </IconButton>}
               primaryText={item.summary}
               secondaryText={item.time}
             />)

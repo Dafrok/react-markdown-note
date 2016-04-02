@@ -39,7 +39,10 @@ export default class ArticleList extends React.Component {
   }
   delete = id => {
     // console.log(id)
-    connect.child('note').child(connect.getAuth().auth.uid).child(id).remove()
+    connect.child('note').child(connect.getAuth().auth.uid).child(id).once('value', snapshot => {
+        connect.child('recycle').child(connect.getAuth().auth.uid).push(snapshot.val())
+        connect.child('note').child(connect.getAuth().auth.uid).child(id).remove()
+    })
     this.getList()
   }
   getList = () => {

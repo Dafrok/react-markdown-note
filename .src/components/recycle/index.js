@@ -25,6 +25,10 @@ export default class Recycle extends React.Component {
   }
   recover = id => {
     // connect.child('recycle').child(connect.getAuth().auth.uid).remove()
+    connect.child('recycle').child(connect.getAuth().auth.uid).child(id).once('value', snapshot => {
+        connect.child('note').child(connect.getAuth().auth.uid).push(snapshot.val())
+        connect.child('recycle').child(connect.getAuth().auth.uid).child(id).remove()
+    })
     this.getList()
   }
   getList = () => {
@@ -56,12 +60,11 @@ export default class Recycle extends React.Component {
             return (<ListItem
               key={item.id}
               rightIcon={
-                <ContentUndo onTouchTap={this.recover}/>
+                <ContentUndo onTouchTap={() => {this.recover(item.id)}}/>
               }
               primaryText={item.title}
               secondaryText={dateFormat(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')}
             />)
-
           })
         }
       </List>

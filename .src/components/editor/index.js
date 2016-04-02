@@ -60,6 +60,7 @@ export default class Editor extends React.Component {
               hintText="Notepad"
               fullWidth={true}
               underlineShow={false}
+              multiLine={true}
               onChange={this.changeNote}
               value={this.state.note}
             />

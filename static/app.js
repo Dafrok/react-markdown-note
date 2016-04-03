@@ -53423,7 +53423,7 @@ webpackJsonp([0],[
 	        _react2.default.createElement(
 	          _statusBar2.default,
 	          null,
-	          _react2.default.createElement(_header2.default, null)
+	          _react2.default.createElement(_header2.default, { refresh: this.getList })
 	        ),
 	        _react2.default.createElement(
 	          _list2.default,
@@ -53576,7 +53576,9 @@ webpackJsonp([0],[
 	    };
 
 	    _this.deleteAll = function () {
-	      _connect2.default.child('recycle').child(_connect2.default.getAuth().auth.uid).remove();
+	      _connect2.default.child('recycle').child(_connect2.default.getAuth().auth.uid).remove(function (err) {
+	        !err && _this.props.refresh();
+	      });
 	      _this.closeConfirm();
 	    };
 

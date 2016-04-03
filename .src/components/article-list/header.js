@@ -15,7 +15,7 @@ export default class MainHeader extends React.Component {
   toggleNav (e) {
     e.stopPropagation()
     e.preventDefault()
-    Actions.toggleNav()
+    Actions.toggleNav(true)
   }
   newNote = () => {
       this.context.router.push('/editor')

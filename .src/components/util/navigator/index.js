@@ -24,7 +24,7 @@ export default class Header extends React.Component {
     connect.unauth()
   }
   close () {
-    Actions.toggleNav(false)
+    Actions.toggleNav(true)
   }
   onStatusChange = data => {
     this.setState({open: data})

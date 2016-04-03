@@ -12,7 +12,7 @@ export default class EditorHeader extends React.Component {
   toggleNav (e) {
     e.stopPropagation()
     e.preventDefault()
-    Actions.toggleNav()
+    Actions.toggleNav(true)
   }
   render() {
     return (

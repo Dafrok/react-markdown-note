@@ -12,7 +12,6 @@ import {Actions} from '../../stores/auth.js'
 class Login extends React.Component {
   constructor(props, context) {
     super(props, context)
-    console.log(context)
     this.state = {
       account: '',
       password: ''

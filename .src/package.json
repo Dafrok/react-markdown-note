@@ -7,7 +7,9 @@
     "start": "npm run webpack && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --port 3000 --inline --content-base ../",
+    "merge": "git merge master",
     "production": "webpack -p --config webpack.config.production.js",
+    "publish": "npm run merge && npm run production",
     "webpack": "webpack",
     "browser-sync": "browser-sync start --proxy localhost:3000 --port 2333"
   },

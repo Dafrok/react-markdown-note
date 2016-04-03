@@ -27,7 +27,7 @@ export default class MainHeader extends React.Component {
   toggleNav (e) {
     e.stopPropagation()
     e.preventDefault()
-    Actions.toggleNav()
+    Actions.toggleNav(true)
   }
   deleteAll = () => {
       connect.child('recycle').child(connect.getAuth().auth.uid).remove(err => {

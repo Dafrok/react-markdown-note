@@ -36,8 +36,8 @@ export default class MainHeader extends React.Component {
     return (
         <AppBar
           title='Markdown Note'
-          onLeftIconButtonTouchTap={this.toggleNav}
-          iconElementRight={<IconButton onTouchTap={this.openConfirm}><ActionDelete /></IconButton>}
+          iconElementLeft={<IconButton onClick={this.toggleNav}><NavigationMenu /></IconButton>}
+          iconElementRight={<IconButton onClick={this.openConfirm}><ActionDelete /></IconButton>}
           children={
             <Dialog
               title="Confirm to delete"
@@ -45,13 +45,13 @@ export default class MainHeader extends React.Component {
                 <FlatButton
                   label="YES"
                   secondary={true}
-                  onTouchTap={this.deleteAll}
+                  onClick={this.deleteAll}
                 />,
                 <FlatButton
                   label="NO"
                   primary={true}
                   keyboardFocused={true}
-                  onTouchTap={this.closeConfirm}
+                  onClick={this.closeConfirm}
                 />
               ]}
               modal={false}

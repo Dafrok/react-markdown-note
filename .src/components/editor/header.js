@@ -36,8 +36,8 @@ export default class EditorHeader extends React.Component {
     return (
         <AppBar
           title='Editor'
-          iconElementLeft={<IconButton onTouchTap={() => {this.context.router.push('/article-list')}}><IconBack /></IconButton>}
-          iconElementRight={<IconButton onTouchTap={this.save}><ContentSave /></IconButton>}
+          iconElementLeft={<IconButton onClick={() => {this.context.router.push('/article-list')}}><IconBack /></IconButton>}
+          iconElementRight={<IconButton onClick={this.save}><ContentSave /></IconButton>}
           />
     );
   }

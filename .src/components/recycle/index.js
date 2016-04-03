@@ -60,7 +60,7 @@ export default class Recycle extends React.Component {
             return (<ListItem
               key={item.id}
               rightIcon={
-                <ContentUndo onTouchTap={() => {this.recover(item.id)}}/>
+                <ContentUndo onClick={() => {this.recover(item.id)}}/>
               }
               primaryText={item.title}
               secondaryText={dateFormat(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')}

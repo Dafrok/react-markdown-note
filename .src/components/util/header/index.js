@@ -17,7 +17,7 @@ export default class MainHeader extends React.Component {
     return (
         <AppBar
           title='Markdown Note'
-          onLeftIconButtonTouchTap={this.toggleNav}
+          iconElementLeft={<IconButton onClick={this.toggleNav}><NavigationMenu /></IconButton>}
           />
     );
   }

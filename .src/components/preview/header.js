@@ -21,8 +21,8 @@ export default class Header extends React.Component {
     return (
         <AppBar
           title='Preview'
-          iconElementLeft={<IconButton onTouchTap={() => {this.context.router.push('/article-list')}}><IconBack /></IconButton>}
-          iconElementRight={<IconButton onTouchTap={this.edit}><EditorModeEdit/></IconButton>}
+          iconElementLeft={<IconButton onClick={() => {this.context.router.push('/article-list')}}><IconBack /></IconButton>}
+          iconElementRight={<IconButton onClick={this.edit}><EditorModeEdit/></IconButton>}
           />
     );
   }

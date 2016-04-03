@@ -2,6 +2,7 @@ import React from 'react'
 import AppBar from 'material-ui/lib/app-bar'
 import IconButton from 'material-ui/lib/icon-button'
 import ContentAdd from 'material-ui/lib/svg-icons/content/add';
+import NavigationMenu from 'material-ui/lib/svg-icons/navigation/menu';
 import {Actions} from '../../stores/nav.js'
 
 export default class MainHeader extends React.Component {
@@ -11,7 +12,9 @@ export default class MainHeader extends React.Component {
   constructor(props) {
     super(props)
   }
-  toggleNav () {
+  toggleNav (e) {
+    e.stopPropagation()
+    e.preventDefault()
     Actions.toggleNav()
   }
   newNote = () => {
@@ -21,8 +24,8 @@ export default class MainHeader extends React.Component {
     return (
         <AppBar
           title='Markdown Note'
-          onLeftIconButtonTouchTap={this.toggleNav}
-          iconElementRight={<IconButton onTouchTap={this.newNote}><ContentAdd /></IconButton>}
+          iconElementLeft={<IconButton onClick={this.toggleNav}><NavigationMenu /></IconButton>}
+          iconElementRight={<IconButton onClick={this.newNote}><ContentAdd /></IconButton>}
           />
     );
   }

@@ -8,14 +8,16 @@ export default class MainHeader extends React.Component {
   constructor(props) {
     super(props)
   }
-  toggleNav () {
+  toggleNav (e) {
+    e.stopPropagation()
+    e.preventDefault()
     Actions.toggleNav()
   }
   render() {
     return (
         <AppBar
           title='Markdown Note'
-          onLeftIconButtonTouchTap={this.toggleNav}
+          iconElementLeft={<IconButton onClick={this.toggleNav}><NavigationMenu /></IconButton>}
           />
     );
   }

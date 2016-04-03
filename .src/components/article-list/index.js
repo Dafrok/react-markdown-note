@@ -75,12 +75,15 @@ export default class ArticleList extends React.Component {
           this.state.articles.map((item, index) => {
             return (<ListItem
               key={item.id}
-              rightIcon={
-                <ActionDelete onTouchTap={e => {
-                  e.stopPropagation()
-                  e.preventDefault()
-                  this.delete(item.id)}
-                }/>
+              rightIconButton={
+                <IconButton
+                  onClick={e =>{
+                    e.preventDefault()
+                    e.stopPropagation()
+                    this.delete(item.id)
+                  }}>
+                  <ActionDelete />
+                </IconButton>
               }
               primaryText={item.title}
               secondaryText={dateFormat(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')}

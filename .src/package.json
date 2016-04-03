@@ -47,6 +47,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "fastclick": "^1.0.6",
     "marked": "^0.3.5",
     "material-ui": "^0.14.4",
     "react": "^0.14.7",

@@ -25426,7 +25426,7 @@ webpackJsonp([0],[
 
 
 	// module
-	exports.push([module.id, "*:not(input,\ntextarea) {\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n}\n* {\n  box-sizing: border-box;\n}\nbody {\n  padding: 0;\n  margin: 0;\n  font-family: PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;\n}\n.status-bar {\n  position: fixed;\n  left: 0;\n  right: 0;\n  top: 0;\n  height: 64px;\n  z-index: 1;\n}\n.content {\n  padding-top: 64px;\n}\n.navigator a {\n  width: 100%;\n  height: 100%;\n  display: block;\n}\n", ""]);
+	exports.push([module.id, "* {\n  box-sizing: border-box;\n}\nbody {\n  padding: 0;\n  margin: 0;\n  font-family: PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;\n}\n.status-bar {\n  position: fixed;\n  left: 0;\n  right: 0;\n  top: 0;\n  height: 64px;\n  z-index: 1;\n}\n.content {\n  padding-top: 64px;\n}\n.navigator a {\n  width: 100%;\n  height: 100%;\n  display: block;\n}\n", ""]);
 
 	// exports
 
@@ -35975,11 +35975,16 @@ webpackJsonp([0],[
 	          this.state.articles.map(function (item, index) {
 	            return _react2.default.createElement(_listItem2.default, {
 	              key: item.id,
-	              rightIcon: _react2.default.createElement(_delete2.default, { onTouchTap: function onTouchTap(e) {
-	                  e.stopPropagation();
-	                  e.preventDefault();
-	                  _this2.delete(item.id);
-	                } }),
+	              rightIconButton: _react2.default.createElement(
+	                _iconButton2.default,
+	                {
+	                  onClick: function onClick(e) {
+	                    e.preventDefault();
+	                    e.stopPropagation();
+	                    _this2.delete(item.id);
+	                  } },
+	                _react2.default.createElement(_delete2.default, null)
+	              ),
 	              primaryText: item.title,
 	              secondaryText: (0, _dateFormat2.default)(new Date(item.time), 'yyyy-MM-dd hh:mm:ss'),
 	              linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: { pathname: '/preview/' + item.id } })
@@ -43315,6 +43320,10 @@ webpackJsonp([0],[
 
 	var _add2 = _interopRequireDefault(_add);
 
+	var _menu = __webpack_require__(413);
+
+	var _menu2 = _interopRequireDefault(_menu);
+
 	var _nav = __webpack_require__(415);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -43342,7 +43351,9 @@ webpackJsonp([0],[
 
 	  _createClass(MainHeader, [{
 	    key: 'toggleNav',
-	    value: function toggleNav() {
+	    value: function toggleNav(e) {
+	      e.stopPropagation();
+	      e.preventDefault();
 	      _nav.Actions.toggleNav();
 	    }
 	  }, {
@@ -43350,10 +43361,14 @@ webpackJsonp([0],[
 	    value: function render() {
 	      return _react2.default.createElement(_appBar2.default, {
 	        title: 'Markdown Note',
-	        onLeftIconButtonTouchTap: this.toggleNav,
+	        iconElementLeft: _react2.default.createElement(
+	          _iconButton2.default,
+	          { onClick: this.toggleNav },
+	          _react2.default.createElement(_menu2.default, null)
+	        ),
 	        iconElementRight: _react2.default.createElement(
 	          _iconButton2.default,
-	          { onTouchTap: this.newNote },
+	          { onClick: this.newNote },
 	          _react2.default.createElement(_add2.default, null)
 	        )
 	      });
@@ -48950,6 +48965,10 @@ webpackJsonp([0],[
 
 	var _nav = __webpack_require__(415);
 
+	var _menu = __webpack_require__(413);
+
+	var _menu2 = _interopRequireDefault(_menu);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -48979,7 +48998,11 @@ webpackJsonp([0],[
 	    value: function render() {
 	      return _react2.default.createElement(_appBar2.default, {
 	        title: 'Markdown Note',
-	        onLeftIconButtonTouchTap: this.toggleNav
+	        iconElementLeft: _react2.default.createElement(
+	          _iconButton2.default,
+	          { onClick: this.toggleNav },
+	          _react2.default.createElement(_menu2.default, null)
+	        )
 	      });
 	    }
 	  }]);
@@ -49253,14 +49276,14 @@ webpackJsonp([0],[
 	        title: 'Preview',
 	        iconElementLeft: _react2.default.createElement(
 	          _iconButton2.default,
-	          { onTouchTap: function onTouchTap() {
+	          { onClick: function onClick() {
 	              _this2.context.router.push('/article-list');
 	            } },
 	          _react2.default.createElement(_keyboardArrowLeft2.default, null)
 	        ),
 	        iconElementRight: _react2.default.createElement(
 	          _iconButton2.default,
-	          { onTouchTap: this.edit },
+	          { onClick: this.edit },
 	          _react2.default.createElement(_modeEdit2.default, null)
 	        )
 	      });
@@ -52545,14 +52568,14 @@ webpackJsonp([0],[
 	        title: 'Editor',
 	        iconElementLeft: _react2.default.createElement(
 	          _iconButton2.default,
-	          { onTouchTap: function onTouchTap() {
+	          { onClick: function onClick() {
 	              _this2.context.router.push('/article-list');
 	            } },
 	          _react2.default.createElement(_keyboardArrowLeft2.default, null)
 	        ),
 	        iconElementRight: _react2.default.createElement(
 	          _iconButton2.default,
-	          { onTouchTap: this.save },
+	          { onClick: this.save },
 	          _react2.default.createElement(_save2.default, null)
 	        )
 	      });
@@ -53409,7 +53432,7 @@ webpackJsonp([0],[
 	          this.state.articles.map(function (item, index) {
 	            return _react2.default.createElement(_listItem2.default, {
 	              key: item.id,
-	              rightIcon: _react2.default.createElement(_undo2.default, { onTouchTap: function onTouchTap() {
+	              rightIcon: _react2.default.createElement(_undo2.default, { onClick: function onClick() {
 	                  _this2.recover(item.id);
 	                } }),
 	              primaryText: item.title,
@@ -53504,6 +53527,10 @@ webpackJsonp([0],[
 
 	var _delete2 = _interopRequireDefault(_delete);
 
+	var _menu = __webpack_require__(413);
+
+	var _menu2 = _interopRequireDefault(_menu);
+
 	var _dialog = __webpack_require__(547);
 
 	var _dialog2 = _interopRequireDefault(_dialog);
@@ -53565,10 +53592,14 @@ webpackJsonp([0],[
 	    value: function render() {
 	      return _react2.default.createElement(_appBar2.default, {
 	        title: 'Markdown Note',
-	        onLeftIconButtonTouchTap: this.toggleNav,
+	        iconElementLeft: _react2.default.createElement(
+	          _iconButton2.default,
+	          { onClick: this.toggleNav },
+	          _react2.default.createElement(_menu2.default, null)
+	        ),
 	        iconElementRight: _react2.default.createElement(
 	          _iconButton2.default,
-	          { onTouchTap: this.openConfirm },
+	          { onClick: this.openConfirm },
 	          _react2.default.createElement(_delete2.default, null)
 	        ),
 	        children: _react2.default.createElement(
@@ -53578,12 +53609,12 @@ webpackJsonp([0],[
 	            actions: [_react2.default.createElement(_flatButton2.default, {
 	              label: 'YES',
 	              secondary: true,
-	              onTouchTap: this.deleteAll
+	              onClick: this.deleteAll
 	            }), _react2.default.createElement(_flatButton2.default, {
 	              label: 'NO',
 	              primary: true,
 	              keyboardFocused: true,
-	              onTouchTap: this.closeConfirm
+	              onClick: this.closeConfirm
 	            })],
 	            modal: false,
 	            open: this.state.open,

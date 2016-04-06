@@ -57,7 +57,7 @@ export default class Editor extends React.Component {
       <Card>
         <CardActions>
           <TextField
-              hintText="Notepad"
+              hintText="&nbsp;Enter markdown text here."
               fullWidth={true}
               underlineShow={false}
               multiLine={true}

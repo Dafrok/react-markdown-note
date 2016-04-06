@@ -52,15 +52,22 @@ export default class Recycle extends React.Component {
       <div>
       <Navigator />
       <StatusBar>
-        <Header />
+        <Header refresh={this.getList} />
       </StatusBar>
       <List>
         {
           this.state.articles.map((item, index) => {
             return (<ListItem
               key={item.id}
-              rightIcon={
-                <ContentUndo onClick={() => {this.recover(item.id)}}/>
+              rightIconButton={
+                <IconButton
+                  onClick={e =>{
+                    e.preventDefault()
+                    e.stopPropagation()
+                    this.recover(item.id)
+                  }}>
+                  <ContentUndo />
+                </IconButton>
               }
               primaryText={item.title}
               secondaryText={dateFormat(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')}

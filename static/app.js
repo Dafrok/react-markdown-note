@@ -52729,7 +52729,6 @@ webpackJsonp([0],[
 	      });
 	    };
 
-	    console.log(context);
 	    _this.state = {
 	      account: '',
 	      password: ''
@@ -53432,9 +53431,16 @@ webpackJsonp([0],[
 	          this.state.articles.map(function (item, index) {
 	            return _react2.default.createElement(_listItem2.default, {
 	              key: item.id,
-	              rightIcon: _react2.default.createElement(_undo2.default, { onClick: function onClick() {
-	                  _this2.recover(item.id);
-	                } }),
+	              rightIconButton: _react2.default.createElement(
+	                _iconButton2.default,
+	                {
+	                  onClick: function onClick(e) {
+	                    e.preventDefault();
+	                    e.stopPropagation();
+	                    _this2.recover(item.id);
+	                  } },
+	                _react2.default.createElement(_undo2.default, null)
+	              ),
 	              primaryText: item.title,
 	              secondaryText: (0, _dateFormat2.default)(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')
 	            });

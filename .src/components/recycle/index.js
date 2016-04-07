@@ -6,7 +6,7 @@ import Avatar from 'material-ui/lib/avatar';
 import Colors from 'material-ui/lib/styles/colors';
 import IconButton from 'material-ui/lib/icon-button';
 import MoreVertIcon from 'material-ui/lib/svg-icons/navigation/more-vert';
-import ActionDelete from 'material-ui/lib/svg-icons/action/delete';
+import ContentUndo from 'material-ui/lib/svg-icons/content/undo';
 import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import {Link} from 'react-router'
@@ -56,7 +56,7 @@ export default class Recycle extends React.Component {
             return (<ListItem
               key={item.id}
               rightIcon={
-                <ActionDelete onTouchTap={this.recover}/>
+                <ContentUndo onTouchTap={this.recover}/>
               }
               primaryText={item.title}
               secondaryText={dateFormat(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')}

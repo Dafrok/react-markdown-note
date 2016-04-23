@@ -8,8 +8,18 @@ let Store = Reflux.createStore({
   listenables: [Actions],
   isNavOpen: false,
   onToggleNav (bool) {
-    this.isNavOpen = (typeof bool !== 'undefined' ? bool : !this.isNavOpen)
+    if (typeof bool === 'undefined') {
+      this.isNavOpen = !bool
+    } else if (bool) {
+      this.isNavOpen = bool
+      this.trigger(!bool)
+    } else {
+      this.isNavOpen = bool
+      this.trigger(!bool)
+    }
     this.trigger(this.isNavOpen)
+    // this.isNavOpen = (typeof bool !== 'undefined' ? bool : !this.isNavOpen)
+    // this.trigger(this.isNavOpen)
   }
 })
 

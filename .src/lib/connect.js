@@ -28,8 +28,12 @@ export const signUp = (email, password) => {
 export const changePassword = (email, oldPwd, newPwd) => {
 
 }
-export const resetPassword = email => {
-
+export const resetPassword = (email, callback) => {
+  wilddog.resetPassword({
+    email: email
+  }, err => {
+    callback && callback(err)
+  })
 }
 
 export default wilddog

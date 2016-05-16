@@ -5,10 +5,8 @@ import Navigator from '../util/navigator'
 import Card from 'material-ui/lib/card/card'
 import CardActions from 'material-ui/lib/card/card-actions'
 import TextField from 'material-ui/lib/text-field'
-import {Link} from 'react-router'
-import FlatButton from 'material-ui/lib/flat-button'
 import RaisedButton from 'material-ui/lib/raised-button'
-import connect, {resetPassword} from '../../lib/connect.js'
+import {resetPassword} from '../../lib/connect.js'
 
 export default class Forgot extends React.Component {
   static contextTypes = {
@@ -25,8 +23,8 @@ export default class Forgot extends React.Component {
   }
   resetPassword = e => {
     e.preventDefault()
-    resetPassword(this.state.account, e => {
-      if (!e) {
+    resetPassword(this.state.account, err => {
+      if (!err) {
         console.log('Reset complete.')
         this.context.router.push('/')
       }

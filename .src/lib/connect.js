@@ -22,5 +22,14 @@ export const login = (email, password, callback) => {
     //   }
   })
 }
+export const signUp = (email, password) => {
+
+}
+export const changePassword = (email, oldPwd, newPwd) => {
+
+}
+export const resetPassword = email => {
+
+}
 
 export default wilddog

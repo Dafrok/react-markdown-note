@@ -2,14 +2,21 @@ import React from 'react'
 import Header from '../util/header'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
+import ActionLock from 'material-ui/lib/svg-icons/action/lock';
+import SocialPersonAdd from 'material-ui/lib/svg-icons/social/person-add';
 import Card from 'material-ui/lib/card/card'
 import CardActions from 'material-ui/lib/card/card-actions'
 import TextField from 'material-ui/lib/text-field'
+import {Link} from 'react-router'
+import FlatButton from 'material-ui/lib/flat-button'
 import RaisedButton from 'material-ui/lib/raised-button'
 import connect from '../../lib/connect.js'
 import {Actions} from '../../stores/auth.js'
 
 class Login extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
   constructor(props, context) {
     super(props, context)
     this.state = {
@@ -53,7 +60,9 @@ class Login extends React.Component {
       <div>
       <Card>
         <CardActions>
-          <form onSubmit={this.login}>
+          <form onSubmit={this.login} id="login">
+            <RaisedButton onClick={() => {this.context.router.push('/signup')}} label="SignUp" type="button" icon={<SocialPersonAdd/>} style={{marginRight: 12}}/>
+            <RaisedButton onClick={() => {this.context.router.push('/forgot')}} label="Forgot" type="button" icon={<ActionLock/>}/>
             <TextField
               hintText="Account"
               fullWidth={true}

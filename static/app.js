@@ -462,8 +462,7 @@ webpackJsonp([0],[
 	var required = __webpack_require__(16)
 	  , lolcation = __webpack_require__(17)
 	  , qs = __webpack_require__(18)
-	  , relativere = /^\/(?!\/)/
-	  , protocolre = /^([a-z0-9.+-]+:)?(\/\/)?(.*)$/i; // actual protocol is first match
+	  , relativere = /^\/(?!\/)/;
 
 	/**
 	 * These are the parse instructions for the URL parsers, it informs the parser
@@ -480,36 +479,13 @@ webpackJsonp([0],[
 	var instructions = [
 	  ['#', 'hash'],                        // Extract from the back.
 	  ['?', 'query'],                       // Extract from the back.
+	  ['//', 'protocol', 2, 1, 1],          // Extract from the front.
 	  ['/', 'pathname'],                    // Extract from the back.
 	  ['@', 'auth', 1],                     // Extract from the front.
 	  [NaN, 'host', undefined, 1, 1],       // Set left over value.
 	  [/\:(\d+)$/, 'port'],                 // RegExp the back.
 	  [NaN, 'hostname', undefined, 1, 1]    // Set left over.
 	];
-
-	 /**
-	 * @typedef ProtocolExtract
-	 * @type Object
-	 * @property {String} protocol Protocol matched in the URL, in lowercase
-	 * @property {Boolean} slashes Indicates whether the protocol is followed by double slash ("//")
-	 * @property {String} rest     Rest of the URL that is not part of the protocol
-	 */
-
-	 /**
-	  * Extract protocol information from a URL with/without double slash ("//")
-	  *
-	  * @param  {String} address   URL we want to extract from.
-	  * @return {ProtocolExtract}  Extracted information
-	  * @private
-	  */
-	function extractProtocol(address) {
-	  var match = protocolre.exec(address);
-	  return {
-	    protocol: match[1] ? match[1].toLowerCase() : '',
-	    slashes: !!match[2],
-	    rest: match[3] ? match[3] : ''
-	  };
-	}
 
 	/**
 	 * The actual URL instance. Instead of returning an object we've opted-in to
@@ -518,8 +494,8 @@ webpackJsonp([0],[
 	 *
 	 * @constructor
 	 * @param {String} address URL we want to parse.
-	 * @param {Object|String} location Location defaults for relative paths.
-	 * @param {Boolean|Function} parser Parser for the query string.
+	 * @param {Boolean|function} parser Parser for the query string.
+	 * @param {Object} location Location defaults for relative paths.
 	 * @api public
 	 */
 	function URL(address, location, parser) {
@@ -554,12 +530,6 @@ webpackJsonp([0],[
 	  }
 
 	  location = lolcation(location);
-
-	  // extract protocol information before running the instructions
-	  var extracted = extractProtocol(address);
-	  url.protocol = extracted.protocol || location.protocol || '';
-	  url.slashes = extracted.slashes || location.slashes;
-	  address = extracted.rest;
 
 	  for (; i < instructions.length; i++) {
 	    instruction = instructions[i];
@@ -631,12 +601,8 @@ webpackJsonp([0],[
 	 * This is convenience method for changing properties in the URL instance to
 	 * insure that they all propagate correctly.
 	 *
-	 * @param {String} prop          Property we need to adjust.
-	 * @param {Mixed} value          The newly assigned value.
-	 * @param {Boolean|Function} fn  When setting the query, it will be the function used to parse
-	 *                               the query.
-	 *                               When setting the protocol, double slash will be removed from
-	 *                               the final url if it is true.
+	 * @param {String} prop Property we need to adjust.
+	 * @param {Mixed} value The newly assigned value.
 	 * @returns {URL}
 	 * @api public
 	 */
@@ -671,9 +637,6 @@ webpackJsonp([0],[
 	      url.hostname = value[0];
 	      url.port = value[1];
 	    }
-	  } else if ('protocol' === part) {
-	    url.protocol = value;
-	    url.slashes = !fn;
 	  } else {
 	    url[part] = value;
 	  }
@@ -694,11 +657,7 @@ webpackJsonp([0],[
 
 	  var query
 	    , url = this
-	    , protocol = url.protocol;
-
-	  if (protocol && protocol.charAt(protocol.length - 1) !== ':') protocol += ':';
-
-	  var result = protocol + (url.slashes ? '//' : '');
+	    , result = url.protocol +'//';
 
 	  if (url.username) {
 	    result += url.username;
@@ -778,11 +737,9 @@ webpackJsonp([0],[
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
-	var slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
-
 	/**
 	 * These properties should not be copied or inherited from. This is only needed
-	 * for all non blob URL's as a blob URL does not include a hash, only the
+	 * for all non blob URL's as the a blob URL does not include a hash, only the
 	 * origin.
 	 *
 	 * @type {Object}
@@ -799,7 +756,7 @@ webpackJsonp([0],[
 	 * encoded in the `pathname` so we can thankfully generate a good "default"
 	 * location from it so we can generate proper relative URL's again.
 	 *
-	 * @param {Object|String} loc Optional default location object.
+	 * @param {Object} loc Optional default location object.
 	 * @returns {Object} lolcation object.
 	 * @api public
 	 */
@@ -816,15 +773,9 @@ webpackJsonp([0],[
 	  } else if ('string' === type) {
 	    finaldestination = new URL(loc, {});
 	    for (key in ignore) delete finaldestination[key];
-	  } else if ('object' === type) {
-	    for (key in loc) {
-	      if (key in ignore) continue;
-	      finaldestination[key] = loc[key];
-	    }
-
-	    if (finaldestination.slashes === undefined) {
-	      finaldestination.slashes = slashes.test(loc.href);
-	    }
+	  } else if ('object' === type) for (key in loc) {
+	    if (key in ignore) continue;
+	    finaldestination[key] = loc[key];
 	  }
 
 	  return finaldestination;
@@ -5481,15 +5432,15 @@ webpackJsonp([0],[
 
 	var _articleList2 = _interopRequireDefault(_articleList);
 
-	var _about = __webpack_require__(514);
+	var _about = __webpack_require__(458);
 
 	var _about2 = _interopRequireDefault(_about);
 
-	var _preview = __webpack_require__(516);
+	var _preview = __webpack_require__(460);
 
 	var _preview2 = _interopRequireDefault(_preview);
 
-	var _editor = __webpack_require__(526);
+	var _editor = __webpack_require__(470);
 
 	var _editor2 = _interopRequireDefault(_editor);
 
@@ -5501,17 +5452,21 @@ webpackJsonp([0],[
 
 	var _recycle2 = _interopRequireDefault(_recycle);
 
-	var _reactTapEventPlugin = __webpack_require__(550);
+	var _signUp = __webpack_require__(550);
+
+	var _signUp2 = _interopRequireDefault(_signUp);
+
+	var _reactTapEventPlugin = __webpack_require__(551);
 
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 
-	var _connect = __webpack_require__(451);
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _connect2 = _interopRequireDefault(_connect);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var FastClick = __webpack_require__(555);
+	var FastClick = __webpack_require__(556);
 	FastClick.attach(document.body);
 	(0, _reactTapEventPlugin2.default)();
 
@@ -5534,7 +5489,8 @@ webpackJsonp([0],[
 	    _react2.default.createElement(_reactRouter.Route, { path: 'preview/:noteId', component: _preview2.default, onEnter: needLogin }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'recycle', component: _recycle2.default, onEnter: needLogin }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _about2.default, onEnter: needLogin }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _login2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _login2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signUp2.default })
 	  )
 	), document.getElementById('app'));
 
@@ -12189,10 +12145,6 @@ webpackJsonp([0],[
 	  }
 	};
 
-	function registerNullComponentID() {
-	  ReactEmptyComponentRegistry.registerNullComponentID(this._rootNodeID);
-	}
-
 	var ReactEmptyComponent = function (instantiate) {
 	  this._currentElement = null;
 	  this._rootNodeID = null;
@@ -12201,7 +12153,7 @@ webpackJsonp([0],[
 	assign(ReactEmptyComponent.prototype, {
 	  construct: function (element) {},
 	  mountComponent: function (rootID, transaction, context) {
-	    transaction.getReactMountReady().enqueue(registerNullComponentID, this);
+	    ReactEmptyComponentRegistry.registerNullComponentID(rootID);
 	    this._rootNodeID = rootID;
 	    return ReactReconciler.mountComponent(this._renderedComponent, rootID, transaction, context);
 	  },
@@ -24435,7 +24387,7 @@ webpackJsonp([0],[
 
 	'use strict';
 
-	module.exports = '0.14.8';
+	module.exports = '0.14.7';
 
 /***/ },
 /* 231 */
@@ -25704,6 +25656,7 @@ webpackJsonp([0],[
 	function applyToTag(styleElement, obj) {
 		var css = obj.css;
 		var media = obj.media;
+		var sourceMap = obj.sourceMap;
 
 		if(media) {
 			styleElement.setAttribute("media", media)
@@ -25721,6 +25674,7 @@ webpackJsonp([0],[
 
 	function updateLink(linkElement, obj) {
 		var css = obj.css;
+		var media = obj.media;
 		var sourceMap = obj.sourceMap;
 
 		if(sourceMap) {
@@ -32414,7 +32368,7 @@ webpackJsonp([0],[
 /***/ function(module, exports) {
 
 	/**
-	 * lodash 3.0.8 (Custom Build) <https://lodash.com/>
+	 * lodash 3.0.7 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -32517,7 +32471,8 @@ webpackJsonp([0],[
 	 * // => false
 	 */
 	function isArrayLike(value) {
-	  return value != null && isLength(getLength(value)) && !isFunction(value);
+	  return value != null &&
+	    !(typeof value == 'function' && isFunction(value)) && isLength(getLength(value));
 	}
 
 	/**
@@ -32565,8 +32520,8 @@ webpackJsonp([0],[
 	 */
 	function isFunction(value) {
 	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in Safari 8 which returns 'object' for typed array and weak map constructors,
-	  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+	  // in Safari 8 which returns 'object' for typed array constructors, and
+	  // PhantomJS 1.9 which returns 'function' for `NodeList` instances.
 	  var tag = isObject(value) ? objectToString.call(value) : '';
 	  return tag == funcTag || tag == genTag;
 	}
@@ -35868,15 +35823,15 @@ webpackJsonp([0],[
 
 	var _navigator2 = _interopRequireDefault(_navigator);
 
-	var _connect = __webpack_require__(451);
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _connect2 = _interopRequireDefault(_connect);
 
-	var _dateFormat = __webpack_require__(513);
+	var _dateFormat = __webpack_require__(457);
 
 	var _dateFormat2 = _interopRequireDefault(_dateFormat);
 
-	var _delete = __webpack_require__(508);
+	var _delete = __webpack_require__(452);
 
 	var _delete2 = _interopRequireDefault(_delete);
 
@@ -43354,7 +43309,7 @@ webpackJsonp([0],[
 	    value: function toggleNav(e) {
 	      e.stopPropagation();
 	      e.preventDefault();
-	      _nav.Actions.toggleNav();
+	      _nav.Actions.toggleNav(true);
 	    }
 	  }, {
 	    key: 'render',
@@ -43862,8 +43817,18 @@ webpackJsonp([0],[
 	  listenables: [Actions],
 	  isNavOpen: false,
 	  onToggleNav: function onToggleNav(bool) {
-	    this.isNavOpen = typeof bool !== 'undefined' ? bool : !this.isNavOpen;
+	    if (typeof bool === 'undefined') {
+	      this.isNavOpen = !bool;
+	    } else if (bool) {
+	      this.isNavOpen = bool;
+	      this.trigger(!bool);
+	    } else {
+	      this.isNavOpen = bool;
+	      this.trigger(!bool);
+	    }
 	    this.trigger(this.isNavOpen);
+	    // this.isNavOpen = (typeof bool !== 'undefined' ? bool : !this.isNavOpen)
+	    // this.trigger(this.isNavOpen)
 	  }
 	});
 
@@ -44342,8 +44307,6 @@ webpackJsonp([0],[
 
 	'use strict';
 
-	var has = Object.prototype.hasOwnProperty;
-
 	//
 	// We store our EE objects in a plain object whose properties are event names.
 	// If `Object.create(null)` is not supported we prefix the event names with a
@@ -44359,7 +44322,7 @@ webpackJsonp([0],[
 	 *
 	 * @param {Function} fn Event handler to be called.
 	 * @param {Mixed} context Context for function execution.
-	 * @param {Boolean} [once=false] Only emit once
+	 * @param {Boolean} once Only emit once
 	 * @api private
 	 */
 	function EE(fn, context, once) {
@@ -44378,37 +44341,12 @@ webpackJsonp([0],[
 	function EventEmitter() { /* Nothing to set */ }
 
 	/**
-	 * Hold the assigned EventEmitters by name.
+	 * Holds the assigned EventEmitters by name.
 	 *
 	 * @type {Object}
 	 * @private
 	 */
 	EventEmitter.prototype._events = undefined;
-
-	/**
-	 * Return an array listing the events for which the emitter has registered
-	 * listeners.
-	 *
-	 * @returns {Array}
-	 * @api public
-	 */
-	EventEmitter.prototype.eventNames = function eventNames() {
-	  var events = this._events
-	    , names = []
-	    , name;
-
-	  if (!events) return names;
-
-	  for (name in events) {
-	    if (has.call(events, name)) names.push(prefix ? name.slice(1) : name);
-	  }
-
-	  if (Object.getOwnPropertySymbols) {
-	    return names.concat(Object.getOwnPropertySymbols(events));
-	  }
-
-	  return names;
-	};
 
 	/**
 	 * Return a list of assigned event listeners.
@@ -44495,8 +44433,8 @@ webpackJsonp([0],[
 	 * Register a new EventListener for the given event.
 	 *
 	 * @param {String} event Name of the event.
-	 * @param {Function} fn Callback function.
-	 * @param {Mixed} [context=this] The context of the function.
+	 * @param {Functon} fn Callback function.
+	 * @param {Mixed} context The context of the function.
 	 * @api public
 	 */
 	EventEmitter.prototype.on = function on(event, fn, context) {
@@ -44520,7 +44458,7 @@ webpackJsonp([0],[
 	 *
 	 * @param {String} event Name of the event.
 	 * @param {Function} fn Callback function.
-	 * @param {Mixed} [context=this] The context of the function.
+	 * @param {Mixed} context The context of the function.
 	 * @api public
 	 */
 	EventEmitter.prototype.once = function once(event, fn, context) {
@@ -45393,27 +45331,27 @@ webpackJsonp([0],[
 
 	var _reactRouter = __webpack_require__(247);
 
-	var _connect = __webpack_require__(451);
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../../lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _connect2 = _interopRequireDefault(_connect);
 
-	var _delete = __webpack_require__(508);
+	var _delete = __webpack_require__(452);
 
 	var _delete2 = _interopRequireDefault(_delete);
 
-	var _insertDriveFile = __webpack_require__(509);
+	var _insertDriveFile = __webpack_require__(453);
 
 	var _insertDriveFile2 = _interopRequireDefault(_insertDriveFile);
 
-	var _folder = __webpack_require__(510);
+	var _folder = __webpack_require__(454);
 
 	var _folder2 = _interopRequireDefault(_folder);
 
-	var _grade = __webpack_require__(511);
+	var _grade = __webpack_require__(455);
 
 	var _grade2 = _interopRequireDefault(_grade);
 
-	var _supervisorAccount = __webpack_require__(512);
+	var _supervisorAccount = __webpack_require__(456);
 
 	var _supervisorAccount2 = _interopRequireDefault(_supervisorAccount);
 
@@ -45451,7 +45389,7 @@ webpackJsonp([0],[
 	  _createClass(Header, [{
 	    key: 'close',
 	    value: function close() {
-	      _nav.Actions.toggleNav(false);
+	      _nav.Actions.toggleNav(true);
 	    }
 	  }, {
 	    key: 'componentDidMount',
@@ -48515,112 +48453,8 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 451 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.login = exports.getUid = undefined;
-
-	var _wilddog = __webpack_require__(452);
-
-	var _wilddog2 = _interopRequireDefault(_wilddog);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var wilddog = new _wilddog2.default('https://wild-tiger-8739.wilddogio.com/');
-
-	var getUid = exports.getUid = function getUid() {
-	  return wilddog.getAuth();
-	};
-	var login = exports.login = function login(email, password, callback) {
-	  wilddog.authWithPassword({
-	    email: undefined.state.account,
-	    password: undefined.state.password
-	  }, function (error, authData) {
-	    callback(error, authData);
-	    // if (error) {
-	    //     switch (error.code) {
-	    //       case "INVALID_EMAIL":
-	    //         console.log("The specified user account email is invalid.")
-	    //         break;
-	    //       default:
-	    //         console.log("Error logging user in:", error)
-	    //     }
-	    //   } else {
-	    //     console.log("Authenticated successfully with payload:", authData)
-	    //   }
-	  });
-	};
-
-	exports.default = wilddog;
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(310); if (makeExportsHot(module, __webpack_require__(138))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "connect.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
-
-/***/ },
-/* 452 */,
-/* 453 */,
-/* 454 */,
-/* 455 */,
-/* 456 */,
-/* 457 */,
-/* 458 */,
-/* 459 */,
-/* 460 */,
-/* 461 */,
-/* 462 */,
-/* 463 */,
-/* 464 */,
-/* 465 */,
-/* 466 */,
-/* 467 */,
-/* 468 */,
-/* 469 */,
-/* 470 */,
-/* 471 */,
-/* 472 */,
-/* 473 */,
-/* 474 */,
-/* 475 */,
-/* 476 */,
-/* 477 */,
-/* 478 */,
-/* 479 */,
-/* 480 */,
-/* 481 */,
-/* 482 */,
-/* 483 */,
-/* 484 */,
-/* 485 */,
-/* 486 */,
-/* 487 */,
-/* 488 */,
-/* 489 */,
-/* 490 */,
-/* 491 */,
-/* 492 */,
-/* 493 */,
-/* 494 */,
-/* 495 */,
-/* 496 */,
-/* 497 */,
-/* 498 */,
-/* 499 */,
-/* 500 */,
-/* 501 */,
-/* 502 */,
-/* 503 */,
-/* 504 */,
-/* 505 */,
-/* 506 */,
-/* 507 */,
-/* 508 */
+/* 451 */,
+/* 452 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48661,7 +48495,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 509 */
+/* 453 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48702,7 +48536,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 510 */
+/* 454 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48743,7 +48577,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 511 */
+/* 455 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48784,7 +48618,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 512 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48825,7 +48659,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 513 */
+/* 457 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -48856,7 +48690,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 514 */
+/* 458 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -48874,7 +48708,7 @@ webpackJsonp([0],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _header = __webpack_require__(515);
+	var _header = __webpack_require__(459);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -48933,7 +48767,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 515 */
+/* 459 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -48991,7 +48825,7 @@ webpackJsonp([0],[
 	    value: function toggleNav(e) {
 	      e.stopPropagation();
 	      e.preventDefault();
-	      _nav.Actions.toggleNav();
+	      _nav.Actions.toggleNav(true);
 	    }
 	  }, {
 	    key: 'render',
@@ -49016,7 +48850,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 516 */
+/* 460 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -49030,15 +48864,15 @@ webpackJsonp([0],[
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	__webpack_require__(517);
+	__webpack_require__(461);
 
-	__webpack_require__(519);
+	__webpack_require__(463);
 
 	var _react = __webpack_require__(138);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _header = __webpack_require__(521);
+	var _header = __webpack_require__(465);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -49054,11 +48888,11 @@ webpackJsonp([0],[
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _marked = __webpack_require__(525);
+	var _marked = __webpack_require__(469);
 
 	var _marked2 = _interopRequireDefault(_marked);
 
-	var _connect = __webpack_require__(451);
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _connect2 = _interopRequireDefault(_connect);
 
@@ -49120,13 +48954,13 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 517 */
+/* 461 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(518);
+	var content = __webpack_require__(462);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(245)(content, {});
@@ -49135,8 +48969,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(518, function() {
-				var newContent = __webpack_require__(518);
+			module.hot.accept(462, function() {
+				var newContent = __webpack_require__(462);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -49146,7 +48980,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 518 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(244)();
@@ -49154,19 +48988,19 @@ webpackJsonp([0],[
 
 
 	// module
-	exports.push([module.id, "@font-face {\r\n  font-family: octicons-anchor;\r\n  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');\r\n}\r\n\r\n.markdown-body {\r\n  -webkit-text-size-adjust: 100%;\r\n  text-size-adjust: 100%;\r\n  color: #333;\r\n  font-family: \"Helvetica Neue\", Helvetica, \"Segoe UI\", Arial, freesans, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";\r\n  font-size: 16px;\r\n  line-height: 1.6;\r\n  word-wrap: break-word;\r\n}\r\n\r\n.markdown-body a {\r\n  background-color: transparent;\r\n}\r\n\r\n.markdown-body a:active,\r\n.markdown-body a:hover {\r\n  outline: 0;\r\n}\r\n\r\n.markdown-body strong {\r\n  font-weight: bold;\r\n}\r\n\r\n.markdown-body h1 {\r\n  font-size: 2em;\r\n  margin: 0.67em 0;\r\n}\r\n\r\n.markdown-body img {\r\n  border: 0;\r\n}\r\n\r\n.markdown-body hr {\r\n  box-sizing: content-box;\r\n  height: 0;\r\n}\r\n\r\n.markdown-body pre {\r\n  overflow: auto;\r\n}\r\n\r\n.markdown-body code,\r\n.markdown-body kbd,\r\n.markdown-body pre {\r\n  font-family: monospace, monospace;\r\n  font-size: 1em;\r\n}\r\n\r\n.markdown-body input {\r\n  color: inherit;\r\n  font: inherit;\r\n  margin: 0;\r\n}\r\n\r\n.markdown-body html input[disabled] {\r\n  cursor: default;\r\n}\r\n\r\n.markdown-body input {\r\n  line-height: normal;\r\n}\r\n\r\n.markdown-body input[type=\"checkbox\"] {\r\n  box-sizing: border-box;\r\n  padding: 0;\r\n}\r\n\r\n.markdown-body table {\r\n  border-collapse: collapse;\r\n  border-spacing: 0;\r\n}\r\n\r\n.markdown-body td,\r\n.markdown-body th {\r\n  padding: 0;\r\n}\r\n\r\n.markdown-body * {\r\n  box-sizing: border-box;\r\n}\r\n\r\n.markdown-body input {\r\n  font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";\r\n}\r\n\r\n.markdown-body a {\r\n  color: #4078c0;\r\n  text-decoration: none;\r\n}\r\n\r\n.markdown-body a:hover,\r\n.markdown-body a:active {\r\n  text-decoration: underline;\r\n}\r\n\r\n.markdown-body hr {\r\n  height: 0;\r\n  margin: 15px 0;\r\n  overflow: hidden;\r\n  background: transparent;\r\n  border: 0;\r\n  border-bottom: 1px solid #ddd;\r\n}\r\n\r\n.markdown-body hr:before {\r\n  display: table;\r\n  content: \"\";\r\n}\r\n\r\n.markdown-body hr:after {\r\n  display: table;\r\n  clear: both;\r\n  content: \"\";\r\n}\r\n\r\n.markdown-body h1,\r\n.markdown-body h2,\r\n.markdown-body h3,\r\n.markdown-body h4,\r\n.markdown-body h5,\r\n.markdown-body h6 {\r\n  margin-top: 15px;\r\n  margin-bottom: 15px;\r\n  line-height: 1.1;\r\n}\r\n\r\n.markdown-body h1 {\r\n  font-size: 30px;\r\n}\r\n\r\n.markdown-body h2 {\r\n  font-size: 21px;\r\n}\r\n\r\n.markdown-body h3 {\r\n  font-size: 16px;\r\n}\r\n\r\n.markdown-body h4 {\r\n  font-size: 14px;\r\n}\r\n\r\n.markdown-body h5 {\r\n  font-size: 12px;\r\n}\r\n\r\n.markdown-body h6 {\r\n  font-size: 11px;\r\n}\r\n\r\n.markdown-body blockquote {\r\n  margin: 0;\r\n}\r\n\r\n.markdown-body ul,\r\n.markdown-body ol {\r\n  padding: 0;\r\n  margin-top: 0;\r\n  margin-bottom: 0;\r\n}\r\n\r\n.markdown-body ol ol,\r\n.markdown-body ul ol {\r\n  list-style-type: lower-roman;\r\n}\r\n\r\n.markdown-body ul ul ol,\r\n.markdown-body ul ol ol,\r\n.markdown-body ol ul ol,\r\n.markdown-body ol ol ol {\r\n  list-style-type: lower-alpha;\r\n}\r\n\r\n.markdown-body dd {\r\n  margin-left: 0;\r\n}\r\n\r\n.markdown-body code {\r\n  font-family: Consolas, \"Liberation Mono\", Menlo, Courier, monospace;\r\n  font-size: 12px;\r\n}\r\n\r\n.markdown-body pre {\r\n  margin-top: 0;\r\n  margin-bottom: 0;\r\n  font: 12px Consolas, \"Liberation Mono\", Menlo, Courier, monospace;\r\n}\r\n\r\n.markdown-body .select::-ms-expand {\r\n  opacity: 0;\r\n}\r\n\r\n.markdown-body .octicon {\r\n  font: normal normal normal 16px/1 octicons-anchor;\r\n  display: inline-block;\r\n  text-decoration: none;\r\n  text-rendering: auto;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  -webkit-user-select: none;\r\n  -moz-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n}\r\n\r\n.markdown-body .octicon-link:before {\r\n  content: '\\F05C';\r\n}\r\n\r\n.markdown-body>*:first-child {\r\n  margin-top: 0 !important;\r\n}\r\n\r\n.markdown-body>*:last-child {\r\n  margin-bottom: 0 !important;\r\n}\r\n\r\n.markdown-body a:not([href]) {\r\n  color: inherit;\r\n  text-decoration: none;\r\n}\r\n\r\n.markdown-body .anchor {\r\n  display: inline-block;\r\n  padding-right: 2px;\r\n  margin-left: -18px;\r\n}\r\n\r\n.markdown-body .anchor:focus {\r\n  outline: none;\r\n}\r\n\r\n.markdown-body h1,\r\n.markdown-body h2,\r\n.markdown-body h3,\r\n.markdown-body h4,\r\n.markdown-body h5,\r\n.markdown-body h6 {\r\n  margin-top: 1em;\r\n  margin-bottom: 16px;\r\n  font-weight: bold;\r\n  line-height: 1.4;\r\n}\r\n\r\n.markdown-body h1 .octicon-link,\r\n.markdown-body h2 .octicon-link,\r\n.markdown-body h3 .octicon-link,\r\n.markdown-body h4 .octicon-link,\r\n.markdown-body h5 .octicon-link,\r\n.markdown-body h6 .octicon-link {\r\n  color: #000;\r\n  vertical-align: middle;\r\n  visibility: hidden;\r\n}\r\n\r\n.markdown-body h1:hover .anchor,\r\n.markdown-body h2:hover .anchor,\r\n.markdown-body h3:hover .anchor,\r\n.markdown-body h4:hover .anchor,\r\n.markdown-body h5:hover .anchor,\r\n.markdown-body h6:hover .anchor {\r\n  text-decoration: none;\r\n}\r\n\r\n.markdown-body h1:hover .anchor .octicon-link,\r\n.markdown-body h2:hover .anchor .octicon-link,\r\n.markdown-body h3:hover .anchor .octicon-link,\r\n.markdown-body h4:hover .anchor .octicon-link,\r\n.markdown-body h5:hover .anchor .octicon-link,\r\n.markdown-body h6:hover .anchor .octicon-link {\r\n  visibility: visible;\r\n}\r\n\r\n.markdown-body h1 {\r\n  padding-bottom: 0.3em;\r\n  font-size: 2.25em;\r\n  line-height: 1.2;\r\n  border-bottom: 1px solid #eee;\r\n}\r\n\r\n.markdown-body h1 .anchor {\r\n  line-height: 1;\r\n}\r\n\r\n.markdown-body h2 {\r\n  padding-bottom: 0.3em;\r\n  font-size: 1.75em;\r\n  line-height: 1.225;\r\n  border-bottom: 1px solid #eee;\r\n}\r\n\r\n.markdown-body h2 .anchor {\r\n  line-height: 1;\r\n}\r\n\r\n.markdown-body h3 {\r\n  font-size: 1.5em;\r\n  line-height: 1.43;\r\n}\r\n\r\n.markdown-body h3 .anchor {\r\n  line-height: 1.2;\r\n}\r\n\r\n.markdown-body h4 {\r\n  font-size: 1.25em;\r\n}\r\n\r\n.markdown-body h4 .anchor {\r\n  line-height: 1.2;\r\n}\r\n\r\n.markdown-body h5 {\r\n  font-size: 1em;\r\n}\r\n\r\n.markdown-body h5 .anchor {\r\n  line-height: 1.1;\r\n}\r\n\r\n.markdown-body h6 {\r\n  font-size: 1em;\r\n  color: #777;\r\n}\r\n\r\n.markdown-body h6 .anchor {\r\n  line-height: 1.1;\r\n}\r\n\r\n.markdown-body p,\r\n.markdown-body blockquote,\r\n.markdown-body ul,\r\n.markdown-body ol,\r\n.markdown-body dl,\r\n.markdown-body table,\r\n.markdown-body pre {\r\n  margin-top: 0;\r\n  margin-bottom: 16px;\r\n}\r\n\r\n.markdown-body hr {\r\n  height: 4px;\r\n  padding: 0;\r\n  margin: 16px 0;\r\n  background-color: #e7e7e7;\r\n  border: 0 none;\r\n}\r\n\r\n.markdown-body ul,\r\n.markdown-body ol {\r\n  padding-left: 2em;\r\n}\r\n\r\n.markdown-body ul ul,\r\n.markdown-body ul ol,\r\n.markdown-body ol ol,\r\n.markdown-body ol ul {\r\n  margin-top: 0;\r\n  margin-bottom: 0;\r\n}\r\n\r\n.markdown-body li>p {\r\n  margin-top: 16px;\r\n}\r\n\r\n.markdown-body dl {\r\n  padding: 0;\r\n}\r\n\r\n.markdown-body dl dt {\r\n  padding: 0;\r\n  margin-top: 16px;\r\n  font-size: 1em;\r\n  font-style: italic;\r\n  font-weight: bold;\r\n}\r\n\r\n.markdown-body dl dd {\r\n  padding: 0 16px;\r\n  margin-bottom: 16px;\r\n}\r\n\r\n.markdown-body blockquote {\r\n  padding: 0 15px;\r\n  color: #777;\r\n  border-left: 4px solid #ddd;\r\n}\r\n\r\n.markdown-body blockquote>:first-child {\r\n  margin-top: 0;\r\n}\r\n\r\n.markdown-body blockquote>:last-child {\r\n  margin-bottom: 0;\r\n}\r\n\r\n.markdown-body table {\r\n  display: block;\r\n  width: 100%;\r\n  overflow: auto;\r\n  word-break: normal;\r\n  word-break: keep-all;\r\n}\r\n\r\n.markdown-body table th {\r\n  font-weight: bold;\r\n}\r\n\r\n.markdown-body table th,\r\n.markdown-body table td {\r\n  padding: 6px 13px;\r\n  border: 1px solid #ddd;\r\n}\r\n\r\n.markdown-body table tr {\r\n  background-color: #fff;\r\n  border-top: 1px solid #ccc;\r\n}\r\n\r\n.markdown-body table tr:nth-child(2n) {\r\n  background-color: #f8f8f8;\r\n}\r\n\r\n.markdown-body img {\r\n  max-width: 100%;\r\n  box-sizing: content-box;\r\n  background-color: #fff;\r\n}\r\n\r\n.markdown-body code {\r\n  padding: 0;\r\n  padding-top: 0.2em;\r\n  padding-bottom: 0.2em;\r\n  margin: 0;\r\n  font-size: 85%;\r\n  background-color: rgba(0,0,0,0.04);\r\n  border-radius: 3px;\r\n}\r\n\r\n.markdown-body code:before,\r\n.markdown-body code:after {\r\n  letter-spacing: -0.2em;\r\n  content: \"\\A0\";\r\n}\r\n\r\n.markdown-body pre>code {\r\n  padding: 0;\r\n  margin: 0;\r\n  font-size: 100%;\r\n  word-break: normal;\r\n  white-space: pre;\r\n  background: transparent;\r\n  border: 0;\r\n}\r\n\r\n.markdown-body .highlight {\r\n  margin-bottom: 16px;\r\n}\r\n\r\n.markdown-body .highlight pre,\r\n.markdown-body pre {\r\n  padding: 16px;\r\n  overflow: auto;\r\n  font-size: 85%;\r\n  line-height: 1.45;\r\n  background-color: #f7f7f7;\r\n  border-radius: 3px;\r\n}\r\n\r\n.markdown-body .highlight pre {\r\n  margin-bottom: 0;\r\n  word-break: normal;\r\n}\r\n\r\n.markdown-body pre {\r\n  word-wrap: normal;\r\n}\r\n\r\n.markdown-body pre code {\r\n  display: inline;\r\n  max-width: initial;\r\n  padding: 0;\r\n  margin: 0;\r\n  overflow: initial;\r\n  line-height: inherit;\r\n  word-wrap: normal;\r\n  background-color: transparent;\r\n  border: 0;\r\n}\r\n\r\n.markdown-body pre code:before,\r\n.markdown-body pre code:after {\r\n  content: normal;\r\n}\r\n\r\n.markdown-body kbd {\r\n  display: inline-block;\r\n  padding: 3px 5px;\r\n  font-size: 11px;\r\n  line-height: 10px;\r\n  color: #555;\r\n  vertical-align: middle;\r\n  background-color: #fcfcfc;\r\n  border: solid 1px #ccc;\r\n  border-bottom-color: #bbb;\r\n  border-radius: 3px;\r\n  box-shadow: inset 0 -1px 0 #bbb;\r\n}\r\n\r\n.markdown-body .pl-c {\r\n  color: #969896;\r\n}\r\n\r\n.markdown-body .pl-c1,\r\n.markdown-body .pl-s .pl-v {\r\n  color: #0086b3;\r\n}\r\n\r\n.markdown-body .pl-e,\r\n.markdown-body .pl-en {\r\n  color: #795da3;\r\n}\r\n\r\n.markdown-body .pl-s .pl-s1,\r\n.markdown-body .pl-smi {\r\n  color: #333;\r\n}\r\n\r\n.markdown-body .pl-ent {\r\n  color: #63a35c;\r\n}\r\n\r\n.markdown-body .pl-k {\r\n  color: #a71d5d;\r\n}\r\n\r\n.markdown-body .pl-pds,\r\n.markdown-body .pl-s,\r\n.markdown-body .pl-s .pl-pse .pl-s1,\r\n.markdown-body .pl-sr,\r\n.markdown-body .pl-sr .pl-cce,\r\n.markdown-body .pl-sr .pl-sra,\r\n.markdown-body .pl-sr .pl-sre {\r\n  color: #183691;\r\n}\r\n\r\n.markdown-body .pl-v {\r\n  color: #ed6a43;\r\n}\r\n\r\n.markdown-body .pl-id {\r\n  color: #b52a1d;\r\n}\r\n\r\n.markdown-body .pl-ii {\r\n  background-color: #b52a1d;\r\n  color: #f8f8f8;\r\n}\r\n\r\n.markdown-body .pl-sr .pl-cce {\r\n  color: #63a35c;\r\n  font-weight: bold;\r\n}\r\n\r\n.markdown-body .pl-ml {\r\n  color: #693a17;\r\n}\r\n\r\n.markdown-body .pl-mh,\r\n.markdown-body .pl-mh .pl-en,\r\n.markdown-body .pl-ms {\r\n  color: #1d3e81;\r\n  font-weight: bold;\r\n}\r\n\r\n.markdown-body .pl-mq {\r\n  color: #008080;\r\n}\r\n\r\n.markdown-body .pl-mi {\r\n  color: #333;\r\n  font-style: italic;\r\n}\r\n\r\n.markdown-body .pl-mb {\r\n  color: #333;\r\n  font-weight: bold;\r\n}\r\n\r\n.markdown-body .pl-md {\r\n  background-color: #ffecec;\r\n  color: #bd2c00;\r\n}\r\n\r\n.markdown-body .pl-mi1 {\r\n  background-color: #eaffea;\r\n  color: #55a532;\r\n}\r\n\r\n.markdown-body .pl-mdr {\r\n  color: #795da3;\r\n  font-weight: bold;\r\n}\r\n\r\n.markdown-body .pl-mo {\r\n  color: #1d3e81;\r\n}\r\n\r\n.markdown-body kbd {\r\n  display: inline-block;\r\n  padding: 3px 5px;\r\n  font: 11px Consolas, \"Liberation Mono\", Menlo, Courier, monospace;\r\n  line-height: 10px;\r\n  color: #555;\r\n  vertical-align: middle;\r\n  background-color: #fcfcfc;\r\n  border: solid 1px #ccc;\r\n  border-bottom-color: #bbb;\r\n  border-radius: 3px;\r\n  box-shadow: inset 0 -1px 0 #bbb;\r\n}\r\n\r\n.markdown-body:before {\r\n  display: table;\r\n  content: \"\";\r\n}\r\n\r\n.markdown-body:after {\r\n  display: table;\r\n  clear: both;\r\n  content: \"\";\r\n}\r\n\r\n.markdown-body .task-list-item {\r\n  list-style-type: none;\r\n}\r\n\r\n.markdown-body .task-list-item+.task-list-item {\r\n  margin-top: 3px;\r\n}\r\n\r\n.markdown-body .task-list-item input {\r\n  margin: 0 0.35em 0.25em -1.6em;\r\n  vertical-align: middle;\r\n}\r\n\r\n.markdown-body :checked+.radio-label {\r\n  z-index: 1;\r\n  position: relative;\r\n  border-color: #4078c0;\r\n}\r\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: octicons-anchor;\n  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');\n}\n\n.markdown-body {\n  -webkit-text-size-adjust: 100%;\n  text-size-adjust: 100%;\n  color: #333;\n  font-family: \"Helvetica Neue\", Helvetica, \"Segoe UI\", Arial, freesans, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";\n  font-size: 16px;\n  line-height: 1.6;\n  word-wrap: break-word;\n}\n\n.markdown-body a {\n  background-color: transparent;\n}\n\n.markdown-body a:active,\n.markdown-body a:hover {\n  outline: 0;\n}\n\n.markdown-body strong {\n  font-weight: bold;\n}\n\n.markdown-body h1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\n\n.markdown-body img {\n  border: 0;\n}\n\n.markdown-body hr {\n  box-sizing: content-box;\n  height: 0;\n}\n\n.markdown-body pre {\n  overflow: auto;\n}\n\n.markdown-body code,\n.markdown-body kbd,\n.markdown-body pre {\n  font-family: monospace, monospace;\n  font-size: 1em;\n}\n\n.markdown-body input {\n  color: inherit;\n  font: inherit;\n  margin: 0;\n}\n\n.markdown-body html input[disabled] {\n  cursor: default;\n}\n\n.markdown-body input {\n  line-height: normal;\n}\n\n.markdown-body input[type=\"checkbox\"] {\n  box-sizing: border-box;\n  padding: 0;\n}\n\n.markdown-body table {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\n\n.markdown-body td,\n.markdown-body th {\n  padding: 0;\n}\n\n.markdown-body * {\n  box-sizing: border-box;\n}\n\n.markdown-body input {\n  font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\";\n}\n\n.markdown-body a {\n  color: #4078c0;\n  text-decoration: none;\n}\n\n.markdown-body a:hover,\n.markdown-body a:active {\n  text-decoration: underline;\n}\n\n.markdown-body hr {\n  height: 0;\n  margin: 15px 0;\n  overflow: hidden;\n  background: transparent;\n  border: 0;\n  border-bottom: 1px solid #ddd;\n}\n\n.markdown-body hr:before {\n  display: table;\n  content: \"\";\n}\n\n.markdown-body hr:after {\n  display: table;\n  clear: both;\n  content: \"\";\n}\n\n.markdown-body h1,\n.markdown-body h2,\n.markdown-body h3,\n.markdown-body h4,\n.markdown-body h5,\n.markdown-body h6 {\n  margin-top: 15px;\n  margin-bottom: 15px;\n  line-height: 1.1;\n}\n\n.markdown-body h1 {\n  font-size: 30px;\n}\n\n.markdown-body h2 {\n  font-size: 21px;\n}\n\n.markdown-body h3 {\n  font-size: 16px;\n}\n\n.markdown-body h4 {\n  font-size: 14px;\n}\n\n.markdown-body h5 {\n  font-size: 12px;\n}\n\n.markdown-body h6 {\n  font-size: 11px;\n}\n\n.markdown-body blockquote {\n  margin: 0;\n}\n\n.markdown-body ul,\n.markdown-body ol {\n  padding: 0;\n  margin-top: 0;\n  margin-bottom: 0;\n}\n\n.markdown-body ol ol,\n.markdown-body ul ol {\n  list-style-type: lower-roman;\n}\n\n.markdown-body ul ul ol,\n.markdown-body ul ol ol,\n.markdown-body ol ul ol,\n.markdown-body ol ol ol {\n  list-style-type: lower-alpha;\n}\n\n.markdown-body dd {\n  margin-left: 0;\n}\n\n.markdown-body code {\n  font-family: Consolas, \"Liberation Mono\", Menlo, Courier, monospace;\n  font-size: 12px;\n}\n\n.markdown-body pre {\n  margin-top: 0;\n  margin-bottom: 0;\n  font: 12px Consolas, \"Liberation Mono\", Menlo, Courier, monospace;\n}\n\n.markdown-body .select::-ms-expand {\n  opacity: 0;\n}\n\n.markdown-body .octicon {\n  font: normal normal normal 16px/1 octicons-anchor;\n  display: inline-block;\n  text-decoration: none;\n  text-rendering: auto;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n\n.markdown-body .octicon-link:before {\n  content: '\\F05C';\n}\n\n.markdown-body>*:first-child {\n  margin-top: 0 !important;\n}\n\n.markdown-body>*:last-child {\n  margin-bottom: 0 !important;\n}\n\n.markdown-body a:not([href]) {\n  color: inherit;\n  text-decoration: none;\n}\n\n.markdown-body .anchor {\n  display: inline-block;\n  padding-right: 2px;\n  margin-left: -18px;\n}\n\n.markdown-body .anchor:focus {\n  outline: none;\n}\n\n.markdown-body h1,\n.markdown-body h2,\n.markdown-body h3,\n.markdown-body h4,\n.markdown-body h5,\n.markdown-body h6 {\n  margin-top: 1em;\n  margin-bottom: 16px;\n  font-weight: bold;\n  line-height: 1.4;\n}\n\n.markdown-body h1 .octicon-link,\n.markdown-body h2 .octicon-link,\n.markdown-body h3 .octicon-link,\n.markdown-body h4 .octicon-link,\n.markdown-body h5 .octicon-link,\n.markdown-body h6 .octicon-link {\n  color: #000;\n  vertical-align: middle;\n  visibility: hidden;\n}\n\n.markdown-body h1:hover .anchor,\n.markdown-body h2:hover .anchor,\n.markdown-body h3:hover .anchor,\n.markdown-body h4:hover .anchor,\n.markdown-body h5:hover .anchor,\n.markdown-body h6:hover .anchor {\n  text-decoration: none;\n}\n\n.markdown-body h1:hover .anchor .octicon-link,\n.markdown-body h2:hover .anchor .octicon-link,\n.markdown-body h3:hover .anchor .octicon-link,\n.markdown-body h4:hover .anchor .octicon-link,\n.markdown-body h5:hover .anchor .octicon-link,\n.markdown-body h6:hover .anchor .octicon-link {\n  visibility: visible;\n}\n\n.markdown-body h1 {\n  padding-bottom: 0.3em;\n  font-size: 2.25em;\n  line-height: 1.2;\n  border-bottom: 1px solid #eee;\n}\n\n.markdown-body h1 .anchor {\n  line-height: 1;\n}\n\n.markdown-body h2 {\n  padding-bottom: 0.3em;\n  font-size: 1.75em;\n  line-height: 1.225;\n  border-bottom: 1px solid #eee;\n}\n\n.markdown-body h2 .anchor {\n  line-height: 1;\n}\n\n.markdown-body h3 {\n  font-size: 1.5em;\n  line-height: 1.43;\n}\n\n.markdown-body h3 .anchor {\n  line-height: 1.2;\n}\n\n.markdown-body h4 {\n  font-size: 1.25em;\n}\n\n.markdown-body h4 .anchor {\n  line-height: 1.2;\n}\n\n.markdown-body h5 {\n  font-size: 1em;\n}\n\n.markdown-body h5 .anchor {\n  line-height: 1.1;\n}\n\n.markdown-body h6 {\n  font-size: 1em;\n  color: #777;\n}\n\n.markdown-body h6 .anchor {\n  line-height: 1.1;\n}\n\n.markdown-body p,\n.markdown-body blockquote,\n.markdown-body ul,\n.markdown-body ol,\n.markdown-body dl,\n.markdown-body table,\n.markdown-body pre {\n  margin-top: 0;\n  margin-bottom: 16px;\n}\n\n.markdown-body hr {\n  height: 4px;\n  padding: 0;\n  margin: 16px 0;\n  background-color: #e7e7e7;\n  border: 0 none;\n}\n\n.markdown-body ul,\n.markdown-body ol {\n  padding-left: 2em;\n}\n\n.markdown-body ul ul,\n.markdown-body ul ol,\n.markdown-body ol ol,\n.markdown-body ol ul {\n  margin-top: 0;\n  margin-bottom: 0;\n}\n\n.markdown-body li>p {\n  margin-top: 16px;\n}\n\n.markdown-body dl {\n  padding: 0;\n}\n\n.markdown-body dl dt {\n  padding: 0;\n  margin-top: 16px;\n  font-size: 1em;\n  font-style: italic;\n  font-weight: bold;\n}\n\n.markdown-body dl dd {\n  padding: 0 16px;\n  margin-bottom: 16px;\n}\n\n.markdown-body blockquote {\n  padding: 0 15px;\n  color: #777;\n  border-left: 4px solid #ddd;\n}\n\n.markdown-body blockquote>:first-child {\n  margin-top: 0;\n}\n\n.markdown-body blockquote>:last-child {\n  margin-bottom: 0;\n}\n\n.markdown-body table {\n  display: block;\n  width: 100%;\n  overflow: auto;\n  word-break: normal;\n  word-break: keep-all;\n}\n\n.markdown-body table th {\n  font-weight: bold;\n}\n\n.markdown-body table th,\n.markdown-body table td {\n  padding: 6px 13px;\n  border: 1px solid #ddd;\n}\n\n.markdown-body table tr {\n  background-color: #fff;\n  border-top: 1px solid #ccc;\n}\n\n.markdown-body table tr:nth-child(2n) {\n  background-color: #f8f8f8;\n}\n\n.markdown-body img {\n  max-width: 100%;\n  box-sizing: content-box;\n  background-color: #fff;\n}\n\n.markdown-body code {\n  padding: 0;\n  padding-top: 0.2em;\n  padding-bottom: 0.2em;\n  margin: 0;\n  font-size: 85%;\n  background-color: rgba(0,0,0,0.04);\n  border-radius: 3px;\n}\n\n.markdown-body code:before,\n.markdown-body code:after {\n  letter-spacing: -0.2em;\n  content: \"\\A0\";\n}\n\n.markdown-body pre>code {\n  padding: 0;\n  margin: 0;\n  font-size: 100%;\n  word-break: normal;\n  white-space: pre;\n  background: transparent;\n  border: 0;\n}\n\n.markdown-body .highlight {\n  margin-bottom: 16px;\n}\n\n.markdown-body .highlight pre,\n.markdown-body pre {\n  padding: 16px;\n  overflow: auto;\n  font-size: 85%;\n  line-height: 1.45;\n  background-color: #f7f7f7;\n  border-radius: 3px;\n}\n\n.markdown-body .highlight pre {\n  margin-bottom: 0;\n  word-break: normal;\n}\n\n.markdown-body pre {\n  word-wrap: normal;\n}\n\n.markdown-body pre code {\n  display: inline;\n  max-width: initial;\n  padding: 0;\n  margin: 0;\n  overflow: initial;\n  line-height: inherit;\n  word-wrap: normal;\n  background-color: transparent;\n  border: 0;\n}\n\n.markdown-body pre code:before,\n.markdown-body pre code:after {\n  content: normal;\n}\n\n.markdown-body kbd {\n  display: inline-block;\n  padding: 3px 5px;\n  font-size: 11px;\n  line-height: 10px;\n  color: #555;\n  vertical-align: middle;\n  background-color: #fcfcfc;\n  border: solid 1px #ccc;\n  border-bottom-color: #bbb;\n  border-radius: 3px;\n  box-shadow: inset 0 -1px 0 #bbb;\n}\n\n.markdown-body .pl-c {\n  color: #969896;\n}\n\n.markdown-body .pl-c1,\n.markdown-body .pl-s .pl-v {\n  color: #0086b3;\n}\n\n.markdown-body .pl-e,\n.markdown-body .pl-en {\n  color: #795da3;\n}\n\n.markdown-body .pl-s .pl-s1,\n.markdown-body .pl-smi {\n  color: #333;\n}\n\n.markdown-body .pl-ent {\n  color: #63a35c;\n}\n\n.markdown-body .pl-k {\n  color: #a71d5d;\n}\n\n.markdown-body .pl-pds,\n.markdown-body .pl-s,\n.markdown-body .pl-s .pl-pse .pl-s1,\n.markdown-body .pl-sr,\n.markdown-body .pl-sr .pl-cce,\n.markdown-body .pl-sr .pl-sra,\n.markdown-body .pl-sr .pl-sre {\n  color: #183691;\n}\n\n.markdown-body .pl-v {\n  color: #ed6a43;\n}\n\n.markdown-body .pl-id {\n  color: #b52a1d;\n}\n\n.markdown-body .pl-ii {\n  background-color: #b52a1d;\n  color: #f8f8f8;\n}\n\n.markdown-body .pl-sr .pl-cce {\n  color: #63a35c;\n  font-weight: bold;\n}\n\n.markdown-body .pl-ml {\n  color: #693a17;\n}\n\n.markdown-body .pl-mh,\n.markdown-body .pl-mh .pl-en,\n.markdown-body .pl-ms {\n  color: #1d3e81;\n  font-weight: bold;\n}\n\n.markdown-body .pl-mq {\n  color: #008080;\n}\n\n.markdown-body .pl-mi {\n  color: #333;\n  font-style: italic;\n}\n\n.markdown-body .pl-mb {\n  color: #333;\n  font-weight: bold;\n}\n\n.markdown-body .pl-md {\n  background-color: #ffecec;\n  color: #bd2c00;\n}\n\n.markdown-body .pl-mi1 {\n  background-color: #eaffea;\n  color: #55a532;\n}\n\n.markdown-body .pl-mdr {\n  color: #795da3;\n  font-weight: bold;\n}\n\n.markdown-body .pl-mo {\n  color: #1d3e81;\n}\n\n.markdown-body kbd {\n  display: inline-block;\n  padding: 3px 5px;\n  font: 11px Consolas, \"Liberation Mono\", Menlo, Courier, monospace;\n  line-height: 10px;\n  color: #555;\n  vertical-align: middle;\n  background-color: #fcfcfc;\n  border: solid 1px #ccc;\n  border-bottom-color: #bbb;\n  border-radius: 3px;\n  box-shadow: inset 0 -1px 0 #bbb;\n}\n\n.markdown-body:before {\n  display: table;\n  content: \"\";\n}\n\n.markdown-body:after {\n  display: table;\n  clear: both;\n  content: \"\";\n}\n\n.markdown-body .task-list-item {\n  list-style-type: none;\n}\n\n.markdown-body .task-list-item+.task-list-item {\n  margin-top: 3px;\n}\n\n.markdown-body .task-list-item input {\n  margin: 0 0.35em 0.25em -1.6em;\n  vertical-align: middle;\n}\n\n.markdown-body :checked+.radio-label {\n  z-index: 1;\n  position: relative;\n  border-color: #4078c0;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 519 */
+/* 463 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(520);
+	var content = __webpack_require__(464);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(245)(content, {});
@@ -49175,8 +49009,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(520, function() {
-				var newContent = __webpack_require__(520);
+			module.hot.accept(464, function() {
+				var newContent = __webpack_require__(464);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -49186,7 +49020,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 520 */
+/* 464 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(244)();
@@ -49194,13 +49028,13 @@ webpackJsonp([0],[
 
 
 	// module
-	exports.push([module.id, "/*\r\n\r\ngithub.com style (c) Vasily Polovnyov <vast@whiteants.net>\r\n\r\n*/\r\n\r\n.hljs {\r\n  display: block;\r\n  overflow-x: auto;\r\n  padding: 0.5em;\r\n  color: #333;\r\n  background: #f8f8f8;\r\n}\r\n\r\n.hljs-comment,\r\n.hljs-quote {\r\n  color: #998;\r\n  font-style: italic;\r\n}\r\n\r\n.hljs-keyword,\r\n.hljs-selector-tag,\r\n.hljs-subst {\r\n  color: #333;\r\n  font-weight: bold;\r\n}\r\n\r\n.hljs-number,\r\n.hljs-literal,\r\n.hljs-variable,\r\n.hljs-template-variable,\r\n.hljs-tag .hljs-attr {\r\n  color: #008080;\r\n}\r\n\r\n.hljs-string,\r\n.hljs-doctag {\r\n  color: #d14;\r\n}\r\n\r\n.hljs-title,\r\n.hljs-section,\r\n.hljs-selector-id {\r\n  color: #900;\r\n  font-weight: bold;\r\n}\r\n\r\n.hljs-subst {\r\n  font-weight: normal;\r\n}\r\n\r\n.hljs-type,\r\n.hljs-class .hljs-title {\r\n  color: #458;\r\n  font-weight: bold;\r\n}\r\n\r\n.hljs-tag,\r\n.hljs-name,\r\n.hljs-attribute {\r\n  color: #000080;\r\n  font-weight: normal;\r\n}\r\n\r\n.hljs-regexp,\r\n.hljs-link {\r\n  color: #009926;\r\n}\r\n\r\n.hljs-symbol,\r\n.hljs-bullet {\r\n  color: #990073;\r\n}\r\n\r\n.hljs-built_in,\r\n.hljs-builtin-name {\r\n  color: #0086b3;\r\n}\r\n\r\n.hljs-meta {\r\n  color: #999;\r\n  font-weight: bold;\r\n}\r\n\r\n.hljs-deletion {\r\n  background: #fdd;\r\n}\r\n\r\n.hljs-addition {\r\n  background: #dfd;\r\n}\r\n\r\n.hljs-emphasis {\r\n  font-style: italic;\r\n}\r\n\r\n.hljs-strong {\r\n  font-weight: bold;\r\n}\r\n", ""]);
+	exports.push([module.id, "/*\n\ngithub.com style (c) Vasily Polovnyov <vast@whiteants.net>\n\n*/\n\n.hljs {\n  display: block;\n  overflow-x: auto;\n  padding: 0.5em;\n  color: #333;\n  background: #f8f8f8;\n}\n\n.hljs-comment,\n.hljs-quote {\n  color: #998;\n  font-style: italic;\n}\n\n.hljs-keyword,\n.hljs-selector-tag,\n.hljs-subst {\n  color: #333;\n  font-weight: bold;\n}\n\n.hljs-number,\n.hljs-literal,\n.hljs-variable,\n.hljs-template-variable,\n.hljs-tag .hljs-attr {\n  color: #008080;\n}\n\n.hljs-string,\n.hljs-doctag {\n  color: #d14;\n}\n\n.hljs-title,\n.hljs-section,\n.hljs-selector-id {\n  color: #900;\n  font-weight: bold;\n}\n\n.hljs-subst {\n  font-weight: normal;\n}\n\n.hljs-type,\n.hljs-class .hljs-title {\n  color: #458;\n  font-weight: bold;\n}\n\n.hljs-tag,\n.hljs-name,\n.hljs-attribute {\n  color: #000080;\n  font-weight: normal;\n}\n\n.hljs-regexp,\n.hljs-link {\n  color: #009926;\n}\n\n.hljs-symbol,\n.hljs-bullet {\n  color: #990073;\n}\n\n.hljs-built_in,\n.hljs-builtin-name {\n  color: #0086b3;\n}\n\n.hljs-meta {\n  color: #999;\n  font-weight: bold;\n}\n\n.hljs-deletion {\n  background: #fdd;\n}\n\n.hljs-addition {\n  background: #dfd;\n}\n\n.hljs-emphasis {\n  font-style: italic;\n}\n\n.hljs-strong {\n  font-weight: bold;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 521 */
+/* 465 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -49228,11 +49062,11 @@ webpackJsonp([0],[
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _close = __webpack_require__(522);
+	var _close = __webpack_require__(466);
 
 	var _close2 = _interopRequireDefault(_close);
 
-	var _modeEdit = __webpack_require__(523);
+	var _modeEdit = __webpack_require__(467);
 
 	var _modeEdit2 = _interopRequireDefault(_modeEdit);
 
@@ -49240,7 +49074,7 @@ webpackJsonp([0],[
 
 	var _nav = __webpack_require__(415);
 
-	var _keyboardArrowLeft = __webpack_require__(524);
+	var _keyboardArrowLeft = __webpack_require__(468);
 
 	var _keyboardArrowLeft2 = _interopRequireDefault(_keyboardArrowLeft);
 
@@ -49300,7 +49134,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 522 */
+/* 466 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49341,7 +49175,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 523 */
+/* 467 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49382,7 +49216,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 524 */
+/* 468 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49423,7 +49257,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 525 */
+/* 469 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -50715,7 +50549,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 526 */
+/* 470 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -50733,15 +50567,15 @@ webpackJsonp([0],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _textField = __webpack_require__(527);
+	var _textField = __webpack_require__(471);
 
 	var _textField2 = _interopRequireDefault(_textField);
 
-	var _card = __webpack_require__(534);
+	var _card = __webpack_require__(478);
 
 	var _card2 = _interopRequireDefault(_card);
 
-	var _cardActions = __webpack_require__(538);
+	var _cardActions = __webpack_require__(482);
 
 	var _cardActions2 = _interopRequireDefault(_cardActions);
 
@@ -50749,7 +50583,7 @@ webpackJsonp([0],[
 
 	var _statusBar2 = _interopRequireDefault(_statusBar);
 
-	var _header = __webpack_require__(539);
+	var _header = __webpack_require__(483);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -50757,7 +50591,7 @@ webpackJsonp([0],[
 
 	var _navigator2 = _interopRequireDefault(_navigator);
 
-	var _connect = __webpack_require__(451);
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _connect2 = _interopRequireDefault(_connect);
 
@@ -50868,7 +50702,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 527 */
+/* 471 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50877,7 +50711,7 @@ webpackJsonp([0],[
 	  value: true
 	});
 
-	var _TextField = __webpack_require__(528);
+	var _TextField = __webpack_require__(472);
 
 	var _TextField2 = _interopRequireDefault(_TextField);
 
@@ -50887,7 +50721,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 528 */
+/* 472 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50896,7 +50730,7 @@ webpackJsonp([0],[
 	  value: true
 	});
 
-	var _TextField = __webpack_require__(529);
+	var _TextField = __webpack_require__(473);
 
 	var _TextField2 = _interopRequireDefault(_TextField);
 
@@ -50906,7 +50740,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 529 */
+/* 473 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50941,7 +50775,7 @@ webpackJsonp([0],[
 
 	var _uniqueId2 = _interopRequireDefault(_uniqueId);
 
-	var _enhancedTextarea = __webpack_require__(530);
+	var _enhancedTextarea = __webpack_require__(474);
 
 	var _enhancedTextarea2 = _interopRequireDefault(_enhancedTextarea);
 
@@ -50953,15 +50787,15 @@ webpackJsonp([0],[
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _TextFieldHint = __webpack_require__(531);
+	var _TextFieldHint = __webpack_require__(475);
 
 	var _TextFieldHint2 = _interopRequireDefault(_TextFieldHint);
 
-	var _TextFieldLabel = __webpack_require__(532);
+	var _TextFieldLabel = __webpack_require__(476);
 
 	var _TextFieldLabel2 = _interopRequireDefault(_TextFieldLabel);
 
-	var _TextFieldUnderline = __webpack_require__(533);
+	var _TextFieldUnderline = __webpack_require__(477);
 
 	var _TextFieldUnderline2 = _interopRequireDefault(_TextFieldUnderline);
 
@@ -51471,7 +51305,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 530 */
+/* 474 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51677,7 +51511,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 531 */
+/* 475 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51755,7 +51589,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 532 */
+/* 476 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51867,7 +51701,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 533 */
+/* 477 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52005,7 +51839,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 534 */
+/* 478 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52028,7 +51862,7 @@ webpackJsonp([0],[
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _cardExpandable = __webpack_require__(535);
+	var _cardExpandable = __webpack_require__(479);
 
 	var _cardExpandable2 = _interopRequireDefault(_cardExpandable);
 
@@ -52156,7 +51990,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 535 */
+/* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52169,11 +52003,11 @@ webpackJsonp([0],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _keyboardArrowUp = __webpack_require__(536);
+	var _keyboardArrowUp = __webpack_require__(480);
 
 	var _keyboardArrowUp2 = _interopRequireDefault(_keyboardArrowUp);
 
-	var _keyboardArrowDown = __webpack_require__(537);
+	var _keyboardArrowDown = __webpack_require__(481);
 
 	var _keyboardArrowDown2 = _interopRequireDefault(_keyboardArrowDown);
 
@@ -52290,7 +52124,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 536 */
+/* 480 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52331,7 +52165,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 537 */
+/* 481 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52372,7 +52206,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 538 */
+/* 482 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52471,7 +52305,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 539 */
+/* 483 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -52499,15 +52333,15 @@ webpackJsonp([0],[
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _close = __webpack_require__(522);
+	var _close = __webpack_require__(466);
 
 	var _close2 = _interopRequireDefault(_close);
 
-	var _save = __webpack_require__(540);
+	var _save = __webpack_require__(484);
 
 	var _save2 = _interopRequireDefault(_save);
 
-	var _keyboardArrowLeft = __webpack_require__(524);
+	var _keyboardArrowLeft = __webpack_require__(468);
 
 	var _keyboardArrowLeft2 = _interopRequireDefault(_keyboardArrowLeft);
 
@@ -52515,11 +52349,11 @@ webpackJsonp([0],[
 
 	var _nav = __webpack_require__(415);
 
-	var _connect = __webpack_require__(451);
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _connect2 = _interopRequireDefault(_connect);
 
-	var _wilddog = __webpack_require__(452);
+	var _wilddog = __webpack_require__(485);
 
 	var _wilddog2 = _interopRequireDefault(_wilddog);
 
@@ -52592,7 +52426,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 540 */
+/* 484 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52633,6 +52467,62 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
+/* 485 */,
+/* 486 */,
+/* 487 */,
+/* 488 */,
+/* 489 */,
+/* 490 */,
+/* 491 */,
+/* 492 */,
+/* 493 */,
+/* 494 */,
+/* 495 */,
+/* 496 */,
+/* 497 */,
+/* 498 */,
+/* 499 */,
+/* 500 */,
+/* 501 */,
+/* 502 */,
+/* 503 */,
+/* 504 */,
+/* 505 */,
+/* 506 */,
+/* 507 */,
+/* 508 */,
+/* 509 */,
+/* 510 */,
+/* 511 */,
+/* 512 */,
+/* 513 */,
+/* 514 */,
+/* 515 */,
+/* 516 */,
+/* 517 */,
+/* 518 */,
+/* 519 */,
+/* 520 */,
+/* 521 */,
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */,
+/* 527 */,
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */,
+/* 532 */,
+/* 533 */,
+/* 534 */,
+/* 535 */,
+/* 536 */,
+/* 537 */,
+/* 538 */,
+/* 539 */,
+/* 540 */,
 /* 541 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -52650,7 +52540,7 @@ webpackJsonp([0],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _header = __webpack_require__(515);
+	var _header = __webpack_require__(459);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -52662,15 +52552,15 @@ webpackJsonp([0],[
 
 	var _navigator2 = _interopRequireDefault(_navigator);
 
-	var _card = __webpack_require__(534);
+	var _card = __webpack_require__(478);
 
 	var _card2 = _interopRequireDefault(_card);
 
-	var _cardActions = __webpack_require__(538);
+	var _cardActions = __webpack_require__(482);
 
 	var _cardActions2 = _interopRequireDefault(_cardActions);
 
-	var _textField = __webpack_require__(527);
+	var _textField = __webpack_require__(471);
 
 	var _textField2 = _interopRequireDefault(_textField);
 
@@ -52678,7 +52568,7 @@ webpackJsonp([0],[
 
 	var _raisedButton2 = _interopRequireDefault(_raisedButton);
 
-	var _connect = __webpack_require__(451);
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _connect2 = _interopRequireDefault(_connect);
 
@@ -53354,11 +53244,11 @@ webpackJsonp([0],[
 
 	var _navigator2 = _interopRequireDefault(_navigator);
 
-	var _connect = __webpack_require__(451);
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _connect2 = _interopRequireDefault(_connect);
 
-	var _dateFormat = __webpack_require__(513);
+	var _dateFormat = __webpack_require__(457);
 
 	var _dateFormat2 = _interopRequireDefault(_dateFormat);
 
@@ -53529,7 +53419,7 @@ webpackJsonp([0],[
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _delete = __webpack_require__(508);
+	var _delete = __webpack_require__(452);
 
 	var _delete2 = _interopRequireDefault(_delete);
 
@@ -53545,7 +53435,7 @@ webpackJsonp([0],[
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
-	var _connect = __webpack_require__(451);
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _connect2 = _interopRequireDefault(_connect);
 
@@ -53593,7 +53483,7 @@ webpackJsonp([0],[
 	    value: function toggleNav(e) {
 	      e.stopPropagation();
 	      e.preventDefault();
-	      _nav.Actions.toggleNav();
+	      _nav.Actions.toggleNav(true);
 	    }
 	  }, {
 	    key: 'render',
@@ -54761,20 +54651,198 @@ webpackJsonp([0],[
 /* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var defaultClickRejectionStrategy = __webpack_require__(551);
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(138);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _list = __webpack_require__(361);
+
+	var _list2 = _interopRequireDefault(_list);
+
+	var _listItem = __webpack_require__(371);
+
+	var _listItem2 = _interopRequireDefault(_listItem);
+
+	var _divider = __webpack_require__(396);
+
+	var _divider2 = _interopRequireDefault(_divider);
+
+	var _avatar = __webpack_require__(398);
+
+	var _avatar2 = _interopRequireDefault(_avatar);
+
+	var _colors = __webpack_require__(306);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
+	var _iconButton = __webpack_require__(387);
+
+	var _iconButton2 = _interopRequireDefault(_iconButton);
+
+	var _moreVert = __webpack_require__(399);
+
+	var _moreVert2 = _interopRequireDefault(_moreVert);
+
+	var _undo = __webpack_require__(545);
+
+	var _undo2 = _interopRequireDefault(_undo);
+
+	var _iconMenu = __webpack_require__(400);
+
+	var _iconMenu2 = _interopRequireDefault(_iconMenu);
+
+	var _menuItem = __webpack_require__(409);
+
+	var _menuItem2 = _interopRequireDefault(_menuItem);
+
+	var _reactRouter = __webpack_require__(247);
+
+	var _header = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./header\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _header2 = _interopRequireDefault(_header);
+
+	var _statusBar = __webpack_require__(435);
+
+	var _statusBar2 = _interopRequireDefault(_statusBar);
+
+	var _navigator = __webpack_require__(436);
+
+	var _navigator2 = _interopRequireDefault(_navigator);
+
+	var _connect = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../lib/connect.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _connect2 = _interopRequireDefault(_connect);
+
+	var _dateFormat = __webpack_require__(457);
+
+	var _dateFormat2 = _interopRequireDefault(_dateFormat);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SignUp = function (_React$Component) {
+	  _inherits(SignUp, _React$Component);
+
+	  function SignUp(props) {
+	    _classCallCheck(this, SignUp);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SignUp).call(this, props));
+
+	    _this.recover = function (id) {
+	      // connect.child('recycle').child(connect.getAuth().auth.uid).remove()
+	      _connect2.default.child('recycle').child(_connect2.default.getAuth().auth.uid).child(id).once('value', function (snapshot) {
+	        _connect2.default.child('note').child(_connect2.default.getAuth().auth.uid).push(snapshot.val());
+	        _connect2.default.child('recycle').child(_connect2.default.getAuth().auth.uid).child(id).remove();
+	      });
+	      _this.getList();
+	    };
+
+	    _this.getList = function () {
+	      _connect2.default.child('recycle').child(_connect2.default.getAuth().auth.uid).orderByChild('time').once("value", function (snapshot) {
+	        var list = [];
+	        snapshot.forEach(function (snap) {
+	          var value = snap.val();
+	          value.id = snap.key();
+	          list.unshift(value);
+	        });
+	        _this.setState({ articles: list });
+	      }, function (errorObject) {
+	        console.log("The read failed: " + errorObject.code);
+	      });
+	    };
+
+	    _this.componentDidMount = function () {
+	      _this.getList();
+	    };
+
+	    _this.state = {
+	      articles: []
+	    };
+	    return _this;
+	  }
+
+	  _createClass(SignUp, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_navigator2.default, null),
+	        _react2.default.createElement(
+	          _statusBar2.default,
+	          null,
+	          _react2.default.createElement(_header2.default, { refresh: this.getList })
+	        ),
+	        _react2.default.createElement(
+	          _list2.default,
+	          null,
+	          this.state.articles.map(function (item, index) {
+	            return _react2.default.createElement(_listItem2.default, {
+	              key: item.id,
+	              rightIconButton: _react2.default.createElement(
+	                _iconButton2.default,
+	                {
+	                  onClick: function onClick(e) {
+	                    e.preventDefault();
+	                    e.stopPropagation();
+	                    _this2.recover(item.id);
+	                  } },
+	                _react2.default.createElement(_undo2.default, null)
+	              ),
+	              primaryText: item.title,
+	              secondaryText: (0, _dateFormat2.default)(new Date(item.time), 'yyyy-MM-dd hh:mm:ss')
+	            });
+	          })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SignUp;
+	}(_react2.default.Component);
+
+	exports.default = SignUp;
+	exports.default = Recycle;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(310); if (makeExportsHot(module, __webpack_require__(138))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
+
+/***/ },
+/* 551 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var defaultClickRejectionStrategy = __webpack_require__(552);
 
 	module.exports = function injectTapEventPlugin (strategyOverrides) {
 	  strategyOverrides = strategyOverrides || {}
 	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
 
 	  __webpack_require__(92).injection.injectEventPluginsByName({
-	    "TapEventPlugin":       __webpack_require__(552)(shouldRejectClick)
+	    "TapEventPlugin":       __webpack_require__(553)(shouldRejectClick)
 	  });
 	};
 
 
 /***/ },
-/* 551 */
+/* 552 */
 /***/ function(module, exports) {
 
 	module.exports = function(lastTouchEvent, clickTimestamp) {
@@ -54785,7 +54853,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 552 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -54813,10 +54881,10 @@ webpackJsonp([0],[
 	var EventPluginUtils = __webpack_require__(94);
 	var EventPropagators = __webpack_require__(157);
 	var SyntheticUIEvent = __webpack_require__(171);
-	var TouchEventUtils = __webpack_require__(553);
+	var TouchEventUtils = __webpack_require__(554);
 	var ViewportMetrics = __webpack_require__(102);
 
-	var keyOf = __webpack_require__(554);
+	var keyOf = __webpack_require__(555);
 	var topLevelTypes = EventConstants.topLevelTypes;
 
 	var isStartish = EventPluginUtils.isStartish;
@@ -54962,7 +55030,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 553 */
+/* 554 */
 /***/ function(module, exports) {
 
 	/**
@@ -55010,7 +55078,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 554 */
+/* 555 */
 /***/ function(module, exports) {
 
 	/**
@@ -55050,7 +55118,7 @@ webpackJsonp([0],[
 	module.exports = keyOf;
 
 /***/ },
-/* 555 */
+/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {

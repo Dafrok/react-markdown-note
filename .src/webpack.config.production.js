@@ -14,11 +14,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, '../static/'),
-<<<<<<< HEAD
     publicPath: "http://dafrok.github.io/react-markdown-note/static",
-=======
-    publicPath: "./static",
->>>>>>> master
     filename: 'app.js'
   },
   module: {
@@ -29,20 +25,13 @@ module.exports = {
       { test: /\.png$/, exclude: /node_modules/, loader: "file"},
       { test: /\.html$/, exclude: /node_modules/, loader: "html"}
     ],
-    noParse: [
-      // /wilddog-web\.js$/
-    ]
   },
   postcss: [autoprefixer],
   plugins: [
     new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
-<<<<<<< HEAD
-=======
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'
     }),
-    new webpack.HotModuleReplacementPlugin(),
->>>>>>> master
     new HtmlWebpackPlugin({
       filename: '../index.html',
       title: 'React Markdown Notepad',

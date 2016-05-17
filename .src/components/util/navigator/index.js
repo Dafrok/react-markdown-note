@@ -45,6 +45,7 @@ export default class Header extends React.Component {
         <MenuItem leftIcon={<Insert />} linkButton={true} containerElement={<Link to="/editor" />}>New Note</MenuItem>
         <MenuItem leftIcon={<Folder />} linkButton={true} containerElement={<Link to="/article-list" />}>My Notes</MenuItem>
         <MenuItem leftIcon={<Delete />} linkButton={true} containerElement={<Link to="/recycle" />}>Recycle</MenuItem>
+        <MenuItem leftIcon={<Favor />} linkButton={true} containerElement={<Link to="/settings" />}>Settings</MenuItem>
         <MenuItem leftIcon={<Favor />} linkButton={true} containerElement={<Link to="/about" />}>About</MenuItem>
         <MenuItem leftIcon={<Auth />} linkButton={true} containerElement={<Link to="/login" onClick={this.logout} />}>{connect.getAuth() ? 'Logout' : 'Login'}</MenuItem>
       </LeftNav>

@@ -1,5 +1,5 @@
 import React from 'react'
-// import Theme from './util/theme'
+import Theme from './util/theme'
 // import MyRawTheme from '../lib/theme.js'
 // import ThemeManager from 'material-ui/lib/styles/theme-manager'
 // import ThemeDecorator from 'material-ui/lib/styles/theme-decorator'
@@ -11,9 +11,11 @@ export default class App extends React.Component {
   }
   render() {
     return (
+      <Theme>
       <section className="content">
         {this.props.children}
       </section>
+      </Theme>
     )
   }
 }

@@ -1,10 +1,10 @@
 import React from 'react'
-import AppBar from 'material-ui/lib/app-bar'
-import IconButton from 'material-ui/lib/icon-button'
-import ActionDelete from 'material-ui/lib/svg-icons/action/delete'
-import NavigationMenu from 'material-ui/lib/svg-icons/navigation/menu'
-import Dialog from 'material-ui/lib/dialog';
-import FlatButton from 'material-ui/lib/flat-button';
+import AppBar from 'material-ui/AppBar'
+import IconButton from 'material-ui/IconButton'
+import ActionDelete from 'material-ui/svg-icons/action/delete'
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import connect from '../../lib/connect.js'
 import {Actions} from '../../stores/nav.js'
 

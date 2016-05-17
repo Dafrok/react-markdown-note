@@ -4,7 +4,7 @@ import React from 'react'
 import Header from './header.js'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
-import Paper from 'material-ui/lib/paper'
+import Paper from 'material-ui/Paper'
 import marked from 'marked'
 import connect from '../../lib/connect.js'
 

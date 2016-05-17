@@ -2,10 +2,9 @@ import React from 'react'
 import Header from '../util/header'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
-import Card from 'material-ui/lib/card/card'
-import CardActions from 'material-ui/lib/card/card-actions'
-import TextField from 'material-ui/lib/text-field'
-import RaisedButton from 'material-ui/lib/raised-button'
+import {Card, CardActions} from 'material-ui/Card'
+import TextField from 'material-ui/TextField'
+import RaisedButton from 'material-ui/RaisedButton';
 import {changePassword} from '../../lib/connect.js'
 
 export default class About extends React.Component {

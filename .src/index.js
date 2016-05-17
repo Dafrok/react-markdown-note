@@ -10,6 +10,9 @@ import Preview from './components/preview'
 import Editor from './components/editor'
 import Login from './components/login'
 import Recycle from './components/recycle'
+import SignUp from './components/sign-up'
+import Forgot from './components/forgot'
+import Settings from './components/settings'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import connect from './lib/connect.js'
 var FastClick = require('fastclick');
@@ -31,8 +34,11 @@ ReactDOM.render(
       <Route path="article-list" component={ArticleList} onEnter={needLogin}/>
       <Route path="preview/:noteId" component={Preview} onEnter={needLogin}/>
       <Route path="recycle" component={Recycle} onEnter={needLogin}/>
+      <Route path="settings" component={Settings} onEnter={needLogin}/>
       <Route path="about" component={About} onEnter={needLogin}/>
       <Route path="login" component={Login}/>
+      <Route path="signup" component={SignUp}/>
+      <Route path="forgot" component={Forgot}/>
     </Route>
   </Router>,
   document.getElementById('app'))

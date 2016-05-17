@@ -11,7 +11,8 @@
     "production": "webpack -p --config webpack.config.production.js",
     "publish": "npm run merge && npm run production",
     "webpack": "webpack",
-    "browser-sync": "browser-sync start --proxy localhost:3000 --port 2333"
+    "browser-sync": "browser-sync start --proxy localhost:3000 --port 2333",
+    "production": "webpack -p --config webpack.config.production.js"
   },
   "repository": {
     "type": "git",

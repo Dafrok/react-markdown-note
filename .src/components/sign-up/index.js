@@ -61,12 +61,6 @@ export default class SignUp extends React.Component {
   }
   validateRepeat = () => {
     this.setState({errorRepeat: this.state.password !== this.state.repeat ? "These passwords don't match. Try again?" : ''},()=>{
-      console.log(!!this.state.account,
-         !!this.state.password,
-         !!this.state.repeat,
-         !this.state.errorAccount,
-         !this.state.errorPassword,
-         !this.state.errorRepeat)
     })
   }
   render () {

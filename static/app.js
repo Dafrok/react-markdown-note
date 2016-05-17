@@ -5432,35 +5432,39 @@ webpackJsonp([0],[
 
 	var _articleList2 = _interopRequireDefault(_articleList);
 
-	var _about = __webpack_require__(514);
+	var _about = __webpack_require__(515);
 
 	var _about2 = _interopRequireDefault(_about);
 
-	var _preview = __webpack_require__(516);
+	var _preview = __webpack_require__(517);
 
 	var _preview2 = _interopRequireDefault(_preview);
 
-	var _editor = __webpack_require__(526);
+	var _editor = __webpack_require__(527);
 
 	var _editor2 = _interopRequireDefault(_editor);
 
-	var _login = __webpack_require__(541);
+	var _login = __webpack_require__(542);
 
 	var _login2 = _interopRequireDefault(_login);
 
-	var _recycle = __webpack_require__(548);
+	var _recycle = __webpack_require__(549);
 
 	var _recycle2 = _interopRequireDefault(_recycle);
 
-	var _signUp = __webpack_require__(552);
+	var _signUp = __webpack_require__(553);
 
 	var _signUp2 = _interopRequireDefault(_signUp);
 
-	var _forgot = __webpack_require__(554);
+	var _forgot = __webpack_require__(555);
 
 	var _forgot2 = _interopRequireDefault(_forgot);
 
-	var _reactTapEventPlugin = __webpack_require__(556);
+	var _settings = __webpack_require__(557);
+
+	var _settings2 = _interopRequireDefault(_settings);
+
+	var _reactTapEventPlugin = __webpack_require__(558);
 
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 
@@ -5470,7 +5474,7 @@ webpackJsonp([0],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var FastClick = __webpack_require__(561);
+	var FastClick = __webpack_require__(563);
 	FastClick.attach(document.body);
 	(0, _reactTapEventPlugin2.default)();
 
@@ -5492,6 +5496,7 @@ webpackJsonp([0],[
 	    _react2.default.createElement(_reactRouter.Route, { path: 'article-list', component: _articleList2.default, onEnter: needLogin }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'preview/:noteId', component: _preview2.default, onEnter: needLogin }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'recycle', component: _recycle2.default, onEnter: needLogin }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'settings', component: _settings2.default, onEnter: needLogin }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'about', component: _about2.default, onEnter: needLogin }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'login', component: _login2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'signup', component: _signUp2.default }),
@@ -35832,7 +35837,7 @@ webpackJsonp([0],[
 
 	var _connect2 = _interopRequireDefault(_connect);
 
-	var _dateFormat = __webpack_require__(513);
+	var _dateFormat = __webpack_require__(514);
 
 	var _dateFormat2 = _interopRequireDefault(_dateFormat);
 
@@ -45344,19 +45349,23 @@ webpackJsonp([0],[
 
 	var _delete2 = _interopRequireDefault(_delete);
 
-	var _insertDriveFile = __webpack_require__(509);
+	var _build = __webpack_require__(509);
+
+	var _build2 = _interopRequireDefault(_build);
+
+	var _insertDriveFile = __webpack_require__(510);
 
 	var _insertDriveFile2 = _interopRequireDefault(_insertDriveFile);
 
-	var _folder = __webpack_require__(510);
+	var _folder = __webpack_require__(511);
 
 	var _folder2 = _interopRequireDefault(_folder);
 
-	var _grade = __webpack_require__(511);
+	var _grade = __webpack_require__(512);
 
 	var _grade2 = _interopRequireDefault(_grade);
 
-	var _supervisorAccount = __webpack_require__(512);
+	var _supervisorAccount = __webpack_require__(513);
 
 	var _supervisorAccount2 = _interopRequireDefault(_supervisorAccount);
 
@@ -45432,6 +45441,11 @@ webpackJsonp([0],[
 	          _menuItem2.default,
 	          { leftIcon: _react2.default.createElement(_delete2.default, null), linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/recycle' }) },
 	          'Recycle'
+	        ),
+	        _react2.default.createElement(
+	          _menuItem2.default,
+	          { leftIcon: _react2.default.createElement(_build2.default, null), linkButton: true, containerElement: _react2.default.createElement(_reactRouter.Link, { to: '/settings' }) },
+	          'Settings'
 	        ),
 	        _react2.default.createElement(
 	          _menuItem2.default,
@@ -48500,13 +48514,20 @@ webpackJsonp([0],[
 	    //   }
 	  });
 	};
-	var signUp = exports.signUp = function signUp(email, password) {};
+	var signUp = exports.signUp = function signUp(option, callback) {
+	  wilddog.createUser({
+	    email: option.email,
+	    password: option.password
+	  }, function (err) {
+	    callback && callback(err);
+	  });
+	};
 	var changePassword = exports.changePassword = function changePassword(email, oldPwd, newPwd) {};
-	var resetPassword = exports.resetPassword = function resetPassword(email) {
-	  wilddog.changePassword({
+	var resetPassword = exports.resetPassword = function resetPassword(email, callback) {
+	  wilddog.resetPassword({
 	    email: email
 	  }, function (err) {
-	    console.log(err);
+	    callback && callback(err);
 	  });
 	};
 
@@ -48636,6 +48657,47 @@ webpackJsonp([0],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var ActionBuild = _react2.default.createClass({
+	  displayName: 'ActionBuild',
+
+	  mixins: [_reactAddonsPureRenderMixin2.default],
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      _svgIcon2.default,
+	      this.props,
+	      _react2.default.createElement('path', { d: 'M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z' })
+	    );
+	  }
+	});
+
+	exports.default = ActionBuild;
+	module.exports = exports['default'];
+
+/***/ },
+/* 510 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(138);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsPureRenderMixin = __webpack_require__(362);
+
+	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
+
+	var _svgIcon = __webpack_require__(393);
+
+	var _svgIcon2 = _interopRequireDefault(_svgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	var EditorInsertDriveFile = _react2.default.createClass({
 	  displayName: 'EditorInsertDriveFile',
 
@@ -48654,7 +48716,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 510 */
+/* 511 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48695,7 +48757,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 511 */
+/* 512 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48736,7 +48798,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 512 */
+/* 513 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48777,7 +48839,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 513 */
+/* 514 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -48808,7 +48870,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 514 */
+/* 515 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -48826,7 +48888,7 @@ webpackJsonp([0],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _header = __webpack_require__(515);
+	var _header = __webpack_require__(516);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -48885,7 +48947,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 515 */
+/* 516 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -48968,7 +49030,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 516 */
+/* 517 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -48982,15 +49044,15 @@ webpackJsonp([0],[
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	__webpack_require__(517);
+	__webpack_require__(518);
 
-	__webpack_require__(519);
+	__webpack_require__(520);
 
 	var _react = __webpack_require__(138);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _header = __webpack_require__(521);
+	var _header = __webpack_require__(522);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -49006,7 +49068,7 @@ webpackJsonp([0],[
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _marked = __webpack_require__(525);
+	var _marked = __webpack_require__(526);
 
 	var _marked2 = _interopRequireDefault(_marked);
 
@@ -49072,13 +49134,13 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 517 */
+/* 518 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(518);
+	var content = __webpack_require__(519);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(245)(content, {});
@@ -49087,8 +49149,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(518, function() {
-				var newContent = __webpack_require__(518);
+			module.hot.accept(519, function() {
+				var newContent = __webpack_require__(519);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -49098,7 +49160,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 518 */
+/* 519 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(244)();
@@ -49112,13 +49174,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 519 */
+/* 520 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(520);
+	var content = __webpack_require__(521);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(245)(content, {});
@@ -49127,8 +49189,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(520, function() {
-				var newContent = __webpack_require__(520);
+			module.hot.accept(521, function() {
+				var newContent = __webpack_require__(521);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -49138,7 +49200,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 520 */
+/* 521 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(244)();
@@ -49152,7 +49214,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 521 */
+/* 522 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -49180,11 +49242,11 @@ webpackJsonp([0],[
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _close = __webpack_require__(522);
+	var _close = __webpack_require__(523);
 
 	var _close2 = _interopRequireDefault(_close);
 
-	var _modeEdit = __webpack_require__(523);
+	var _modeEdit = __webpack_require__(524);
 
 	var _modeEdit2 = _interopRequireDefault(_modeEdit);
 
@@ -49192,7 +49254,7 @@ webpackJsonp([0],[
 
 	var _nav = __webpack_require__(415);
 
-	var _keyboardArrowLeft = __webpack_require__(524);
+	var _keyboardArrowLeft = __webpack_require__(525);
 
 	var _keyboardArrowLeft2 = _interopRequireDefault(_keyboardArrowLeft);
 
@@ -49252,7 +49314,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 522 */
+/* 523 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49293,7 +49355,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 523 */
+/* 524 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49334,7 +49396,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 524 */
+/* 525 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49375,7 +49437,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 525 */
+/* 526 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -50667,7 +50729,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 526 */
+/* 527 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -50685,15 +50747,15 @@ webpackJsonp([0],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _textField = __webpack_require__(527);
+	var _textField = __webpack_require__(528);
 
 	var _textField2 = _interopRequireDefault(_textField);
 
-	var _card = __webpack_require__(534);
+	var _card = __webpack_require__(535);
 
 	var _card2 = _interopRequireDefault(_card);
 
-	var _cardActions = __webpack_require__(538);
+	var _cardActions = __webpack_require__(539);
 
 	var _cardActions2 = _interopRequireDefault(_cardActions);
 
@@ -50701,7 +50763,7 @@ webpackJsonp([0],[
 
 	var _statusBar2 = _interopRequireDefault(_statusBar);
 
-	var _header = __webpack_require__(539);
+	var _header = __webpack_require__(540);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -50820,25 +50882,6 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 527 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _TextField = __webpack_require__(528);
-
-	var _TextField2 = _interopRequireDefault(_TextField);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _TextField2.default;
-	module.exports = exports['default'];
-
-/***/ },
 /* 528 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -50859,6 +50902,25 @@ webpackJsonp([0],[
 
 /***/ },
 /* 529 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _TextField = __webpack_require__(530);
+
+	var _TextField2 = _interopRequireDefault(_TextField);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _TextField2.default;
+	module.exports = exports['default'];
+
+/***/ },
+/* 530 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50893,7 +50955,7 @@ webpackJsonp([0],[
 
 	var _uniqueId2 = _interopRequireDefault(_uniqueId);
 
-	var _enhancedTextarea = __webpack_require__(530);
+	var _enhancedTextarea = __webpack_require__(531);
 
 	var _enhancedTextarea2 = _interopRequireDefault(_enhancedTextarea);
 
@@ -50905,15 +50967,15 @@ webpackJsonp([0],[
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _TextFieldHint = __webpack_require__(531);
+	var _TextFieldHint = __webpack_require__(532);
 
 	var _TextFieldHint2 = _interopRequireDefault(_TextFieldHint);
 
-	var _TextFieldLabel = __webpack_require__(532);
+	var _TextFieldLabel = __webpack_require__(533);
 
 	var _TextFieldLabel2 = _interopRequireDefault(_TextFieldLabel);
 
-	var _TextFieldUnderline = __webpack_require__(533);
+	var _TextFieldUnderline = __webpack_require__(534);
 
 	var _TextFieldUnderline2 = _interopRequireDefault(_TextFieldUnderline);
 
@@ -51423,7 +51485,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 530 */
+/* 531 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51629,7 +51691,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 531 */
+/* 532 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51707,7 +51769,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 532 */
+/* 533 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51819,7 +51881,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 533 */
+/* 534 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51957,7 +52019,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 534 */
+/* 535 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51980,7 +52042,7 @@ webpackJsonp([0],[
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _cardExpandable = __webpack_require__(535);
+	var _cardExpandable = __webpack_require__(536);
 
 	var _cardExpandable2 = _interopRequireDefault(_cardExpandable);
 
@@ -52108,7 +52170,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 535 */
+/* 536 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52121,11 +52183,11 @@ webpackJsonp([0],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _keyboardArrowUp = __webpack_require__(536);
+	var _keyboardArrowUp = __webpack_require__(537);
 
 	var _keyboardArrowUp2 = _interopRequireDefault(_keyboardArrowUp);
 
-	var _keyboardArrowDown = __webpack_require__(537);
+	var _keyboardArrowDown = __webpack_require__(538);
 
 	var _keyboardArrowDown2 = _interopRequireDefault(_keyboardArrowDown);
 
@@ -52242,7 +52304,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 536 */
+/* 537 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52283,7 +52345,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 537 */
+/* 538 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52324,7 +52386,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 538 */
+/* 539 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52423,7 +52485,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 539 */
+/* 540 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -52451,15 +52513,15 @@ webpackJsonp([0],[
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _close = __webpack_require__(522);
+	var _close = __webpack_require__(523);
 
 	var _close2 = _interopRequireDefault(_close);
 
-	var _save = __webpack_require__(540);
+	var _save = __webpack_require__(541);
 
 	var _save2 = _interopRequireDefault(_save);
 
-	var _keyboardArrowLeft = __webpack_require__(524);
+	var _keyboardArrowLeft = __webpack_require__(525);
 
 	var _keyboardArrowLeft2 = _interopRequireDefault(_keyboardArrowLeft);
 
@@ -52544,7 +52606,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 540 */
+/* 541 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52585,7 +52647,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 541 */
+/* 542 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -52604,7 +52666,7 @@ webpackJsonp([0],[
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _header = __webpack_require__(515);
+	var _header = __webpack_require__(516);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -52616,33 +52678,33 @@ webpackJsonp([0],[
 
 	var _navigator2 = _interopRequireDefault(_navigator);
 
-	var _lock = __webpack_require__(542);
+	var _lock = __webpack_require__(543);
 
 	var _lock2 = _interopRequireDefault(_lock);
 
-	var _personAdd = __webpack_require__(543);
+	var _personAdd = __webpack_require__(544);
 
 	var _personAdd2 = _interopRequireDefault(_personAdd);
 
-	var _card = __webpack_require__(534);
+	var _card = __webpack_require__(535);
 
 	var _card2 = _interopRequireDefault(_card);
 
-	var _cardActions = __webpack_require__(538);
+	var _cardActions = __webpack_require__(539);
 
 	var _cardActions2 = _interopRequireDefault(_cardActions);
 
-	var _textField = __webpack_require__(527);
+	var _textField = __webpack_require__(528);
 
 	var _textField2 = _interopRequireDefault(_textField);
 
 	var _reactRouter = __webpack_require__(247);
 
-	var _flatButton = __webpack_require__(544);
+	var _flatButton = __webpack_require__(545);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
-	var _raisedButton = __webpack_require__(546);
+	var _raisedButton = __webpack_require__(547);
 
 	var _raisedButton2 = _interopRequireDefault(_raisedButton);
 
@@ -52650,7 +52712,7 @@ webpackJsonp([0],[
 
 	var _connect2 = _interopRequireDefault(_connect);
 
-	var _auth = __webpack_require__(547);
+	var _auth = __webpack_require__(548);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52777,7 +52839,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 542 */
+/* 543 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52818,7 +52880,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 543 */
+/* 544 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52859,7 +52921,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 544 */
+/* 545 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52900,7 +52962,7 @@ webpackJsonp([0],[
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _flatButtonLabel = __webpack_require__(545);
+	var _flatButtonLabel = __webpack_require__(546);
 
 	var _flatButtonLabel2 = _interopRequireDefault(_flatButtonLabel);
 
@@ -53217,7 +53279,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 545 */
+/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53319,7 +53381,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 546 */
+/* 547 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53767,7 +53829,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 547 */
+/* 548 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -53803,7 +53865,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 548 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -53849,7 +53911,7 @@ webpackJsonp([0],[
 
 	var _moreVert2 = _interopRequireDefault(_moreVert);
 
-	var _undo = __webpack_require__(549);
+	var _undo = __webpack_require__(550);
 
 	var _undo2 = _interopRequireDefault(_undo);
 
@@ -53863,7 +53925,7 @@ webpackJsonp([0],[
 
 	var _reactRouter = __webpack_require__(247);
 
-	var _header = __webpack_require__(550);
+	var _header = __webpack_require__(551);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -53879,7 +53941,7 @@ webpackJsonp([0],[
 
 	var _connect2 = _interopRequireDefault(_connect);
 
-	var _dateFormat = __webpack_require__(513);
+	var _dateFormat = __webpack_require__(514);
 
 	var _dateFormat2 = _interopRequireDefault(_dateFormat);
 
@@ -53981,7 +54043,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 549 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54022,7 +54084,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 550 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -54058,11 +54120,11 @@ webpackJsonp([0],[
 
 	var _menu2 = _interopRequireDefault(_menu);
 
-	var _dialog = __webpack_require__(551);
+	var _dialog = __webpack_require__(552);
 
 	var _dialog2 = _interopRequireDefault(_dialog);
 
-	var _flatButton = __webpack_require__(544);
+	var _flatButton = __webpack_require__(545);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
@@ -54164,7 +54226,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 551 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -54199,7 +54261,7 @@ webpackJsonp([0],[
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _flatButton = __webpack_require__(544);
+	var _flatButton = __webpack_require__(545);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
@@ -54819,7 +54881,7 @@ webpackJsonp([0],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 552 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -54843,13 +54905,31 @@ webpackJsonp([0],[
 
 	var _statusBar2 = _interopRequireDefault(_statusBar);
 
-	var _header = __webpack_require__(553);
+	var _header = __webpack_require__(554);
 
 	var _header2 = _interopRequireDefault(_header);
 
 	var _navigator = __webpack_require__(436);
 
 	var _navigator2 = _interopRequireDefault(_navigator);
+
+	var _card = __webpack_require__(535);
+
+	var _card2 = _interopRequireDefault(_card);
+
+	var _cardActions = __webpack_require__(539);
+
+	var _cardActions2 = _interopRequireDefault(_cardActions);
+
+	var _textField = __webpack_require__(528);
+
+	var _textField2 = _interopRequireDefault(_textField);
+
+	var _raisedButton = __webpack_require__(547);
+
+	var _raisedButton2 = _interopRequireDefault(_raisedButton);
+
+	var _connect = __webpack_require__(451);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -54867,9 +54947,61 @@ webpackJsonp([0],[
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SignUp).call(this, props));
 
+	    _this.changeAccount = function (e) {
+	      _this.setState({ account: e.target.value }, function () {
+	        _this.validateAccount();
+	      });
+	    };
+
+	    _this.changePassword = function (e) {
+	      _this.setState({ password: e.target.value }, function () {
+	        _this.validatePassword();
+	        _this.validateRepeat();
+	      });
+	    };
+
+	    _this.changeRepeat = function (e) {
+	      _this.setState({ repeat: e.target.value }, function () {
+	        _this.validateRepeat();
+	      });
+	    };
+
+	    _this.signUp = function (e) {
+	      e.preventDefault();
+	      (0, _connect.signUp)({
+	        email: _this.state.account,
+	        password: _this.state.password
+	      }, function (err) {
+	        if (!err) {
+	          console.log('Sign up complete.');
+	          _this.context.router.push('/');
+	        } else {
+	          console.log(err);
+	        }
+	      });
+	    };
+
+	    _this.validateAccount = function () {
+	      _this.setState({ errorAccount: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(_this.state.account) ? '' : 'Invalid email.' });
+	    };
+
+	    _this.validatePassword = function () {
+	      _this.setState({ errorPassword: /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{8,20}$/.test(_this.state.password) ? '' : 'Invalid password. Try one with 8~20 characters.' });
+	    };
+
+	    _this.validateRepeat = function () {
+	      _this.setState({ errorRepeat: _this.state.password !== _this.state.repeat ? "These passwords don't match. Try again?" : '' }, function () {
+	        console.log(!!_this.state.account, !!_this.state.password, !!_this.state.repeat, !_this.state.errorAccount, !_this.state.errorPassword, !_this.state.errorRepeat);
+	      });
+	    };
+
 	    _this.state = {
 	      account: '',
-	      password: ''
+	      password: '',
+	      repeat: '',
+	      errorAccount: '',
+	      errorPassword: '',
+	      errorRepeat: ''
 	    };
 	    return _this;
 	  }
@@ -54885,6 +55017,47 @@ webpackJsonp([0],[
 	          _statusBar2.default,
 	          null,
 	          _react2.default.createElement(_header2.default, { router: this.context.router })
+	        ),
+	        _react2.default.createElement(
+	          _card2.default,
+	          null,
+	          _react2.default.createElement(
+	            _cardActions2.default,
+	            null,
+	            _react2.default.createElement(
+	              'form',
+	              { onSubmit: this.signUp },
+	              _react2.default.createElement(_textField2.default, {
+	                hintText: 'Email',
+	                fullWidth: true,
+	                type: 'email',
+	                floatingLabelText: 'Email',
+	                onChange: this.changeAccount,
+	                value: this.state.account,
+	                errorText: this.state.errorAccount
+	              }),
+	              _react2.default.createElement('br', null),
+	              _react2.default.createElement(_textField2.default, {
+	                hintText: 'Password',
+	                fullWidth: true,
+	                floatingLabelText: 'Password',
+	                type: 'password',
+	                onChange: this.changePassword,
+	                value: this.state.password,
+	                errorText: this.state.errorPassword
+	              }),
+	              _react2.default.createElement(_textField2.default, {
+	                hintText: 'Repeat Password',
+	                fullWidth: true,
+	                floatingLabelText: 'Repeat Password',
+	                type: 'password',
+	                onChange: this.changeRepeat,
+	                value: this.state.repeat,
+	                errorText: this.state.errorRepeat
+	              }),
+	              _react2.default.createElement(_raisedButton2.default, { label: 'Sign Up', disabled: !this.state.account || !this.state.password || !this.state.repeat || !!this.state.errorAccount || !!this.state.errorPassword || !!this.state.errorRepeat, fullWidth: true, primary: true, type: 'submit' })
+	            )
+	          )
 	        )
 	      );
 	    }
@@ -54901,7 +55074,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 553 */
+/* 554 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -54931,7 +55104,7 @@ webpackJsonp([0],[
 
 	var _reactRouter = __webpack_require__(247);
 
-	var _keyboardArrowLeft = __webpack_require__(524);
+	var _keyboardArrowLeft = __webpack_require__(525);
 
 	var _keyboardArrowLeft2 = _interopRequireDefault(_keyboardArrowLeft);
 
@@ -54980,7 +55153,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 554 */
+/* 555 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -55004,7 +55177,7 @@ webpackJsonp([0],[
 
 	var _statusBar2 = _interopRequireDefault(_statusBar);
 
-	var _header = __webpack_require__(555);
+	var _header = __webpack_require__(556);
 
 	var _header2 = _interopRequireDefault(_header);
 
@@ -55012,31 +55185,23 @@ webpackJsonp([0],[
 
 	var _navigator2 = _interopRequireDefault(_navigator);
 
-	var _card = __webpack_require__(534);
+	var _card = __webpack_require__(535);
 
 	var _card2 = _interopRequireDefault(_card);
 
-	var _cardActions = __webpack_require__(538);
+	var _cardActions = __webpack_require__(539);
 
 	var _cardActions2 = _interopRequireDefault(_cardActions);
 
-	var _textField = __webpack_require__(527);
+	var _textField = __webpack_require__(528);
 
 	var _textField2 = _interopRequireDefault(_textField);
 
-	var _reactRouter = __webpack_require__(247);
-
-	var _flatButton = __webpack_require__(544);
-
-	var _flatButton2 = _interopRequireDefault(_flatButton);
-
-	var _raisedButton = __webpack_require__(546);
+	var _raisedButton = __webpack_require__(547);
 
 	var _raisedButton2 = _interopRequireDefault(_raisedButton);
 
 	var _connect = __webpack_require__(451);
-
-	var _connect2 = _interopRequireDefault(_connect);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -55060,7 +55225,12 @@ webpackJsonp([0],[
 
 	    _this.resetPassword = function (e) {
 	      e.preventDefault();
-	      (0, _connect.resetPassword)(_this.state.account);
+	      (0, _connect.resetPassword)(_this.state.account, function (err) {
+	        if (!err) {
+	          console.log('Reset complete.');
+	          _this.context.router.push('/');
+	        }
+	      });
 	    };
 
 	    _this.state = {
@@ -55116,7 +55286,7 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 555 */
+/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -55146,7 +55316,7 @@ webpackJsonp([0],[
 
 	var _reactRouter = __webpack_require__(247);
 
-	var _keyboardArrowLeft = __webpack_require__(524);
+	var _keyboardArrowLeft = __webpack_require__(525);
 
 	var _keyboardArrowLeft2 = _interopRequireDefault(_keyboardArrowLeft);
 
@@ -55195,23 +55365,100 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 556 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var defaultClickRejectionStrategy = __webpack_require__(557);
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(138);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _header = __webpack_require__(516);
+
+	var _header2 = _interopRequireDefault(_header);
+
+	var _statusBar = __webpack_require__(435);
+
+	var _statusBar2 = _interopRequireDefault(_statusBar);
+
+	var _navigator = __webpack_require__(436);
+
+	var _navigator2 = _interopRequireDefault(_navigator);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var About = function (_React$Component) {
+	  _inherits(About, _React$Component);
+
+	  function About(props) {
+	    _classCallCheck(this, About);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(About).call(this, props));
+	  }
+
+	  _createClass(About, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_navigator2.default, null),
+	        _react2.default.createElement(
+	          _statusBar2.default,
+	          null,
+	          _react2.default.createElement(_header2.default, null)
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          null,
+	          'Settings'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return About;
+	}(_react2.default.Component);
+
+	exports.default = About;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(310); if (makeExportsHot(module, __webpack_require__(138))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
+
+/***/ },
+/* 558 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var defaultClickRejectionStrategy = __webpack_require__(559);
 
 	module.exports = function injectTapEventPlugin (strategyOverrides) {
 	  strategyOverrides = strategyOverrides || {}
 	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
 
 	  __webpack_require__(92).injection.injectEventPluginsByName({
-	    "TapEventPlugin":       __webpack_require__(558)(shouldRejectClick)
+	    "TapEventPlugin":       __webpack_require__(560)(shouldRejectClick)
 	  });
 	};
 
 
 /***/ },
-/* 557 */
+/* 559 */
 /***/ function(module, exports) {
 
 	module.exports = function(lastTouchEvent, clickTimestamp) {
@@ -55222,7 +55469,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 558 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -55250,10 +55497,10 @@ webpackJsonp([0],[
 	var EventPluginUtils = __webpack_require__(94);
 	var EventPropagators = __webpack_require__(157);
 	var SyntheticUIEvent = __webpack_require__(171);
-	var TouchEventUtils = __webpack_require__(559);
+	var TouchEventUtils = __webpack_require__(561);
 	var ViewportMetrics = __webpack_require__(102);
 
-	var keyOf = __webpack_require__(560);
+	var keyOf = __webpack_require__(562);
 	var topLevelTypes = EventConstants.topLevelTypes;
 
 	var isStartish = EventPluginUtils.isStartish;
@@ -55399,7 +55646,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 559 */
+/* 561 */
 /***/ function(module, exports) {
 
 	/**
@@ -55447,7 +55694,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 560 */
+/* 562 */
 /***/ function(module, exports) {
 
 	/**
@@ -55487,7 +55734,7 @@ webpackJsonp([0],[
 	module.exports = keyOf;
 
 /***/ },
-/* 561 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {

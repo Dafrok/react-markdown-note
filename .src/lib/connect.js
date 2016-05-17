@@ -23,15 +23,14 @@ export const login = (email, password, callback) => {
   })
 }
 export const signUp = (option, callback) => {
-  wilddog.createUser({
-    email: option.email,
-    password: option.password
-  }, err => {
+  wilddog.createUser(option, err => {
     callback && callback(err)
   })
 }
-export const changePassword = (email, oldPwd, newPwd) => {
-
+export const changePassword = (option, callback) => {
+  wilddog.changePassword(Object.assign(option, {email: getUid().password.email}), err => {
+    callback && callback(err)
+  })
 }
 export const resetPassword = (email, callback) => {
   wilddog.resetPassword({

@@ -1,8 +1,8 @@
 import React from 'react'
-import AppBar from 'material-ui/lib/app-bar'
-import IconButton from 'material-ui/lib/icon-button';
+import AppBar from 'material-ui/AppBar'
+import IconButton from 'material-ui/IconButton';
 import {Link} from 'react-router'
-import IconBack from 'material-ui/lib/svg-icons/hardware/keyboard-arrow-left'
+import IconBack from 'material-ui/svg-icons/hardware/keyboard-arrow-left'
 
 export default class Header extends React.Component {
   static contextTypes = {

@@ -1,9 +1,9 @@
 import React from 'react'
-import Header from '../util/header'
+import Header from './header'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
-import ActionLock from 'material-ui/lib/svg-icons/action/lock';
-import SocialPersonAdd from 'material-ui/lib/svg-icons/social/person-add';
+import ActionLock from 'material-ui/lib/svg-icons/action/lock'
+import SocialPersonAdd from 'material-ui/lib/svg-icons/social/person-add'
 import Card from 'material-ui/lib/card/card'
 import CardActions from 'material-ui/lib/card/card-actions'
 import TextField from 'material-ui/lib/text-field'
@@ -61,8 +61,7 @@ class Login extends React.Component {
       <Card>
         <CardActions>
           <form onSubmit={this.login} id="login">
-            <RaisedButton onClick={() => {this.context.router.push('/signup')}} label="SignUp" type="button" icon={<SocialPersonAdd/>} style={{marginRight: 12}}/>
-            <RaisedButton onClick={() => {this.context.router.push('/forgot')}} label="Forgot" type="button" icon={<ActionLock/>}/>
+            <RaisedButton onClick={() => {this.context.router.push('/signup')}} label="SignUp" type="button" icon={<SocialPersonAdd/>} fullWidth={true}/>
             <TextField
               hintText="Account"
               fullWidth={true}

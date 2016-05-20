@@ -1,62 +1,29 @@
 import React from 'react'
+import {Link} from 'react-router'
 import Header from '../util/header'
 import StatusBar from '../util/status-bar'
 import Navigator from '../util/navigator'
-import {Card, CardActions} from 'material-ui/Card'
-import TextField from 'material-ui/TextField'
-import RaisedButton from 'material-ui/RaisedButton';
-import {changePassword} from '../../lib/connect.js'
+import {List, ListItem} from 'material-ui/List'
+import Divider from 'material-ui/Divider'
+import ColorLens from 'material-ui/svg-icons/image/color-lens'
+import LockOpen from 'material-ui/svg-icons/action/lock-open'
 
-export default class About extends React.Component {
+export default class Settings extends React.Component {
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   }
   constructor(props) {
     super(props)
-    this.state = {
-      old: '',
-      new: '',
-      repeat: '',
-      errorNew: '',
-      errorPassword: '',
-      errorRepeat: ''
-    }
   }
-  changeOld = e => {
-    this.setState({old: e.target.value}, () => {
-    })
-  }
-  changeNew = e => {
-    this.setState({new: e.target.value}, () => {
-      this.validateNew()
-      this.validateRepeat()
-    })
-  }
-  changeRepeat = e => {
-    this.setState({repeat: e.target.value}, () => {
-      this.validateRepeat()
-    })
-  }
-  changePassword = e => {
-    e.preventDefault()
-    changePassword({
-      oldPassword: this.state.old,
-      newPassword: this.state.new
-    }, err => {
-      if (!err) {
-        console.log('Reset complete.')
-        this.context.router.push('/')
-      } else {
-        console.log(err)
+  changeTheme () {
+    ThemeActions.changeTheme({
+      palette: {
+        primary1Color: ['red', 'blue', 'yellow'][0 | Math.random() * 3]
       }
     })
   }
-  validateNew = () => {
-    this.setState({errorNew: /^[\@A-Za-z0-9\!\#\$\%\^\&\*\.\~]{8,20}$/.test(this.state.new) ? '' : 'Invalid password. Try one with 8~20 characters.'})
-  }
-  validateRepeat = () => {
-    this.setState({errorRepeat: this.state.new !== this.state.repeat ? "These passwords don't match. Try again?" : ''},()=>{
-    })
+  resetTheme () {
+    ThemeActions.changeTheme()
   }
   render() {
     return (
@@ -65,40 +32,12 @@ export default class About extends React.Component {
       <StatusBar>
         <Header />
       </StatusBar>
-      <Card>
-        <CardActions>
-          <form onSubmit={this.changePassword}>
-            <TextField
-              hintText="Old Password"
-              fullWidth={true}
-              type="password"
-              floatingLabelText="Old password"
-              onChange={this.changeOld}
-              value={this.state.old}
-              errorText={this.state.errorOld}
-            /><br/>
-            <TextField
-              hintText="New password"
-              fullWidth={true}
-              floatingLabelText="New password"
-              type="password"
-              onChange={this.changeNew}
-              value={this.state.new}
-              errorText={this.state.errorNew}
-            />
-            <TextField
-              hintText="Repeat new password"
-              fullWidth={true}
-              floatingLabelText="Repeat new password"
-              type="password"
-              onChange={this.changeRepeat}
-              value={this.state.repeat}
-              errorText={this.state.errorRepeat}
-            />
-            <RaisedButton label="Change Password" disabled={!this.state.old || !this.state.new || !this.state.repeat || !!this.state.errorNew || !!this.state.errorPassword || !!this.state.errorRepeat} fullWidth={true} primary={true} type="submit" />
-          </form>
-        </CardActions>
-      </Card>
+      <List>
+        <ListItem primaryText="Theme" containerElement={<Link to="/settings/theme"/>} leftIcon={<ColorLens />}/>
+        <Divider />
+        <ListItem primaryText="Password" containerElement={<Link to="/settings/password"/>} leftIcon={<LockOpen />}/>
+        <Divider />
+      </List>
       </div>
     );
   }

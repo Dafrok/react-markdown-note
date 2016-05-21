@@ -7,8 +7,7 @@ import {List, ListItem} from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
-import Dialog from 'material-ui/Dialog'
-import Color from './theme-color-picker.js'
+import ColorPicker from './theme-color-picker.js'
 import {changePassword} from '../../lib/connect.js'
 import {Actions as ThemeActions} from '../../stores/theme.js'
 
@@ -18,6 +17,31 @@ export default class Theme extends React.Component {
   }
   constructor(props) {
     super(props)
+    this.state = {
+      activeOption: -1,
+      themeOptions: [
+        {key: 'primary1Color', text: 'Primary Color 1'},
+        {key: 'primary2Color', text: 'Primary Color 2'},
+        {key: 'primary3Color', text: 'Primary Color 3'},
+        {key: 'accent1Color', text: 'Accent Color 1'},
+        {key: 'accent2Color', text: 'Accent Color 2'},
+        {key: 'accent3Color', text: 'Accent Color 3'},
+        {key: 'textColor', text: 'Text Color'},
+        {key: 'alternateTextColor', text: 'Alternate Text Color'},
+        // {key: 'canvasColor', text: 'Canvas Color'},
+        {key: 'borderColor', text: 'Border Color'},
+        {key: 'disabledColor', text: 'Disabled Color'},
+        // {key: 'pickerHeaderColor', text: 'Picker Header Color'},
+        // {key: 'clockCircleColor', text: 'Clock Circle Color'},
+        {key: 'shadowColor', text: 'Shadow Color'}
+      ]
+    }
+  }
+  openColorPicker = index => {
+    this.setState({activeOption: index})
+  }
+  closeColorPicker = () => {
+    this.openColorPicker(-1)
   }
   changeTheme () {
     ThemeActions.changeTheme({
@@ -36,18 +60,16 @@ export default class Theme extends React.Component {
       <StatusBar>
         <Header />
       </StatusBar>
-      <Dialog open={true} contentStyle={{textAlign: 'center', paddingLeft: 0, paddingRight: 0}}>
-        <Color />
-      </Dialog>
       <List>
-        <ListItem
-          primaryText="Primary Color 1"
-          initiallyOpen={true}
-        />
+        {this.state.themeOptions.map((item, index) => {
+          return <ListItem primaryText={item.text} key={index} onClick={() => {this.openColorPicker(index)}}>
+            <ColorPicker open={index === this.state.activeOption} handleClose={this.closeColorPicker} option={item}/>
+          </ListItem>
+        })}
+
       </List>
       <Card>
         <CardActions>
-          <RaisedButton label="Change Theme" fullWidth={true} type="button" onClick={this.changeTheme}/>
           <RaisedButton label="Reset Theme" fullWidth={true} type="button" onClick={this.resetTheme}/>
         </CardActions>
       </Card>

@@ -5472,7 +5472,7 @@ webpackJsonp([0],[
 
 	var _theme2 = _interopRequireDefault(_theme);
 
-	var _reactTapEventPlugin = __webpack_require__(645);
+	var _reactTapEventPlugin = __webpack_require__(634);
 
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 
@@ -5482,7 +5482,7 @@ webpackJsonp([0],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var FastClick = __webpack_require__(650);
+	var FastClick = __webpack_require__(639);
 	FastClick.attach(document.body);
 	(0, _reactTapEventPlugin2.default)();
 
@@ -59114,6 +59114,10 @@ webpackJsonp([0],[
 
 	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 
+	var _Dialog = __webpack_require__(606);
+
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+
 	var _themeColorPicker = __webpack_require__(617);
 
 	var _themeColorPicker2 = _interopRequireDefault(_themeColorPicker);
@@ -59165,7 +59169,19 @@ webpackJsonp([0],[
 	          null,
 	          _react2.default.createElement(_header2.default, null)
 	        ),
-	        _react2.default.createElement(_themeColorPicker2.default, null),
+	        _react2.default.createElement(
+	          _Dialog2.default,
+	          { open: true, contentStyle: { textAlign: 'center', paddingLeft: 0, paddingRight: 0 } },
+	          _react2.default.createElement(_themeColorPicker2.default, null)
+	        ),
+	        _react2.default.createElement(
+	          _List.List,
+	          null,
+	          _react2.default.createElement(_List.ListItem, {
+	            primaryText: 'Primary Color 1',
+	            initiallyOpen: true
+	          })
+	        ),
 	        _react2.default.createElement(
 	          _Card.Card,
 	          null,
@@ -59206,9 +59222,15 @@ webpackJsonp([0],[
 
 	var _class, _temp;
 
+	__webpack_require__(618);
+
 	var _react = __webpack_require__(138);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _reactColorpickr = __webpack_require__(620);
+
+	var _reactColorpickr2 = _interopRequireDefault(_reactColorpickr);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59218,37 +59240,27 @@ webpackJsonp([0],[
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	// import ColorPicker from 'react-color-picker'
-	var ColorPicker = __webpack_require__(618);
-
 	var Color = (_temp = _class = function (_React$Component) {
 	  _inherits(Color, _React$Component);
 
 	  function Color(props) {
 	    _classCallCheck(this, Color);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Color).call(this, props));
-
-	    _this.onDrag = function (color, c) {
-	      COLOR = color;
-	      _this.setState({});
-	    };
-
-	    return _this;
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Color).call(this, props));
 	  }
 
 	  _createClass(Color, [{
+	    key: 'onChange',
+	    value: function onChange(color) {
+	      console.log(color);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(ColorPicker, { value: COLOR, onDrag: this.onDrag }),
-	        _react2.default.createElement(
-	          'div',
-	          { style: { background: COLOR, width: 100, height: 50, color: 'white' } },
-	          COLOR
-	        )
+	        _react2.default.createElement(_reactColorpickr2.default, { onChange: this.onChange })
 	      );
 	    }
 	  }]);
@@ -59266,246 +59278,40 @@ webpackJsonp([0],[
 /* 618 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	// style-loader: Adds some css to the DOM by adding a <style> tag
 
-	var React = __webpack_require__(138);
-	var assign = __webpack_require__(619);
-	var colorUtils = __webpack_require__(620);
-
-	var HueSpectrum = __webpack_require__(622);
-	var SaturationSpectrum = __webpack_require__(644);
-
-	var toHsv = colorUtils.toHsv;
-
-	function emptyFn() {}
-
-	var RESULT = React.createClass({
-
-	    displayName: 'ColorPicker',
-
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            defaultColor: __webpack_require__(642),
-	            saturationWidth: 300,
-	            saturationHeight: 300,
-	            hueHeight: null,
-	            hueWidth: 30,
-	            hueMargin: 10
-	        };
-	    },
-
-	    getInitialState: function getInitialState() {
-	        return {
-	            value: this.props.defaultValue
-	        };
-	    },
-
-	    prepareClassName: function prepareClassName(props) {
-	        var className = props.className || '';
-
-	        className += ' cp';
-
-	        return className;
-	    },
-
-	    prepareProps: function prepareProps(props) {
-
-	        props.className = this.prepareClassName(props);
-
-	        return props;
-	    },
-
-	    render: function render() {
-
-	        var props = this.prepareProps(assign({}, this.props));
-	        var hueStyle = assign({}, this.props.hueStyle) || {};
-
-	        hueStyle.marginLeft = this.props.hueMargin;
-
-	        var value = props.value ? this.toColorValue(this.props.value) : null;
-
-	        var defaultValue = !value ? this.toColorValue(this.state.value || props.defaultValue || props.defaultColor) : null;
-
-	        var saturationConfig = {
-	            onDrag: this.handleSaturationDrag,
-	            onChange: this.handleSaturationChange,
-	            onMouseDown: this.handleSaturationMouseDown,
-	            height: props.saturationHeight,
-	            width: props.saturationWidth,
-	            inPicker: true
-	        };
-
-	        var hueConfig = {
-	            onDrag: this.handleHueDrag,
-	            onChange: this.handleHueChange,
-	            height: props.hueHeight || props.saturationHeight,
-	            width: props.hueWidth,
-	            inPicker: true,
-	            style: hueStyle
-	        };
-
-	        if (this.state.dragHue) {
-	            ;(value || defaultValue).h = this.state.dragHue;
-	        }
-
-	        //both value and defaultValue are objects like: {h,s,v}
-	        if (value) {
-	            saturationConfig.value = assign({}, value);
-	            hueConfig.value = assign({}, value);
-	        } else {
-	            saturationConfig.defaultValue = assign({}, defaultValue);
-	            hueConfig.defaultValue = assign({}, defaultValue);
-	        }
-
-	        return React.createElement(
-	            'div',
-	            props,
-	            React.createElement(SaturationSpectrum, saturationConfig),
-	            React.createElement(HueSpectrum, hueConfig)
-	        );
-	    },
-
-	    toColorValue: function toColorValue(value) {
-	        return typeof value == 'string' ? toHsv(value) : value;
-	    },
-
-	    toStringValue: __webpack_require__(643),
-
-	    handleChange: function handleChange(color) {
-
-	        this.state.dragHue = null;
-
-	        color = assign({}, color);
-
-	        var value = this.toStringValue(color);(this.props.onChange || emptyFn)(value, color);
-	    },
-
-	    handleSaturationChange: function handleSaturationChange(color) {
-	        this.handleChange(color);
-	    },
-
-	    handleHueChange: function handleHueChange(color) {
-	        this.handleChange(color);
-	    },
-
-	    handleHueDrag: function handleHueDrag(hsv) {
-	        this.handleDrag(hsv);
-	    },
-
-	    handleSaturationDrag: function handleSaturationDrag(hsv) {
-	        this.handleDrag(hsv);
-	    },
-
-	    handleDrag: function handleDrag(color) {
-
-	        if (!this.props.value) {
-	            this.setState({
-	                value: color
-	            });
-	        }
-
-	        ;(this.props.onDrag || emptyFn)(this.toStringValue(color), color);
-	    },
-
-	    handleSaturationMouseDown: function handleSaturationMouseDown(hsv) {
-	        this.setState({
-	            dragHue: hsv.h
-	        });
-	    }
-	});
-
-	RESULT.HueSpectrum = HueSpectrum;
-	RESULT.SaturationSpectrum = SaturationSpectrum;
-
-	module.exports = RESULT;
+	// load the styles
+	var content = __webpack_require__(619);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(245)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(true) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept(619, function() {
+				var newContent = __webpack_require__(619);
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
 
 /***/ },
 /* 619 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	/* eslint-disable no-unused-vars */
-	var hasOwnProperty = Object.prototype.hasOwnProperty;
-	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+	exports = module.exports = __webpack_require__(244)();
+	// imports
 
-	function toObject(val) {
-		if (val === null || val === undefined) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
 
-		return Object(val);
-	}
+	// module
+	exports.push([module.id, ".colorpickr,\n.colorpickr *,\n.colorpickr *:after,\n.colorpickr *:before {\n  box-sizing: border-box;\n}\n.colorpickr {\n  width: 200px;\n  display: inline-block;\n  z-index: 1;\n  border-radius: 4px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n      user-select: none;\n}\n.colorpickr,\n.colorpickr input[type='number'],\n.colorpickr input[type='text'] {\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  color: #404040;\n  font-size: 12px;\n  line-height: 1;\n  -webkit-font-smoothing: antialiased;\n  outline: 0;\n}\n/* Clearfix rule */\n.colorpickr .cp-floor:after,\n.colorpickr .cp-body:after {\n  content: '';\n  display: block;\n  height: 0;\n  clear: both;\n  visibility: hidden;\n}\n.colorpickr .cp-relative {\n  position: relative;\n}\n.colorpickr .cp-inputs > div {\n  margin-bottom: 10px;\n}\n.colorpickr fieldset {\n  padding: 0;\n  margin: 0 0 5px;\n  border: 0;\n}\n.colorpickr fieldset input[type=radio] {\n  position: relative;\n  top: 3px;\n  cursor: pointer;\n}\n.colorpickr fieldset div:first-child {\n  display: none;\n  width: 25px;\n  height: 26px;\n}\n.colorpickr fieldset div:last-child {\n  width: 100%;\n  display: block;\n  position: relative;\n}\n/* Inputs */\n.colorpickr fieldset label {\n  position: absolute;\n  color: rgba(0,0,0,0.25);\n  font-weight: 600;\n  top: 7px;\n  left: 5px;\n}\n.colorpickr fieldset.cp-active label {\n  color: rgba(0,0,0,0.75);\n}\n.colorpickr fieldset input[type='number'],\n.colorpickr fieldset input[type='text'] {\n  width: 100%;\n  height: 26px;\n  margin: 0;\n  border: 0;\n  box-shadow: 0 0 1px #808080 inset;\n  padding: 5px 5px 5px 20px;\n  border-radius: 3px;\n  -webkit-appearance: none;\n}\n.colorpickr input:invalid {\n  border-color: #e55e5e;\n}\n.colorpickr button {\n  background-color: rgba(0,0,0,0.25);\n  text-align: center;\n  color: #fff;\n  font-size: 11px;\n  line-height: 14px;\n  font-weight: bold;\n  display: inline-block;\n  height: auto;\n  padding: 5px 10px;\n  width: 50px;\n  margin: 0;\n  border: none;\n  cursor: pointer;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n/* The button element needs to be forced this */\n  -webkit-font-smoothing: antialiased;\n}\n.colorpickr button:not(.cp-active):hover {\n  box-shadow: inset 0 0 0 3px rgba(0,0,0,0.1);\n}\n.colorpickr button.cp-active {\n  background-color: rgba(0,0,0,0.75);\n}\n.colorpickr .cp-col {\n  position: relative;\n}\n.colorpickr .cp-col:first-child {\n  width: 200px;\n  padding-right: 0;\n}\n.colorpickr .cp-col:last-child {\n  width: 200px;\n  margin-top: 10px;\n  z-index: 1;\n}\n.colorpickr .cp-mode-tabs {\n  margin: 0 0 10px;\n}\n.colorpickr .cp-mode-tabs button {\n  width: 50%;\n}\n.colorpickr .cp-mode-tabs button:first-child {\n  border-radius: 3px 0 0 3px;\n}\n.colorpickr .cp-mode-tabs button:last-child {\n  border-radius: 0 3px 3px 0;\n}\n.colorpickr .cp-selector {\n  position: relative;\n  width: 190px;\n  height: 190px;\n  z-index: 1;\n}\n.colorpickr .cp-gradient {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n}\n.colorpickr .cp-light-left {\n  background: -webkit-linear-gradient(left, #fff 0%, transparent 100%);\n  background: linear-gradient(to right, #fff 0%, transparent 100%);\n}\n.colorpickr .cp-light-bottom {\n  background: -webkit-linear-gradient(top, transparent 0%, #fff 100%);\n  background: linear-gradient(to bottom, transparent 0%, #fff 100%);\n}\n.colorpickr .cp-dark-bottom {\n  background: -webkit-linear-gradient(top, transparent 0%, #000 100%);\n  background: linear-gradient(to bottom, transparent 0%, #000 100%);\n}\n/* r-ne = white\n * r-nw = yellow\n * r-sw = red\n * r-se = violet\n */\n.colorpickr .cp-gradient.cp-rgb {\n  background-repeat: no-repeat;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-r-high {\n  background-position: 0 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-r-low {\n  background-position: -190px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-g-high {\n  background-position: -380px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-g-low {\n  background-position: -570px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-b-high {\n  background-position: -760px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-b-low {\n  background-position: -950px 0;\n}\n.colorpickr input[type=range],\n.colorpickr input[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none;\n  margin: 0;\n  padding: 0;\n  border: 0;\n}\n.colorpickr input[type=range] {\n  display: block !important;\n  height: 10px;\n  width: 100%;\n  padding: 0 2px;\n  margin: 0;\n  min-width: 100px;\n  overflow: hidden;\n  cursor: pointer;\n}\n.colorpickr input[type=range]::-ms-fill-upper {\n  background: transparent;\n}\n.colorpickr input[type=range]::-ms-fill-lower {\n  background: rgba(255,255,255,0.25);\n}\n/* Vendor specific thingies */\n.colorpickr input[type=range]::-moz-range-track {\n  opacity: 0;\n}\n.colorpickr input[type=range]::-ms-track {\n  opacity: 0;\n}\n.colorpickr input[type=range]::-ms-tooltip {\n  display: none;\n}\n/* For whatever reason, these need to be defined\n * on their own so dont group them */\n.colorpickr input[type=range]::-webkit-slider-thumb {\n  background: rgba(255,255,255,0.75);\n  border: 1px solid rgba(0,0,0,0.75);\n  height: 10px;\n  width: 5px;\n  cursor: ew-resize;\n  box-shadow: none;\n}\n.colorpickr input[type=range]::-ms-thumb {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  background: rgba(255,255,255,0.75);\n  border: 1px solid rgba(0,0,0,0.75);\n  height: 10px;\n  width: 5px;\n  cursor: ew-resize;\n  box-shadow: none;\n}\n.colorpickr input[type=range]::-moz-range-thumb {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  background: rgba(255,255,255,0.75);\n  border: 1px solid rgba(0,0,0,0.75);\n  height: 10px;\n  width: 5px;\n  cursor: ew-resize;\n  box-shadow: none;\n}\n/* Hue slider */\n.colorpickr .cp-colormode-slider {\n  position: absolute;\n  top: 90px;\n  right: -90px;\n  z-index: 1;\n}\n.colorpickr .cp-colormode-slider input[type=range] {\n  margin: 0;\n  width: 190px;\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.colorpickr .cp-gradient.cp-s-high,\n.colorpickr .cp-gradient.cp-v-high,\n.colorpickr .cp-colormode-slider.h input[type=range] {\n  background: -webkit-linear-gradient(right, #f00 0%, #f09 10%, #cd00ff 20%, #3200ff 30%, #06f 40%, #00fffd 50%, #0f6 60%, #35ff00 70%, #cdff00 80%, #f90 90%, #f00 100%);\n  background: linear-gradient(to left, #f00 0%, #f09 10%, #cd00ff 20%, #3200ff 30%, #06f 40%, #00fffd 50%, #0f6 60%, #35ff00 70%, #cdff00 80%, #f90 90%, #f00 100%);\n}\n.colorpickr .cp-gradient.cp-s-low {\n  background: -webkit-linear-gradient(top, #fff 0%, #bbb 100%);\n  background: linear-gradient(to bottom, #fff 0%, #bbb 100%);\n}\n.colorpickr .cp-gradient.cp-v-low {\n  background-color: #000;\n}\n.colorpickr .cp-colormode-slider.r input[type=range] {\n  background: -webkit-linear-gradient(right, #f00 0%, #000 100%);\n  background: linear-gradient(to left, #f00 0%, #000 100%);\n}\n.colorpickr .cp-colormode-slider.g input[type=range] {\n  background: -webkit-linear-gradient(right, #0f0 0%, #000 100%);\n  background: linear-gradient(to left, #0f0 0%, #000 100%);\n}\n.colorpickr .cp-colormode-slider.b input[type=range] {\n  background: -webkit-linear-gradient(right, #00f 0%, #000 100%);\n  background: linear-gradient(to left, #00f 0%, #000 100%);\n}\n.colorpickr .cp-colormode-slider input[type=range]::-webkit-slider-thumb {\n  cursor: ns-resize;\n}\n.colorpickr .cp-colormode-slider input[type=range]::-ms-thumb {\n  cursor: ns-resize;\n}\n.colorpickr .cp-colormode-slider input[type=range]::-moz-range-thumb {\n  cursor: ns-resize;\n}\n.colorpickr .cp-fill-tile {\n  background-image: url(\"data:image/png;base64,R0lGODdhCgAKAPAAAOXl5f///ywAAAAACgAKAEACEIQdqXt9GxyETrI279OIgwIAOw==\");\n  background-repeat: repeat;\n}\n.colorpickr .cp-floor {\n  display: none;\n  padding: 5px 10px 0;\n  position: relative;\n  width: 100%;\n  clear: both;\n}\n.colorpickr .cp-swatch {\n  width: 36px;\n  height: 24px;\n}\n.colorpickr .cp-actions .cp-fill-tile:only-of-type > .cp-swatch {\n  border-radius: 3px;\n}\n.colorpickr .cp-actions .cp-fill-tile,\n.colorpickr .cp-actions .cp-swatch {\n  border-radius: 3px 0 0 3px;\n}\n.colorpickr .cp-actions .cp-fill-tile + .cp-fill-tile,\n.colorpickr .cp-actions .cp-fill-tile + .cp-fill-tile .cp-swatch {\n  border-radius: 0 3px 3px 0;\n}\n.colorpickr .cp-actions .cp-fill-tile + .cp-fill-tile {\n  margin-left: 1px;\n}\n.colorpickr .cp-actions:after,\n.colorpickr .cp-actions:before {\n  display: block;\n  color: rgba(0,0,0,0.4);\n  vertical-align: top;\n  line-height: 20px;\n  float: left;\n  margin-top: 3px;\n  padding: 0 5px;\n  content: 'Current';\n}\n.colorpickr .cp-actions:before {\n  content: 'New';\n}\n.colorpickr .cp-fl {\n  float: left;\n}\n.colorpickr .cp-fr {\n  float: right;\n}\n.colorpickr .cp-floor .cp-output {\n  display: none;\n  width: 100px;\n}\n.colorpickr .cp-output {\n  width: 50%;\n  margin: 0;\n}\n/* xy controler for background selection */\n.colorpickr .slider-xy {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  cursor: pointer;\n}\n.colorpickr .slider-xy.dragging-xy {\n  cursor: move;\n  cursor: -webkit-grabbing;\n  cursor: -moz-grabbing;\n}\n.colorpickr .slider-xy .handle-xy {\n  position: absolute;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n   -ms-user-select: none;\n       user-select: none;\n}\n.colorpickr .slider-xy .handle-xy:after {\n  content: '';\n  background-color: rgba(255,255,255,0.1);\n  border: 1px solid #000;\n  display: block;\n  border-radius: 50%;\n  position: relative;\n  width: 10px;\n  height: 10px;\n  top: -5px;\n  left: -5px;\n}\n.colorpickr .slider-xy .handle-xy.dark:after {\n  border-color: #fff;\n}\n.colorpickr .cp-gradient.cp-rgb {\n  background-image: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABHQAAAC+CAYAAABUMFh3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAA6NSURBVHic7d1hUuNYEoVRuYYlzP53OEuo9vyZjlG/epJlsLHFd04EARhjVPSNbJSRSl2u1+W63OWy8fn6/fjxr8nHv268/evAc37tvP7W57PjOHJc4/HsHd/e6986ttpxXYaP996Wyftl4/N9lzufL/dnzde7Htdrcn+V+4PHdfZ8vetxvSb3/7nIfSNf73pcr8n9v/11n0jXux7Xa1K/LPf+fS/358zXux7Xq3L/687nAwAAAPBiGjoAAAAAJ6OhAwAAAHAyGjoAAAAAJ6OhAwAAAHAyGjoAAAAAJ6OhAwAAAHAyGjoAAAAAJ6OhAwAAAHAyGjoAAAAAJ6OhAwAAAHAyH8v11YcAwHe4Xl59BPD9/JlDkuADJJjQAQAAADgZDR0AAACAk9HQAQAAADgZO3QAIuzQocifOSQJPkCCCR0AAACAkzGhAxCh3FMk9yQJPkCCCR0AAACAkzGhAxCh3FMk9yQJPkCChg5AhHIPEKHgAyRo6ABEKPcUyT1Jgg+QoKEDEKHcUyT33Oe6LMtl9X7vedfJ5+PbZfLcy/B9T3DdO3YAfgoNHYAI5Z4iuSdJ8AESNHQAIpR7iuT+Xd2agFk/78gkzHX19cvw+ew1tx5bT+fc+lmz45u97vjv3JrWeSDBB0jQ0AGIUO4pknuSBB8gQUMHIEK5p+ivVx/Aae1NxoxTLMvy+UmY9fd/ZRJm/BnxHTIKPkDCh790ABqUe4qc15Kk4AMkaOgARCj3FGnokKTgAyS45AogQrmnyHnt3m2495YNj4+Pt9o+cmtvXkbBB0gwoQMQodxTJPckCT5AgoYOQIRyT5Hcc5+j00dHb6c+Ln9elj+nnZ7gL5NTAAUaOgARyj1FrjwhScEHSNDQAYhQ7imS+3d1dP/O0UmY9e3PH3E79fVkzVdup35rd9GTJmkEHyBBQwcgQrmnSO5JEnyAhI/l96sPAYDvoNxT5LyWJAUfIMGEDkCEck+R3JMk+AAJGjoAEco9Rd8zqLC3D2a2d+Xo4+MemMvG87d+7vp7ZjthZndgGo9jdlzja24dx5FdNevv/8qumvFnfHY3zU+5y9VzXhaA96KhAxCh3FMk9yQJPkCCHToAEco9Rc5rSVLwARJM6ABEKPcUyT1Jgg+QoKEDEKHcUyT37+ronpuju2rWu3gesdtntnPoM7t9Zv/OrX06DyT4AAkaOgARyj1FT1o5C+9NwQdI0NABiFDuKZJ77uMuVwCch4YOQIRyT5HckyT4AAkaOgARyj1Fcr83cbI3YTI+Pk6VHJli4WUEHyDhw8XlAA3KPUVyT5LgAySY0AGIUO4pknuSBB8gwYQOQIRyT5Hcf9be0t/x1t7LMv9NH7k9+Pr7v3J78PFnxC8FE3yABBM6ABHKPUVyz2vd2l30pMaT4AMkmNABiFDuKZL7d3V0iubo7cHXkz6PmBxaTxA9anLoG73hIQHweCZ0ACKUe4qc13Kfo3fwOtpoGi8tW5Y/7xj2BAo+QIIJHYAI5Z4iuSdJ8AESNHQAIpR7iuSeJMEHSNDQAYhQ7imSe5IEHyBBQwcgQrmnSO5JEnyABEuRASKUe4rkniTBB0gwoQMQodxTJPckCT5AgoYOQIRyT5HckyT4AAkaOgARyj1Fck+S4AMkaOgARCj3FMk9SYIPkGApMkCEck+R81pe5/q/t8vy/ySuP34iBR8gwYQOQIRyT5Hc86e/myy3Hvv78dnb+PU384aHBMDjmdABiFDuKZJ7nmOrsbN+u6y+Nvv4iQQfIMGEDkCEck+R3L+7scGxNfEym5CZNVBmjZbR7LKn9WPr99/QfHkGwQdIMKEDEKHcUyT3JAk+QIIJHYAI5Z4iuSdJ8AESTOgARCj3FHVzv3e50OwSpVuXOo3PXVbvt+7cdOux2euud83cOq6ji42DusEHSNHQAYhQ7imSe5IEHyBBQwcgQrmnSO55nXG6aVm2p5keTPABEjR0ACKUe4qsEiFJwQdI0NABiFDuKZJ7/nTP/p1xl889b+t9QLOPn0jwARI0dAAilHuK5J4kwQdI+Fh+v/oQAPgOyj1FzmtJUvABEkzoAEQo9xTJPUmCD5CgoQMQodxT9P2DCnv7Utb7Vcbvme1dua4+Xibft/XYsvzzbkrr9+PPmL3e7Dj3dr98ZS/M1u/oyHHNdtbMjns0u9PU1u/rK/tu3OUKgOfS0AGIUO4pknuSBB8gwQ4dgAjlniLntSQp+AAJJnQAIpR7iuSeJMEHSNDQAYhQ7imSe/40242ztS9n3NNzz9tsl9JX9/IcJPgACRo6ABHKPUXfsH4W3o+CD5CgoQMQodxTJPe8jrtcAfBcGjoAEco9RXJPkuADJGjoAEQo9xR1c7+3q2WcHFm/HX3ustyeOrn12Ox117tmbh3X0T04Qd3gA6R8uLgcoEG5p0juSRJ8gAQTOgARyj1Fck+S4AMkmNABiFDuKZL7dzdeJnXr0q/xkq/xcq3x+2evNbtEbP3Y+v1JL+ESfIAEEzoAEco9Rc5rea6tBtSLKfgACSZ0ACKUe4qc1/KnexYqj1NAW8uaZ19bL3ieffxECj5AggkdgAjlniLntbzOeCnYsmzfEezBFHyABBM6ABHKPUVyT5LgAyRo6ABEKPcUyT1Jgg+QoKEDEKHcUyT3JAk+QIKGDkCEck+R3JMk+AAJliIDRCj3FMk9SYIPkGBCByBCuadI7kkSfIAEDR2ACOWeIrknSfABEjR0ACKUe4rkniTBB0jQ0AGIUO4pknuSBB8gwVJkgAjlniLntdzvuizLZfX+1nO33i6rj5fV52uzxx5AwQdIMKEDEKHcU+S89qcamy1jE2VZ9psls8fH71s3ZLbe3tQbHxoAj2NCByBCuafIeS2vM2s6jRM/R6aAPkHBB0gwoQMQodxTJPfvZt3AGD+efb43GTNe3rT3+jGCD5BgQgcgQrmnSO5JEnyABBM6ABHKPUVyT5LgAySY0AGIUO4pkvtlue8ypKN3bVovHL5n8fBsafHsUiu+RPABEjR0ACKUe4rkniTBB0jQ0AGIUO4pknvut55AurVU+ehE07LMb6O+d2v1LxB8gAQNHYAI5Z4iF++QpOADJGjoAEQo9xTJ/U81Ts/MdvvsTb/MHh+/bz1hs3f79HuOcZz4edKt1QUfIEFDByBCuadI7kkSfICEj+X3qw8BgO+g3FPkvJYkBR8gwYQOQIRyT5HckyT4AAkaOgARyj1FzxlUOLIL5dZulFu7WcY9Lsuyv/dl62csyz93wdzaC7Nn/W/67O6Xrde4bny+d5zj7+vRx+guVwC8Nw0dgAjlniK5J0nwARLs0AGIUO4pcl5LkoIPkGBCByBCuadI7kkSfIAEDR2ACOWeIrn/qWY7i8adQ3v7afb2EY37ix6xc2j2+dZjDyD4AAkaOgARyj1FT1g3C+9PwQdI0NABiFDuKZJ77ucuVwCcg4YOQIRyT5HckyT4AAkaOgARyj1Fcr8s/5w0uTV1cnTiZD1Zcs+emtmOm/H4XCj3ZYIPkPDh/5kADco9RXJPkuADJJjQAYhQ7imSe5IEHyDBhA5AhHJPkdy/m63Lv7Yuvdq7Xfh4Odje68cIPkCCCR2ACOWeIue1JCn4AAkmdAAilHuKnNf+VOP0zWxZ894twWePj9+3Xtq8Nyl0zzGOE0NPmiJS8AESTOgARCj3FDmv5X7rZs6tZsvRu4Ity7zBtNd0+gIFHyDBhA5AhHJPkdyTJPgACRo6ABHKPUVyT5LgAyRo6ABEKPcUyT1Jgg+QoKEDEKHcUyT3JAk+QIKlyAARyj1Fck+S4AMkmNABiFDuKZJ7kgQfIEFDByBCuadI7kkSfIAEDR2ACOWeIrknSfABEjR0ACKUe4rkniTBB0iwFBkgQrmnyHktSQo+QIIJHYAI5Z4iuee467Isl52vzd7ueb3Z6+/9zC8QfIAEDR2ACOWeIoMKfL+/mz2X1efL/z4fK/HssQcdAgA/nkuuACKUe4qc157BbJLlyCTM+uuXyXP3/uvPvrZurqzf3zu5c2sq5xso+AAJJnQAIpR7ipzXkqTgAySY0AGIUO4pcl5LkoIPkKChAxCh3FMk92vffWnTkcfH19y6ROlNL216V4IPkKChAxCh3FMk9yQJPkCChg5AhHJPkdyTJPgACRo6ABHKPUV26JCk4AMkaOgARCj3FMk9x917e/J7dg4tO89/AsEHSNDQAYhQ7imSe5IEHyBBQwcgQrmnSO5JEnyABA0dgAjlniK5J0nwARI+lt+vPgQAvoNyT9FrzmvHXSxHd6+Mz11W79e7WMbn773WeEzjfpe9nz973t6emc/67O9rtqtm/Dfv/czRbN/N3u9q61if/fs6QMEHSDChAxCh3FMk9yQJPkCChg5AhHJPkdyTJPgACRo6ABHKPUVyT5LgAyRo6ABEKPcUyT3H3bsr557dPsvO859A8AESNHQAIpR7ir7xFBreh4IPkKChAxCh3FOkoUOSgg+QoKEDEKHcU6ShQ5KCD5CgoQMQodxTpKGzNu6I+cpOmOvw9a3vu/X4+Jpbe2xmxzr+W7b23wQp+AAJH/7SAWhQ7imSe5IEHyDBhA5AhHIPEKHgAySY0AGIUO4pkvsz+O5Lwba+NrvF+N5lYFvH+gaXggk+QIKGDkCEck+R3JMk+AAJLrkCiFDuAfbcO4lzz+TQsvP8J1DwARJM6ABEKPcAEQo+QIKGDkCEcg8QoeADJHy8+gAAAJ7FeS0A8FOZ0AGIUO4BIhR8gAQNHYAI5R4gQsEHSPj16gMAAAAA4D4mdAAilHuACAUfIMGEDgAAAMDJmNABiFDuASIUfIAEEzoAAAAAJ6OhAwAAAHAyGjoAAAAAJ2OHDkCEcg8QoeADJJjQAQAAADgZDR0AAACAk9HQAQAAADgZDR0AAACAk9HQAQAAADgZDR0AAACAk9HQAQAAADgZDR0AAACAk9HQAQAAADgZDR0AAACAk9HQAQAAADiZ/wLMHimZTc1pKgAAAABJRU5ErkJggg==\");\n}\n", ""]);
 
-	function shouldUseNative() {
-		try {
-			if (!Object.assign) {
-				return false;
-			}
-
-			// Detect buggy property enumeration order in older V8 versions.
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line
-			test1[5] = 'de';
-			if (Object.getOwnPropertyNames(test1)[0] === '5') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test2 = {};
-			for (var i = 0; i < 10; i++) {
-				test2['_' + String.fromCharCode(i)] = i;
-			}
-			var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-				return test2[n];
-			});
-			if (order2.join('') !== '0123456789') {
-				return false;
-			}
-
-			// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-			var test3 = {};
-			'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-				test3[letter] = letter;
-			});
-			if (Object.keys(Object.assign({}, test3)).join('') !==
-					'abcdefghijklmnopqrst') {
-				return false;
-			}
-
-			return true;
-		} catch (e) {
-			// We don't expect any of the above to throw, but better to be safe.
-			return false;
-		}
-	}
-
-	module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-		var from;
-		var to = toObject(target);
-		var symbols;
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
-
-			for (var key in from) {
-				if (hasOwnProperty.call(from, key)) {
-					to[key] = from[key];
-				}
-			}
-
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
-				for (var i = 0; i < symbols.length; i++) {
-					if (propIsEnumerable.call(from, symbols[i])) {
-						to[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
-
-		return to;
-	};
+	// exports
 
 
 /***/ },
@@ -59514,57 +59320,849 @@ webpackJsonp([0],[
 
 	'use strict';
 
-	var tinycolor = __webpack_require__(621);
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	if (typeof window != 'undefined') {
-	    window.tinycolor = tinycolor;
-	}
+	var React = __webpack_require__(138);
 
-	function toColor(color) {
-	    return tinycolor(color);
-	}
+	var XYControl = __webpack_require__(621);
+	var ModeInput = __webpack_require__(623);
+	var RGBInput = __webpack_require__(624);
+	var HInput = __webpack_require__(626);
+	var SVAlphaInput = __webpack_require__(627);
+	var RGBGradient = __webpack_require__(628);
+	var HGradient = __webpack_require__(629);
+	var SVGradient = __webpack_require__(630);
+	var tinyColor = __webpack_require__(631);
 
-	function toPure(color) {
-	    var h = toColor(color).toHsl().h;
+	var _require = __webpack_require__(632);
 
-	    return toColor({ h: h, s: 100, l: 50, a: 1 });
-	}
+	var rgbaColor = _require.rgbaColor;
+	var rgb2hsv = _require.rgb2hsv;
+	var rgb2hex = _require.rgb2hex;
+	var hsv2hex = _require.hsv2hex;
+	var hsv2rgb = _require.hsv2rgb;
+	var colorCoords = _require.colorCoords;
+	var colorCoordValue = _require.colorCoordValue;
+	var getColor = _require.getColor;
+	var isDark = _require.isDark;
 
-	function fromRatio(color) {
-	    return tinycolor.fromRatio(color);
-	}
 
-	function toAlpha(color, alpha) {
-	    if (alpha > 1) {
-	        alpha = alpha / 100;
-	    }
-
-	    color = toColor(color).toRgb();
-	    color.a = alpha;
-
-	    return toColor(color);
-	}
-
-	function toHsv(color) {
-	    return toColor(color).toHsv();
-	}
-
-	var Color = {
-	    toColor: toColor,
-	    toPure: toPure,
-	    fromRatio: fromRatio,
-	    toAlpha: toAlpha,
-	    toHsv: toHsv
+	var isRGBMode = function isRGBMode(c) {
+	  return c === 'r' || c === 'g' || c === 'b';
+	};
+	var isHSVMode = function isHSVMode(c) {
+	  return c === 'h' || c === 's' || c === 'v';
 	};
 
-	if (typeof window != 'undefined') {
-	    window.color = Color;
-	}
+	module.exports = React.createClass({
+	  displayName: 'exports',
 
-	module.exports = Color;
+
+	  propTypes: {
+	    onChange: React.PropTypes.func.isRequired,
+	    colorAttribute: React.PropTypes.string,
+	    mode: React.PropTypes.string,
+	    value: React.PropTypes.string,
+	    reset: React.PropTypes.bool
+	  },
+
+	  getInitialState: function getInitialState() {
+	    var _props = this.props;
+	    var value = _props.value;
+	    var reset = _props.reset;
+	    var mode = _props.mode;
+	    var colorAttribute = _props.colorAttribute;
+
+	    var modeInputName = 'mode-' + Math.random();
+	    return {
+	      originalValue: value,
+	      reset: reset,
+	      mode: mode,
+	      modeInputName: modeInputName,
+	      colorAttribute: colorAttribute,
+	      color: getColor(value)
+	    };
+	  },
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      value: '#3887be',
+	      reset: true,
+	      mode: 'rgb',
+	      colorAttribute: 'h'
+	    };
+	  },
+
+
+	  componentWillReceiveProps: function componentWillReceiveProps(props) {
+	    if (props.value) this.setState({ color: getColor(props.value) });
+	  },
+
+	  emitOnChange: function emitOnChange(change) {
+	    var _state = this.state;
+	    var color = _state.color;
+	    var mode = _state.mode;
+	    var colorAttribute = _state.colorAttribute;
+
+	    this.props.onChange(Object.assign({}, color, { mode: mode }, { colorAttribute: colorAttribute }, change));
+	  },
+	  changeHSV: function changeHSV(p, val) {
+	    var _this = this;
+
+	    var color = this.state.color;
+
+	    var j = p;
+	    if (typeof j === 'string') {
+	      j = {};
+	      j[p] = Math.floor(parseInt(val.target.value || 0, 10));
+	    }
+	    var h = 'h' in j ? j.h : color.h,
+	        s = 's' in j ? j.s : color.s,
+	        v = 'v' in j ? j.v : color.v;
+	    var rgb = hsv2rgb(h, s, v);
+	    var hex = rgb2hex(rgb.r, rgb.g, rgb.b);
+
+	    color = Object.assign({}, color, j, rgb, { hex: hex });
+
+	    this.setState({ color: color }, function () {
+	      _this.emitOnChange(color);
+	    });
+	  },
+	  changeRGB: function changeRGB(p, val) {
+	    var _this2 = this;
+
+	    var color = this.state.color;
+
+	    var j = p;
+	    if (typeof j === 'string') {
+	      j = {};
+	      j[p] = Math.floor(parseInt(val.target.value || 0, 10));
+	    }
+	    var r = 'r' in j ? j.r : color.r,
+	        g = 'g' in j ? j.g : color.g,
+	        b = 'b' in j ? j.b : color.b;
+	    var hsv = rgb2hsv(r, g, b);
+
+	    color = Object.assign({}, color, j, hsv, {
+	      hex: rgb2hex(r, g, b)
+	    });
+
+	    this.setState({ color: color }, function () {
+	      _this2.emitOnChange(color);
+	    });
+	  },
+	  changeAlpha: function changeAlpha(e) {
+	    var _this3 = this;
+
+	    var value = e.target.value || '0';
+	    if (value && typeof value === 'string') {
+	      var a = Math.floor(parseFloat(value));
+	      var color = Object.assign({}, this.state.color, { a: a / 100 });
+	      this.setState({ color: color }, function () {
+	        _this3.emitOnChange(color);
+	      });
+	    }
+	  },
+	  changeHEX: function changeHEX(e) {
+	    var _this4 = this;
+
+	    var hex = '#' + e.target.value.trim();
+	    var isValid = tinyColor(hex).isValid();
+
+	    var color = getColor(hex) || this.state.color;
+
+	    this.setState({
+	      color: isValid ? color : Object.assign({}, color, { hex: e.target.value.trim() })
+	    }, function () {
+	      if (isValid) _this4.emitOnChange({ input: 'hex' });
+	    });
+	  },
+	  reset: function reset() {
+	    this.setState({ color: getColor(this.state.originalValue) }, this.emitOnChange);
+	  },
+	  _onXYChange: function _onXYChange(mode, pos) {
+	    var color = colorCoordValue(mode, pos);
+	    if (isRGBMode(mode)) this.changeRGB(color);
+	    if (isHSVMode(mode)) this.changeHSV(color);
+	  },
+	  _onColorSliderChange: function _onColorSliderChange(mode, e) {
+	    var color = {};
+	    color[mode] = parseFloat(e.target.value);
+	    if (isRGBMode(mode)) this.changeRGB(color);
+	    if (isHSVMode(mode)) this.changeHSV(color);
+	  },
+	  _onAlphaSliderChange: function _onAlphaSliderChange(e) {
+	    this.changeHSV({
+	      a: Math.floor(parseFloat(e.target.value)) / 100
+	    });
+	  },
+	  setMode: function setMode(e) {
+	    var _this5 = this;
+
+	    var obj = { mode: e.target.value };
+	    this.setState(obj, function () {
+	      _this5.emitOnChange(obj);
+	    });
+	  },
+	  setColorAttribute: function setColorAttribute(attribute) {
+	    var _this6 = this;
+
+	    var obj = { colorAttribute: attribute };
+	    this.setState(obj, function () {
+	      _this6.emitOnChange(obj);
+	    });
+	  },
+	  render: function render() {
+	    var _state2 = this.state;
+	    var colorAttribute = _state2.colorAttribute;
+	    var color = _state2.color;
+	    var r = color.r;
+	    var g = color.g;
+	    var b = color.b;
+	    var h = color.h;
+	    var s = color.s;
+	    var v = color.v;
+	    var hex = color.hex;
+
+
+	    var a = Math.round(color.a * 100);
+
+	    var colorAttributeValue = color[colorAttribute];
+
+	    var colorAttributeMax;
+	    if (isRGBMode(colorAttribute)) {
+	      colorAttributeMax = 255;
+	    } else if (colorAttribute === 'h') {
+	      colorAttributeMax = 359;
+	    } else {
+	      colorAttributeMax = 100;
+	    }
+
+	    var rgbaBackground = rgbaColor(r, g, b, a);
+	    var opacityGradient = 'linear-gradient(to right, ' + rgbaColor(r, g, b, 0) + ', ' + rgbaColor(r, g, b, 100) + ')';
+
+	    var hueBackground = '#' + hsv2hex(h, 100, 100);
+	    var coords = colorCoords(colorAttribute, color);
+
+	    // Slider background color for saturation & value.
+	    var hueSlide = {};
+	    if (colorAttribute === 'v') {
+	      hueSlide.background = 'linear-gradient(to left, ' + hueBackground + ' 0%, #000 100%)';
+	    } else if (colorAttribute === 's') {
+	      hueSlide.background = 'linear-gradient(to left, ' + hueBackground + ' 0%, #bbb 100%)';
+	    }
+
+	    // Opacity between colorspaces in RGB & SV
+	    var opacityHigh = {},
+	        opacityLow = {};
+	    if (['r', 'g', 'b'].indexOf(colorAttribute) >= 0) {
+	      opacityHigh.opacity = Math.round(color[colorAttribute] / 255 * 100) / 100;
+	      opacityLow.opacity = Math.round(100 - color[colorAttribute] / 255 * 100) / 100;
+	    } else if (['s', 'v'].indexOf(colorAttribute) >= 0) {
+	      opacityHigh.opacity = Math.round(color[colorAttribute] / 100 * 100) / 100;
+	      opacityLow.opacity = Math.round(100 - color[colorAttribute] / 100 * 100) / 100;
+	    }
+
+	    return React.createElement(
+	      'div',
+	      { className: 'colorpickr' },
+	      React.createElement(
+	        'div',
+	        { className: 'cp-body' },
+	        React.createElement(
+	          'div',
+	          { className: 'cp-col' },
+	          React.createElement(
+	            'div',
+	            { className: 'cp-selector' },
+	            React.createElement(RGBGradient, {
+	              active: colorAttribute === 'r',
+	              color: 'r',
+	              opacityLow: opacityLow,
+	              opacityHigh: opacityHigh
+	            }),
+	            React.createElement(RGBGradient, {
+	              active: colorAttribute === 'g',
+	              color: 'g',
+	              opacityLow: opacityLow,
+	              opacityHigh: opacityHigh
+	            }),
+	            React.createElement(RGBGradient, {
+	              active: colorAttribute === 'b',
+	              color: 'b',
+	              opacityLow: opacityLow,
+	              opacityHigh: opacityHigh
+	            }),
+	            React.createElement(HGradient, { active: colorAttribute === 'h', hueBackground: hueBackground }),
+	            React.createElement(SVGradient, {
+	              active: colorAttribute === 's',
+	              color: 's',
+	              opacityLow: opacityLow,
+	              opacityHigh: opacityHigh
+	            }),
+	            React.createElement(SVGradient, {
+	              active: colorAttribute === 'v',
+	              color: 'v',
+	              opacityLow: opacityLow,
+	              opacityHigh: opacityHigh
+	            }),
+	            React.createElement(XYControl, _extends({
+	              className: 'cp-slider-xy'
+	            }, coords, {
+	              handleClass: isDark([r, g, b, a]) ? '' : 'dark',
+	              onChange: this._onXYChange.bind(null, colorAttribute) }))
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'cp-colormode-slider cp-colormode-attribute-slider ' + colorAttribute },
+	            React.createElement('input', {
+	              type: 'range',
+	              value: colorAttributeValue,
+	              style: hueSlide,
+	              onChange: this._onColorSliderChange.bind(null, colorAttribute),
+	              className: 'cp-colormode-slider-input',
+	              min: 0,
+	              max: colorAttributeMax })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'cp-col' },
+	          React.createElement(
+	            'div',
+	            { className: 'cp-mode-tabs' },
+	            React.createElement(
+	              'button',
+	              {
+	                onClick: this.setMode,
+	                className: 'cp-mode-rgb ' + (this.state.mode === 'rgb' ? 'cp-active' : ''),
+	                value: 'rgb' },
+	              'RGB'
+	            ),
+	            React.createElement(
+	              'button',
+	              {
+	                className: 'cp-mode-hsv ' + (this.state.mode === 'hsv' ? 'cp-active' : ''),
+	                onClick: this.setMode,
+	                value: 'hsv' },
+	              'HSV'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'cp-inputs' },
+	            this.state.mode === 'rgb' ? React.createElement(
+	              'div',
+	              null,
+	              React.createElement(
+	                'fieldset',
+	                { className: 'rgb-attribute-r ' + (colorAttribute === 'r' ? 'cp-active' : '') },
+	                React.createElement(ModeInput, {
+	                  name: this.state.modeInputName,
+	                  checked: colorAttribute === 'r',
+	                  onChange: this.setColorAttribute.bind(null, 'r')
+	                }),
+	                React.createElement(RGBInput, {
+	                  value: r,
+	                  onChange: this.changeRGB.bind(null, 'r'),
+	                  label: 'R'
+	                })
+	              ),
+	              React.createElement(
+	                'fieldset',
+	                { className: 'rgb-attribute-g ' + (colorAttribute === 'g' ? 'cp-active' : '') },
+	                React.createElement(ModeInput, {
+	                  name: this.state.modeInputName,
+	                  checked: colorAttribute === 'g',
+	                  onChange: this.setColorAttribute.bind(null, 'g')
+	                }),
+	                React.createElement(RGBInput, {
+	                  value: g,
+	                  onChange: this.changeRGB.bind(null, 'g'),
+	                  label: 'G'
+	                })
+	              ),
+	              React.createElement(
+	                'fieldset',
+	                { className: 'rgb-attribute-b ' + (colorAttribute === 'b' ? 'cp-active' : '') },
+	                React.createElement(ModeInput, {
+	                  name: this.state.modeInputName,
+	                  checked: colorAttribute === 'b',
+	                  onChange: this.setColorAttribute.bind(null, 'b')
+	                }),
+	                React.createElement(RGBInput, {
+	                  value: b,
+	                  onChange: this.changeRGB.bind(null, 'b'),
+	                  label: 'B'
+	                })
+	              )
+	            ) : React.createElement(
+	              'div',
+	              null,
+	              React.createElement(
+	                'fieldset',
+	                { className: 'hsv-attribute-h ' + (colorAttribute === 'h' ? 'cp-active' : '') },
+	                React.createElement(ModeInput, {
+	                  name: this.state.modeInputName,
+	                  checked: colorAttribute === 'h',
+	                  onChange: this.setColorAttribute.bind(null, 'h')
+	                }),
+	                React.createElement(HInput, {
+	                  value: h,
+	                  onChange: this.changeHSV.bind(null, 'h'),
+	                  label: 'H'
+	                })
+	              ),
+	              React.createElement(
+	                'fieldset',
+	                { className: 'hsv-attribute-s ' + (colorAttribute === 's' ? 'cp-active' : '') },
+	                React.createElement(ModeInput, {
+	                  name: this.state.modeInputName,
+	                  checked: colorAttribute === 's',
+	                  onChange: this.setColorAttribute.bind(null, 's')
+	                }),
+	                React.createElement(SVAlphaInput, {
+	                  value: s,
+	                  onChange: this.changeHSV.bind(null, 's'),
+	                  label: 'S'
+	                })
+	              ),
+	              React.createElement(
+	                'fieldset',
+	                { className: 'hsv-attribute-v ' + (colorAttribute === 'v' ? 'cp-active' : '') },
+	                React.createElement(ModeInput, {
+	                  name: this.state.modeInputName,
+	                  checked: colorAttribute === 'v',
+	                  onChange: this.setColorAttribute.bind(null, 'v')
+	                }),
+	                React.createElement(SVAlphaInput, {
+	                  value: v,
+	                  onChange: this.changeHSV.bind(null, 'v'),
+	                  label: 'V'
+	                })
+	              )
+	            ),
+	            React.createElement(
+	              'fieldset',
+	              { className: 'cp-relative' },
+	              React.createElement(SVAlphaInput, {
+	                value: a,
+	                onChange: this.changeAlpha,
+	                label: String.fromCharCode(945)
+	              })
+	            )
+	          ),
+	          React.createElement(
+	            'fieldset',
+	            { className: 'cp-fill-tile' },
+	            React.createElement('input', {
+	              type: 'range',
+	              className: 'cp-alpha-slider-input',
+	              value: a,
+	              onChange: this._onAlphaSliderChange,
+	              style: { background: opacityGradient },
+	              min: 0,
+	              max: 100 })
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'cp-floor' },
+	        React.createElement(
+	          'div',
+	          { className: 'cp-actions cp-fl' },
+	          React.createElement(
+	            'span',
+	            { className: 'cp-fl cp-fill-tile' },
+	            React.createElement('div', {
+	              className: 'cp-swatch',
+	              style: { backgroundColor: rgbaBackground } })
+	          ),
+	          this.state.reset && React.createElement(
+	            'span',
+	            { className: 'cp-fl cp-fill-tile' },
+	            React.createElement('button', {
+	              className: 'cp-swatch cp-swatch-reset',
+	              title: 'Reset color',
+	              style: { backgroundColor: this.state.originalValue },
+	              onClick: this.reset })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'cp-output cp-fr' },
+	          React.createElement(
+	            'fieldset',
+	            { className: 'cp-hex cp-relative cp-fr' },
+	            React.createElement(
+	              'label',
+	              null,
+	              '#'
+	            ),
+	            React.createElement('input', {
+	              value: hex,
+	              className: 'cp-hex-input',
+	              onChange: this.changeHEX,
+	              type: 'text' })
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
 
 /***/ },
 /* 621 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(138);
+	var ReactDOM = __webpack_require__(246);
+	var clamp = __webpack_require__(622);
+
+	var XYControl = React.createClass({
+	  displayName: 'XYControl',
+
+	  propTypes: {
+	    x: React.PropTypes.number.isRequired,
+	    y: React.PropTypes.number.isRequired,
+	    xmax: React.PropTypes.number.isRequired,
+	    ymax: React.PropTypes.number.isRequired,
+	    handleClass: React.PropTypes.string,
+	    onChange: React.PropTypes.func.isRequired
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      dragging: false
+	    };
+	  },
+	  change: function change(pos) {
+	    var rect = this.getOwnBoundingRect();
+	    this.props.onChange({
+	      x: clamp(pos.left, 0, rect.width) / rect.width * this.props.xmax,
+	      y: clamp(pos.top, 0, rect.height) / rect.height * this.props.ymax
+	    });
+	  },
+	  getOwnBoundingRect: function getOwnBoundingRect() {
+	    return ReactDOM.findDOMNode(this).getBoundingClientRect();
+	  },
+	  _onMouseDown: function _onMouseDown(e) {
+	    var rect = this.getOwnBoundingRect();
+	    var x = e.clientX,
+	        y = e.clientY;
+
+	    var offset = {
+	      left: x - rect.left,
+	      top: y - rect.top
+	    };
+
+	    this.change(offset);
+
+	    // Handle interaction
+	    this.setState({
+	      start: { x: offset.left, y: offset.top },
+	      offset: { x: x, y: y }
+	    });
+
+	    window.addEventListener('mousemove', this._drag);
+	    window.addEventListener('mouseup', this._dragEnd);
+	  },
+	  _drag: function _drag(e) {
+	    this.setState({ dragging: true });
+	    var posX = e.clientX + this.state.start.x - this.state.offset.x;
+	    var posY = e.clientY + this.state.start.y - this.state.offset.y;
+
+	    this.change({
+	      left: posX,
+	      top: posY
+	    });
+	  },
+	  _dragEnd: function _dragEnd() {
+	    this.setState({ dragging: false });
+	    window.removeEventListener('mousemove', this._drag);
+	    window.removeEventListener('mouseup', this._dragEnd);
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      {
+	        onMouseDown: this._onMouseDown,
+	        className: 'slider-xy ' + (this.state.dragging ? 'dragging-xy' : '') },
+	      React.createElement('div', {
+	        className: 'handle-xy ' + this.props.handleClass,
+	        style: {
+	          top: clamp(this.props.y / this.props.ymax * 100, 0, 100) + '%',
+	          left: clamp(this.props.x / this.props.xmax * 100, 0, 100) + '%'
+	        } })
+	    );
+	  }
+	});
+
+	module.exports = XYControl;
+
+/***/ },
+/* 622 */
+/***/ function(module, exports) {
+
+	module.exports = clamp
+
+	function clamp(value, min, max) {
+	  return min < max
+	    ? (value < min ? min : value > max ? max : value)
+	    : (value < max ? max : value > min ? min : value)
+	}
+
+
+/***/ },
+/* 623 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(138);
+
+	function ModeInput(_ref) {
+	  var name = _ref.name;
+	  var checked = _ref.checked;
+	  var onChange = _ref.onChange;
+
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement('input', {
+	      type: 'radio',
+	      name: name,
+	      checked: checked,
+	      onChange: onChange
+	    })
+	  );
+	}
+
+	ModeInput.propTypes = {
+	  name: React.PropTypes.string.isRequired,
+	  checked: React.PropTypes.bool.isRequired,
+	  onChange: React.PropTypes.func.isRequired
+	};
+
+	module.exports = ModeInput;
+
+/***/ },
+/* 624 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var React = __webpack_require__(138);
+	var NumberInput = __webpack_require__(625);
+
+	function RGBInput(props) {
+	  return React.createElement(NumberInput, _extends({}, props, { min: 0, max: 255 }));
+	}
+
+	RGBInput.propTypes = {
+	  label: React.PropTypes.string.isRequired,
+	  value: React.PropTypes.number.isRequired,
+	  onChange: React.PropTypes.func.isRequired
+	};
+
+	module.exports = RGBInput;
+
+/***/ },
+/* 625 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(138);
+
+	function NumberInput(_ref) {
+	  var label = _ref.label;
+	  var value = _ref.value;
+	  var onChange = _ref.onChange;
+	  var min = _ref.min;
+	  var max = _ref.max;
+
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement(
+	      'label',
+	      null,
+	      label
+	    ),
+	    React.createElement('input', {
+	      value: value,
+	      onChange: onChange,
+	      type: 'number',
+	      min: min,
+	      max: max,
+	      step: 1
+	    })
+	  );
+	}
+
+	NumberInput.propTypes = {
+	  label: React.PropTypes.string.isRequired,
+	  value: React.PropTypes.number.isRequired,
+	  onChange: React.PropTypes.func.isRequired,
+	  min: React.PropTypes.number.isRequired,
+	  max: React.PropTypes.number.isRequired
+	};
+
+	module.exports = NumberInput;
+
+/***/ },
+/* 626 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var React = __webpack_require__(138);
+	var NumberInput = __webpack_require__(625);
+
+	function HInput(props) {
+	  return React.createElement(NumberInput, _extends({}, props, { min: 0, max: 359 }));
+	}
+
+	HInput.propTypes = {
+	  label: React.PropTypes.string.isRequired,
+	  value: React.PropTypes.number.isRequired,
+	  onChange: React.PropTypes.func.isRequired
+	};
+
+	module.exports = HInput;
+
+/***/ },
+/* 627 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var React = __webpack_require__(138);
+	var NumberInput = __webpack_require__(625);
+
+	function SVAlphaInput(props) {
+	  return React.createElement(NumberInput, _extends({}, props, { min: 0, max: 100 }));
+	}
+
+	SVAlphaInput.propTypes = {
+	  label: React.PropTypes.string.isRequired,
+	  value: React.PropTypes.number.isRequired,
+	  onChange: React.PropTypes.func.isRequired
+	};
+
+	module.exports = SVAlphaInput;
+
+/***/ },
+/* 628 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(138);
+
+	function RGBGradient(_ref) {
+	  var color = _ref.color;
+	  var active = _ref.active;
+	  var opacityLow = _ref.opacityLow;
+	  var opacityHigh = _ref.opacityHigh;
+
+	  if (!active) {
+	    return React.createElement('noscript', null);
+	  }
+
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement('div', { className: 'cp-gradient cp-rgb cp-' + color + '-high', style: opacityHigh }),
+	    React.createElement('div', { className: 'cp-gradient cp-rgb cp-' + color + '-low', style: opacityLow })
+	  );
+	}
+
+	RGBGradient.propTypes = {
+	  color: React.PropTypes.string.isRequired,
+	  active: React.PropTypes.bool.isRequired,
+	  opacityLow: React.PropTypes.object.isRequired,
+	  opacityHigh: React.PropTypes.object.isRequired
+	};
+
+	module.exports = RGBGradient;
+
+/***/ },
+/* 629 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(138);
+
+	function HGradient(_ref) {
+	  var active = _ref.active;
+	  var hueBackground = _ref.hueBackground;
+
+	  if (!active) {
+	    return React.createElement('noscript', null);
+	  }
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement('div', { className: 'cp-gradient', style: { backgroundColor: hueBackground } }),
+	    React.createElement('div', { className: 'cp-gradient cp-light-left' }),
+	    React.createElement('div', { className: 'cp-gradient cp-dark-bottom' })
+	  );
+	}
+
+	HGradient.propTypes = {
+	  active: React.PropTypes.bool.isRequired,
+	  hueBackground: React.PropTypes.string.isRequired
+	};
+
+	module.exports = HGradient;
+
+/***/ },
+/* 630 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(138);
+
+	function SVGradient(_ref) {
+	  var color = _ref.color;
+	  var active = _ref.active;
+	  var opacityLow = _ref.opacityLow;
+	  var opacityHigh = _ref.opacityHigh;
+
+	  if (!active) {
+	    return React.createElement('noscript', null);
+	  }
+	  return React.createElement(
+	    'div',
+	    null,
+	    React.createElement('div', { className: 'cp-gradient cp-' + color + '-high', style: opacityHigh }),
+	    React.createElement('div', { className: 'cp-gradient cp-' + color + '-low', style: opacityLow }),
+	    React.createElement('div', { className: 'cp-gradient cp-dark-bottom' })
+	  );
+	}
+
+	SVGradient.propTypes = {
+	  color: React.PropTypes.string.isRequired,
+	  active: React.PropTypes.bool.isRequired,
+	  opacityLow: React.PropTypes.object.isRequired,
+	  opacityHigh: React.PropTypes.object.isRequired
+	};
+
+	module.exports = SVGradient;
+
+/***/ },
+/* 631 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;// TinyColor v1.3.0
@@ -60736,2825 +61334,476 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 622 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(138);
-	var ReactDOM = __webpack_require__(246);
-	var Region = __webpack_require__(623);
-	var assign = __webpack_require__(619);
-	var common = __webpack_require__(632);
-
-	var VALIDATE = __webpack_require__(641);
-
-	module.exports = React.createClass(assign({
-
-	    displayName: 'HueSpectrum',
-
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            height: 300,
-	            width: 30,
-	            pointerSize: 3,
-	            defaultColor: __webpack_require__(642)
-	        };
-	    },
-
-	    getInitialState: function getInitialState() {
-	        return {
-	            h: 0
-	        };
-	    },
-
-	    componentDidUpdate: function componentDidUpdate() {
-	        // this.updateDragPositionIf()
-	    },
-
-	    componentDidMount: function componentDidMount() {
-	        this.updateDragPositionIf();
-	    },
-
-	    updateDragPositionIf: function updateDragPositionIf() {
-
-	        if (!this.props.height) {
-	            this.setState({});
-	        }
-	    },
-
-	    render: function render() {
-	        this.hsv = this.toColorValue(this.state.value || this.props.value || this.props.defaultValue || this.props.defaultColor);
-	        // console.log('hue:', this.hsv)
-
-	        if (this.state.h == 360 && !this.hsv.h) {
-	            //in order to show bottom red as well on drag
-	            this.hsv.h = 360;
-	        }
-
-	        var style = assign({}, this.props.style);
-
-	        if (this.props.height) {
-	            style.height = this.props.height;
-	        }
-	        if (this.props.width) {
-	            style.width = this.props.width;
-	        }
-
-	        var dragStyle = {
-	            height: this.props.pointerSize
-	        };
-
-	        var dragPos = this.getDragPosition();
-
-	        if (dragPos != null) {
-	            dragStyle.top = dragPos;
-	            dragStyle.display = 'block';
-	        }
-	        return React.createElement(
-	            'div',
-	            { className: 'react-color-picker__hue-spectrum', style: style, onMouseDown: this.onMouseDown },
-	            React.createElement(
-	                'div',
-	                { className: 'react-color-picker__hue-drag', style: dragStyle },
-	                React.createElement('div', { className: 'react-color-picker__hue-inner' })
-	            )
-	        );
-	    },
-
-	    getDragPosition: function getDragPosition(hsv) {
-	        hsv = hsv || this.hsv;
-
-	        if (!this.props.height && !this.isMounted()) {
-	            return null;
-	        }
-
-	        var height = this.props.height || Region.fromDOM(ReactDOM.findDOMNode(this)).getHeight();
-	        var size = this.props.pointerSize;
-
-	        var pos = Math.round(hsv.h * height / 360);
-	        var diff = Math.round(size / 2);
-
-	        return pos - diff;
-	    },
-
-	    updateColor: function updateColor(point) {
-	        point = VALIDATE(point);
-
-	        this.hsv.h = point.y * 360 / point.height;
-
-	        if (this.hsv.h != 0) {
-	            this.state.h = this.hsv.h;
-	        }
-
-	        this.state.h = this.hsv.h != 0 ? this.hsv.h : 0;
-	    },
-
-	    toStringValue: __webpack_require__(643)
-	}, common));
-
-/***/ },
-/* 623 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(624)
-
-/***/ },
-/* 624 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var hasOwn    = __webpack_require__(625)
-	var newify    = __webpack_require__(626)
-
-	var assign      = __webpack_require__(628);
-	var EventEmitter = __webpack_require__(505).EventEmitter
-
-	var inherits = __webpack_require__(629)
-	var VALIDATE = __webpack_require__(630)
-
-	var objectToString = Object.prototype.toString
-
-	var isObject = function(value){
-	    return objectToString.apply(value) === '[object Object]'
-	}
-
-	function copyList(source, target, list){
-	    if (source){
-	        list.forEach(function(key){
-	            if (hasOwn(source, key)){
-	                target[key] = source[key]
-	            }
-	        })
-	    }
-
-	    return target
-	}
-
-	/**
-	 * @class Region
-	 *
-	 * The Region is an abstraction that allows the developer to refer to rectangles on the screen,
-	 * and move them around, make diffs and unions, detect intersections, compute areas, etc.
-	 *
-	 * ## Creating a region
-	 *      var region = require('region')({
-	 *          top  : 10,
-	 *          left : 10,
-	 *          bottom: 100,
-	 *          right : 100
-	 *      })
-	 *      //this region is a square, 90x90, starting from (10,10) to (100,100)
-	 *
-	 *      var second = require('region')({ top: 10, left: 100, right: 200, bottom: 60})
-	 *      var union  = region.getUnion(second)
-	 *
-	 *      //the "union" region is a union between "region" and "second"
-	 */
-
-	var POINT_POSITIONS = {
-	        cy: 'YCenter',
-	        cx: 'XCenter',
-	        t : 'Top',
-	        tc: 'TopCenter',
-	        tl: 'TopLeft',
-	        tr: 'TopRight',
-	        b : 'Bottom',
-	        bc: 'BottomCenter',
-	        bl: 'BottomLeft',
-	        br: 'BottomRight',
-	        l : 'Left',
-	        lc: 'LeftCenter',
-	        r : 'Right',
-	        rc: 'RightCenter',
-	        c : 'Center'
-	    }
-
-	/**
-	 * @constructor
-	 *
-	 * Construct a new Region.
-	 *
-	 * Example:
-	 *
-	 *      var r = new Region({ top: 10, left: 20, bottom: 100, right: 200 })
-	 *
-	 *      //or, the same, but with numbers (can be used with new or without)
-	 *
-	 *      r = Region(10, 200, 100, 20)
-	 *
-	 *      //or, with width and height
-	 *
-	 *      r = Region({ top: 10, left: 20, width: 180, height: 90})
-	 *
-	 * @param {Number|Object} top The top pixel position, or an object with top, left, bottom, right properties. If an object is passed,
-	 * instead of having bottom and right, it can have width and height.
-	 *
-	 * @param {Number} right The right pixel position
-	 * @param {Number} bottom The bottom pixel position
-	 * @param {Number} left The left pixel position
-	 *
-	 * @return {Region} this
-	 */
-	var REGION = function(top, right, bottom, left){
-
-	    if (!(this instanceof REGION)){
-	        return newify(REGION, arguments)
-	    }
-
-	    EventEmitter.call(this)
-
-	    if (isObject(top)){
-	        copyList(top, this, ['top','right','bottom','left'])
-
-	        if (top.bottom == null && top.height != null){
-	            this.bottom = this.top + top.height
-	        }
-	        if (top.right == null && top.width != null){
-	            this.right = this.left + top.width
-	        }
-
-	        if (top.emitChangeEvents){
-	            this.emitChangeEvents = top.emitChangeEvents
-	        }
-	    } else {
-	        this.top    = top
-	        this.right  = right
-	        this.bottom = bottom
-	        this.left   = left
-	    }
-
-	    this[0] = this.left
-	    this[1] = this.top
-
-	    VALIDATE(this)
-	}
-
-	inherits(REGION, EventEmitter)
-
-	assign(REGION.prototype, {
-
-	    /**
-	     * @cfg {Boolean} emitChangeEvents If this is set to true, the region
-	     * will emit 'changesize' and 'changeposition' whenever the size or the position changs
-	     */
-	    emitChangeEvents: false,
-
-	    /**
-	     * Returns this region, or a clone of this region
-	     * @param  {Boolean} [clone] If true, this method will return a clone of this region
-	     * @return {Region}       This region, or a clone of this
-	     */
-	    getRegion: function(clone){
-	        return clone?
-	                    this.clone():
-	                    this
-	    },
-
-	    /**
-	     * Sets the properties of this region to those of the given region
-	     * @param {Region/Object} reg The region or object to use for setting properties of this region
-	     * @return {Region} this
-	     */
-	    setRegion: function(reg){
-
-	        if (reg instanceof REGION){
-	            this.set(reg.get())
-	        } else {
-	            this.set(reg)
-	        }
-
-	        return this
-	    },
-
-	    /**
-	     * Returns true if this region is valid, false otherwise
-	     *
-	     * @param  {Region} region The region to check
-	     * @return {Boolean}        True, if the region is valid, false otherwise.
-	     * A region is valid if
-	     *  * left <= right  &&
-	     *  * top  <= bottom
-	     */
-	    validate: function(){
-	        return REGION.validate(this)
-	    },
-
-	    _before: function(){
-	        if (this.emitChangeEvents){
-	            return copyList(this, {}, ['left','top','bottom','right'])
-	        }
-	    },
-
-	    _after: function(before){
-	        if (this.emitChangeEvents){
-
-	            if(this.top != before.top || this.left != before.left) {
-	                this.emitPositionChange()
-	            }
-
-	            if(this.right != before.right || this.bottom != before.bottom) {
-	                this.emitSizeChange()
-	            }
-	        }
-	    },
-
-	    notifyPositionChange: function(){
-	        this.emit('changeposition', this)
-	    },
-
-	    emitPositionChange: function(){
-	        this.notifyPositionChange()
-	    },
-
-	    notifySizeChange: function(){
-	        this.emit('changesize', this)
-	    },
-
-	    emitSizeChange: function(){
-	        this.notifySizeChange()
-	    },
-
-	    /**
-	     * Add the given amounts to each specified side. Example
-	     *
-	     *      region.add({
-	     *          top: 50,    //add 50 px to the top side
-	     *          bottom: -100    //substract 100 px from the bottom side
-	     *      })
-	     *
-	     * @param {Object} directions
-	     * @param {Number} [directions.top]
-	     * @param {Number} [directions.left]
-	     * @param {Number} [directions.bottom]
-	     * @param {Number} [directions.right]
-	     *
-	     * @return {Region} this
-	     */
-	    add: function(directions){
-
-	        var before = this._before()
-	        var direction
-
-	        for (direction in directions) if ( hasOwn(directions, direction) ) {
-	            this[direction] += directions[direction]
-	        }
-
-	        this[0] = this.left
-	        this[1] = this.top
-
-	        this._after(before)
-
-	        return this
-	    },
-
-	    /**
-	     * The same as {@link #add}, but substracts the given values
-	     * @param {Object} directions
-	     * @param {Number} [directions.top]
-	     * @param {Number} [directions.left]
-	     * @param {Number} [directions.bottom]
-	     * @param {Number} [directions.right]
-	     *
-	     * @return {Region} this
-	     */
-	    substract: function(directions){
-
-	        var before = this._before()
-	        var direction
-
-	        for (direction in directions) if (hasOwn(directions, direction) ) {
-	            this[direction] -= directions[direction]
-	        }
-
-	        this[0] = this.left
-	        this[1] = this.top
-
-	        this._after(before)
-
-	        return this
-	    },
-
-	    /**
-	     * Retrieves the size of the region.
-	     * @return {Object} An object with {width, height}, corresponding to the width and height of the region
-	     */
-	    getSize: function(){
-	        return {
-	            width  : this.width,
-	            height : this.height
-	        }
-	    },
-
-	    /**
-	     * Move the region to the given position and keeps the region width and height.
-	     *
-	     * @param {Object} position An object with {top, left} properties. The values in {top,left} are used to move the region by the given amounts.
-	     * @param {Number} [position.left]
-	     * @param {Number} [position.top]
-	     *
-	     * @return {Region} this
-	     */
-	    setPosition: function(position){
-	        var width  = this.width
-	        var height = this.height
-
-	        if (position.left != undefined){
-	            position.right  = position.left + width
-	        }
-
-	        if (position.top != undefined){
-	            position.bottom = position.top  + height
-	        }
-
-	        return this.set(position)
-	    },
-
-	    /**
-	     * Sets both the height and the width of this region to the given size.
-	     *
-	     * @param {Number} size The new size for the region
-	     * @return {Region} this
-	     */
-	    setSize: function(size){
-	        if (size.height != undefined && size.width != undefined){
-	            return this.set({
-	                right  : this.left + size.width,
-	                bottom : this.top  + size.height
-	            })
-	        }
-
-	        if (size.width != undefined){
-	            this.setWidth(size.width)
-	        }
-
-	        if (size.height != undefined){
-	            this.setHeight(size.height)
-	        }
-
-	        return this
-	    },
-
-
-
-	    /**
-	     * @chainable
-	     *
-	     * Sets the width of this region
-	     * @param {Number} width The new width for this region
-	     * @return {Region} this
-	     */
-	    setWidth: function(width){
-	        return this.set({
-	            right: this.left + width
-	        })
-	    },
-
-	    /**
-	     * @chainable
-	     *
-	     * Sets the height of this region
-	     * @param {Number} height The new height for this region
-	     * @return {Region} this
-	     */
-	    setHeight: function(height){
-	        return this.set({
-	            bottom: this.top + height
-	        })
-	    },
-
-	    /**
-	     * Sets the given properties on this region
-	     *
-	     * @param {Object} directions an object containing top, left, and EITHER bottom, right OR width, height
-	     * @param {Number} [directions.top]
-	     * @param {Number} [directions.left]
-	     *
-	     * @param {Number} [directions.bottom]
-	     * @param {Number} [directions.right]
-	     *
-	     * @param {Number} [directions.width]
-	     * @param {Number} [directions.height]
-	     *
-	     *
-	     * @return {Region} this
-	     */
-	    set: function(directions){
-	        var before = this._before()
-
-	        copyList(directions, this, ['left','top','bottom','right'])
-
-	        if (directions.bottom == null && directions.height != null){
-	            this.bottom = this.top + directions.height
-	        }
-	        if (directions.right == null && directions.width != null){
-	            this.right = this.left + directions.width
-	        }
-
-	        this[0] = this.left
-	        this[1] = this.top
-
-	        this._after(before)
-
-	        return this
-	    },
-
-	    /**
-	     * Retrieves the given property from this region. If no property is given, return an object
-	     * with {left, top, right, bottom}
-	     *
-	     * @param {String} [dir] the property to retrieve from this region
-	     * @return {Number/Object}
-	     */
-	    get: function(dir){
-	        return dir? this[dir]:
-	                    copyList(this, {}, ['left','right','top','bottom'])
-	    },
-
-	    /**
-	     * Shifts this region to either top, or left or both.
-	     * Shift is similar to {@link #add} by the fact that it adds the given dimensions to top/left sides, but also adds the given dimensions
-	     * to bottom and right
-	     *
-	     * @param {Object} directions
-	     * @param {Number} [directions.top]
-	     * @param {Number} [directions.left]
-	     *
-	     * @return {Region} this
-	     */
-	    shift: function(directions){
-
-	        var before = this._before()
-
-	        if (directions.top){
-	            this.top    += directions.top
-	            this.bottom += directions.top
-	        }
-
-	        if (directions.left){
-	            this.left  += directions.left
-	            this.right += directions.left
-	        }
-
-	        this[0] = this.left
-	        this[1] = this.top
-
-	        this._after(before)
-
-	        return this
-	    },
-
-	    /**
-	     * Same as {@link #shift}, but substracts the given values
-	     * @chainable
-	     *
-	     * @param {Object} directions
-	     * @param {Number} [directions.top]
-	     * @param {Number} [directions.left]
-	     *
-	     * @return {Region} this
-	     */
-	    unshift: function(directions){
-
-	        if (directions.top){
-	            directions.top *= -1
-	        }
-
-	        if (directions.left){
-	            directions.left *= -1
-	        }
-
-	        return this.shift(directions)
-	    },
-
-	    /**
-	     * Compare this region and the given region. Return true if they have all the same size and position
-	     * @param  {Region} region The region to compare with
-	     * @return {Boolean}       True if this and region have same size and position
-	     */
-	    equals: function(region){
-	        return this.equalsPosition(region) && this.equalsSize(region)
-	    },
-
-	    /**
-	     * Returns true if this region has the same bottom,right properties as the given region
-	     * @param  {Region/Object} size The region to compare against
-	     * @return {Boolean}       true if this region is the same size as the given size
-	     */
-	    equalsSize: function(size){
-	        var isInstance = size instanceof REGION
-
-	        var s = {
-	            width: size.width == null && isInstance?
-	                    size.getWidth():
-	                    size.width,
-
-	            height: size.height == null && isInstance?
-	                    size.getHeight():
-	                    size.height
-	        }
-	        return this.getWidth() == s.width && this.getHeight() == s.height
-	    },
-
-	    /**
-	     * Returns true if this region has the same top,left properties as the given region
-	     * @param  {Region} region The region to compare against
-	     * @return {Boolean}       true if this.top == region.top and this.left == region.left
-	     */
-	    equalsPosition: function(region){
-	        return this.top == region.top && this.left == region.left
-	    },
-
-	    /**
-	     * Adds the given ammount to the left side of this region
-	     * @param {Number} left The ammount to add
-	     * @return {Region} this
-	     */
-	    addLeft: function(left){
-	        var before = this._before()
-
-	        this.left = this[0] = this.left + left
-
-	        this._after(before)
-
-	        return this
-	    },
-
-	    /**
-	     * Adds the given ammount to the top side of this region
-	     * @param {Number} top The ammount to add
-	     * @return {Region} this
-	     */
-	    addTop: function(top){
-	        var before = this._before()
-
-	        this.top = this[1] = this.top + top
-
-	        this._after(before)
-
-	        return this
-	    },
-
-	    /**
-	     * Adds the given ammount to the bottom side of this region
-	     * @param {Number} bottom The ammount to add
-	     * @return {Region} this
-	     */
-	    addBottom: function(bottom){
-	        var before = this._before()
-
-	        this.bottom += bottom
-
-	        this._after(before)
-
-	        return this
-	    },
-
-	    /**
-	     * Adds the given ammount to the right side of this region
-	     * @param {Number} right The ammount to add
-	     * @return {Region} this
-	     */
-	    addRight: function(right){
-	        var before = this._before()
-
-	        this.right += right
-
-	        this._after(before)
-
-	        return this
-	    },
-
-	    /**
-	     * Minimize the top side.
-	     * @return {Region} this
-	     */
-	    minTop: function(){
-	        return this.expand({top: 1})
-	    },
-	    /**
-	     * Minimize the bottom side.
-	     * @return {Region} this
-	     */
-	    maxBottom: function(){
-	        return this.expand({bottom: 1})
-	    },
-	    /**
-	     * Minimize the left side.
-	     * @return {Region} this
-	     */
-	    minLeft: function(){
-	        return this.expand({left: 1})
-	    },
-	    /**
-	     * Maximize the right side.
-	     * @return {Region} this
-	     */
-	    maxRight: function(){
-	        return this.expand({right: 1})
-	    },
-
-	    /**
-	     * Expands this region to the dimensions of the given region, or the document region, if no region is expanded.
-	     * But only expand the given sides (any of the four can be expanded).
-	     *
-	     * @param {Object} directions
-	     * @param {Boolean} [directions.top]
-	     * @param {Boolean} [directions.bottom]
-	     * @param {Boolean} [directions.left]
-	     * @param {Boolean} [directions.right]
-	     *
-	     * @param {Region} [region] the region to expand to, defaults to the document region
-	     * @return {Region} this region
-	     */
-	    expand: function(directions, region){
-	        var docRegion = region || REGION.getDocRegion()
-	        var list      = []
-	        var direction
-	        var before = this._before()
-
-	        for (direction in directions) if ( hasOwn(directions, direction) ) {
-	            list.push(direction)
-	        }
-
-	        copyList(docRegion, this, list)
-
-	        this[0] = this.left
-	        this[1] = this.top
-
-	        this._after(before)
-
-	        return this
-	    },
-
-	    /**
-	     * Returns a clone of this region
-	     * @return {Region} A new region, with the same position and dimension as this region
-	     */
-	    clone: function(){
-	        return new REGION({
-	                    top    : this.top,
-	                    left   : this.left,
-	                    right  : this.right,
-	                    bottom : this.bottom
-	                })
-	    },
-
-	    /**
-	     * Returns true if this region contains the given point
-	     * @param {Number/Object} x the x coordinate of the point
-	     * @param {Number} [y] the y coordinate of the point
-	     *
-	     * @return {Boolean} true if this region constains the given point, false otherwise
-	     */
-	    containsPoint: function(x, y){
-	        if (arguments.length == 1){
-	            y = x.y
-	            x = x.x
-	        }
-
-	        return this.left <= x  &&
-	               x <= this.right &&
-	               this.top <= y   &&
-	               y <= this.bottom
-	    },
-
-	    /**
-	     *
-	     * @param region
-	     *
-	     * @return {Boolean} true if this region contains the given region, false otherwise
-	     */
-	    containsRegion: function(region){
-	        return this.containsPoint(region.left, region.top)    &&
-	               this.containsPoint(region.right, region.bottom)
-	    },
-
-	    /**
-	     * Returns an object with the difference for {top, bottom} positions betwen this and the given region,
-	     *
-	     * See {@link #diff}
-	     * @param  {Region} region The region to use for diff
-	     * @return {Object}        {top,bottom}
-	     */
-	    diffHeight: function(region){
-	        return this.diff(region, {top: true, bottom: true})
-	    },
-
-	    /**
-	     * Returns an object with the difference for {left, right} positions betwen this and the given region,
-	     *
-	     * See {@link #diff}
-	     * @param  {Region} region The region to use for diff
-	     * @return {Object}        {left,right}
-	     */
-	    diffWidth: function(region){
-	        return this.diff(region, {left: true, right: true})
-	    },
-
-	    /**
-	     * Returns an object with the difference in sizes for the given directions, between this and region
-	     *
-	     * @param  {Region} region     The region to use for diff
-	     * @param  {Object} directions An object with the directions to diff. Can have any of the following keys:
-	     *  * left
-	     *  * right
-	     *  * top
-	     *  * bottom
-	     *
-	     * @return {Object} and object with the same keys as the directions object, but the values being the
-	     * differences between this region and the given region
-	     */
-	    diff: function(region, directions){
-	        var result = {}
-	        var dirName
-
-	        for (dirName in directions) if ( hasOwn(directions, dirName) ) {
-	            result[dirName] = this[dirName] - region[dirName]
-	        }
-
-	        return result
-	    },
-
-	    /**
-	     * Returns the position, in {left,top} properties, of this region
-	     *
-	     * @return {Object} {left,top}
-	     */
-	    getPosition: function(){
-	        return {
-	            left: this.left,
-	            top : this.top
-	        }
-	    },
-
-	    /**
-	     * Returns the point at the given position from this region.
-	     *
-	     * @param {String} position Any of:
-	     *
-	     *  * 'cx' - See {@link #getPointXCenter}
-	     *  * 'cy' - See {@link #getPointYCenter}
-	     *  * 'b'  - See {@link #getPointBottom}
-	     *  * 'bc' - See {@link #getPointBottomCenter}
-	     *  * 'l'  - See {@link #getPointLeft}F
-	     *  * 'lc' - See {@link #getPointLeftCenter}
-	     *  * 't'  - See {@link #getPointTop}
-	     *  * 'tc' - See {@link #getPointTopCenter}
-	     *  * 'r'  - See {@link #getPointRight}
-	     *  * 'rc' - See {@link #getPointRightCenter}
-	     *  * 'c'  - See {@link #getPointCenter}
-	     *  * 'tl' - See {@link #getPointTopLeft}
-	     *  * 'bl' - See {@link #getPointBottomLeft}
-	     *  * 'br' - See {@link #getPointBottomRight}
-	     *  * 'tr' - See {@link #getPointTopRight}
-	     *
-	     * @param {Boolean} asLeftTop
-	     *
-	     * @return {Object} either an object with {x,y} or {left,top} if asLeftTop is true
-	     */
-	    getPoint: function(position, asLeftTop){
-
-	        //<debug>
-	        if (!POINT_POSITIONS[position]) {
-	            console.warn('The position ', position, ' could not be found! Available options are tl, bl, tr, br, l, r, t, b.');
-	        }
-	        //</debug>
-
-	        var method = 'getPoint' + POINT_POSITIONS[position],
-	            result = this[method]()
-
-	        if (asLeftTop){
-	            return {
-	                left : result.x,
-	                top  : result.y
-	            }
-	        }
-
-	        return result
-	    },
-
-	    /**
-	     * Returns a point with x = null and y being the middle of the left region segment
-	     * @return {Object} {x,y}
-	     */
-	    getPointYCenter: function(){
-	        return { x: null, y: this.top + this.getHeight() / 2 }
-	    },
-
-	    /**
-	     * Returns a point with y = null and x being the middle of the top region segment
-	     * @return {Object} {x,y}
-	     */
-	    getPointXCenter: function(){
-	        return { x: this.left + this.getWidth() / 2, y: null }
-	    },
-
-	    /**
-	     * Returns a point with x = null and y the region top position on the y axis
-	     * @return {Object} {x,y}
-	     */
-	    getPointTop: function(){
-	        return { x: null, y: this.top }
-	    },
-
-	    /**
-	     * Returns a point that is the middle point of the region top segment
-	     * @return {Object} {x,y}
-	     */
-	    getPointTopCenter: function(){
-	        return { x: this.left + this.getWidth() / 2, y: this.top }
-	    },
-
-	    /**
-	     * Returns a point that is the top-left point of the region
-	     * @return {Object} {x,y}
-	     */
-	    getPointTopLeft: function(){
-	        return { x: this.left, y: this.top}
-	    },
-
-	    /**
-	     * Returns a point that is the top-right point of the region
-	     * @return {Object} {x,y}
-	     */
-	    getPointTopRight: function(){
-	        return { x: this.right, y: this.top}
-	    },
-
-	    /**
-	     * Returns a point with x = null and y the region bottom position on the y axis
-	     * @return {Object} {x,y}
-	     */
-	    getPointBottom: function(){
-	        return { x: null, y: this.bottom }
-	    },
-
-	    /**
-	     * Returns a point that is the middle point of the region bottom segment
-	     * @return {Object} {x,y}
-	     */
-	    getPointBottomCenter: function(){
-	        return { x: this.left + this.getWidth() / 2, y: this.bottom }
-	    },
-
-	    /**
-	     * Returns a point that is the bottom-left point of the region
-	     * @return {Object} {x,y}
-	     */
-	    getPointBottomLeft: function(){
-	        return { x: this.left, y: this.bottom}
-	    },
-
-	    /**
-	     * Returns a point that is the bottom-right point of the region
-	     * @return {Object} {x,y}
-	     */
-	    getPointBottomRight: function(){
-	        return { x: this.right, y: this.bottom}
-	    },
-
-	    /**
-	     * Returns a point with y = null and x the region left position on the x axis
-	     * @return {Object} {x,y}
-	     */
-	    getPointLeft: function(){
-	        return { x: this.left, y: null }
-	    },
-
-	    /**
-	     * Returns a point that is the middle point of the region left segment
-	     * @return {Object} {x,y}
-	     */
-	    getPointLeftCenter: function(){
-	        return { x: this.left, y: this.top + this.getHeight() / 2 }
-	    },
-
-	    /**
-	     * Returns a point with y = null and x the region right position on the x axis
-	     * @return {Object} {x,y}
-	     */
-	    getPointRight: function(){
-	        return { x: this.right, y: null }
-	    },
-
-	    /**
-	     * Returns a point that is the middle point of the region right segment
-	     * @return {Object} {x,y}
-	     */
-	    getPointRightCenter: function(){
-	        return { x: this.right, y: this.top + this.getHeight() / 2 }
-	    },
-
-	    /**
-	     * Returns a point that is the center of the region
-	     * @return {Object} {x,y}
-	     */
-	    getPointCenter: function(){
-	        return { x: this.left + this.getWidth() / 2, y: this.top + this.getHeight() / 2 }
-	    },
-
-	    /**
-	     * @return {Number} returns the height of the region
-	     */
-	    getHeight: function(){
-	        return this.bottom - this.top
-	    },
-
-	    /**
-	     * @return {Number} returns the width of the region
-	     */
-	    getWidth: function(){
-	        return this.right - this.left
-	    },
-
-	    /**
-	     * @return {Number} returns the top property of the region
-	     */
-	    getTop: function(){
-	        return this.top
-	    },
-
-	    /**
-	     * @return {Number} returns the left property of the region
-	     */
-	    getLeft: function(){
-	        return this.left
-	    },
-
-	    /**
-	     * @return {Number} returns the bottom property of the region
-	     */
-	    getBottom: function(){
-	        return this.bottom
-	    },
-
-	    /**
-	     * @return {Number} returns the right property of the region
-	     */
-	    getRight: function(){
-	        return this.right
-	    },
-
-	    /**
-	     * Returns the area of the region
-	     * @return {Number} the computed area
-	     */
-	    getArea: function(){
-	        return this.getWidth() * this.getHeight()
-	    },
-
-	    constrainTo: function(contrain){
-	        var intersect = this.getIntersection(contrain)
-	        var shift
-
-	        if (!intersect || !intersect.equals(this)){
-
-	            var contrainWidth  = contrain.getWidth(),
-	                contrainHeight = contrain.getHeight()
-
-	            if (this.getWidth() > contrainWidth){
-	                this.left = contrain.left
-	                this.setWidth(contrainWidth)
-	            }
-
-	            if (this.getHeight() > contrainHeight){
-	                this.top = contrain.top
-	                this.setHeight(contrainHeight)
-	            }
-
-	            shift = {}
-
-	            if (this.right > contrain.right){
-	                shift.left = contrain.right - this.right
-	            }
-
-	            if (this.bottom > contrain.bottom){
-	                shift.top = contrain.bottom - this.bottom
-	            }
-
-	            if (this.left < contrain.left){
-	                shift.left = contrain.left - this.left
-	            }
-
-	            if (this.top < contrain.top){
-	                shift.top = contrain.top - this.top
-	            }
-
-	            this.shift(shift)
-
-	            return true
-	        }
-
-	        return false
-	    },
-
-	    __IS_REGION: true
-
-	    /**
-	     * @property {Number} top
-	     */
-
-	    /**
-	     * @property {Number} right
-	     */
-
-	    /**
-	     * @property {Number} bottom
-	     */
-
-	    /**
-	     * @property {Number} left
-	     */
-
-	    /**
-	     * @property {Number} [0] the top property
-	     */
-
-	    /**
-	     * @property {Number} [1] the left property
-	     */
-
-	    /**
-	     * @method getIntersection
-	     * Returns a region that is the intersection of this region and the given region
-	     * @param  {Region} region The region to intersect with
-	     * @return {Region}        The intersection region
-	     */
-
-	    /**
-	     * @method getUnion
-	     * Returns a region that is the union of this region with the given region
-	     * @param  {Region} region  The region to make union with
-	     * @return {Region}        The union region. The smallest region that contains both this and the given region.
-	     */
-
-	})
-
-	Object.defineProperties(REGION.prototype, {
-	    width: {
-	        get: function(){
-	            return this.getWidth()
-	        },
-	        set: function(width){
-	            return this.setWidth(width)
-	        }
-	    },
-	    height: {
-	        get: function(){
-	            return this.getHeight()
-	        },
-	        set: function(height){
-	            return this.setHeight(height)
-	        }
-	    }
-	})
-
-	__webpack_require__(631)(REGION)
-
-	module.exports = REGION
-
-/***/ },
-/* 625 */
-/***/ function(module, exports) {
-
-	'use strict'
-
-	var hasOwn = Object.prototype.hasOwnProperty
-
-	function curry(fn, n){
-
-	    if (typeof n !== 'number'){
-	        n = fn.length
-	    }
-
-	    function getCurryClosure(prevArgs){
-
-	        function curryClosure() {
-
-	            var len  = arguments.length
-	            var args = [].concat(prevArgs)
-
-	            if (len){
-	                args.push.apply(args, arguments)
-	            }
-
-	            if (args.length < n){
-	                return getCurryClosure(args)
-	            }
-
-	            return fn.apply(this, args)
-	        }
-
-	        return curryClosure
-	    }
-
-	    return getCurryClosure([])
-	}
-
-
-	module.exports = curry(function(object, property){
-	    return hasOwn.call(object, property)
-	})
-
-/***/ },
-/* 626 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var getInstantiatorFunction = __webpack_require__(627)
-
-	module.exports = function(fn, args){
-		return getInstantiatorFunction(args.length)(fn, args)
-	}
-
-/***/ },
-/* 627 */
-/***/ function(module, exports) {
-
-	module.exports = function(){
-
-	    'use strict';
-
-	    var fns = {}
-
-	    return function(len){
-
-	        if ( ! fns [len ] ) {
-
-	            var args = []
-	            var i    = 0
-
-	            for (; i < len; i++ ) {
-	                args.push( 'a[' + i + ']')
-	            }
-
-	            fns[len] = new Function(
-	                            'c',
-	                            'a',
-	                            'return new c(' + args.join(',') + ')'
-	                        )
-	        }
-
-	        return fns[len]
-	    }
-
-	}()
-
-/***/ },
-/* 628 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	function ToObject(val) {
-		if (val == null) {
-			throw new TypeError('Object.assign cannot be called with null or undefined');
-		}
-
-		return Object(val);
-	}
-
-	module.exports = Object.assign || function (target, source) {
-		var from;
-		var keys;
-		var to = ToObject(target);
-
-		for (var s = 1; s < arguments.length; s++) {
-			from = arguments[s];
-			keys = Object.keys(Object(from));
-
-			for (var i = 0; i < keys.length; i++) {
-				to[keys[i]] = from[keys[i]];
-			}
-		}
-
-		return to;
-	};
-
-
-/***/ },
-/* 629 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function(ctor, superCtor) {
-	    ctor.super_ = superCtor
-	    ctor.prototype = Object.create(superCtor.prototype, {
-	        constructor: {
-	            value       : ctor,
-	            enumerable  : false,
-	            writable    : true,
-	            configurable: true
-	        }
-	    })
-	}
-
-/***/ },
-/* 630 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	/**
-	 * @static
-	 * Returns true if the given region is valid, false otherwise.
-	 * @param  {Region} region The region to check
-	 * @return {Boolean}        True, if the region is valid, false otherwise.
-	 * A region is valid if
-	 *  * left <= right  &&
-	 *  * top  <= bottom
-	 */
-	module.exports = function validate(region){
-
-	    var isValid = true
-
-	    if (region.right < region.left){
-	        isValid = false
-	        region.right = region.left
-	    }
-
-	    if (region.bottom < region.top){
-	        isValid = false
-	        region.bottom = region.top
-	    }
-
-	    return isValid
-	}
-
-/***/ },
-/* 631 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var hasOwn   = __webpack_require__(625)
-	var VALIDATE = __webpack_require__(630)
-
-	module.exports = function(REGION){
-
-	    var MAX = Math.max
-	    var MIN = Math.min
-
-	    var statics = {
-	        init: function(){
-	            var exportAsNonStatic = {
-	                getIntersection      : true,
-	                getIntersectionArea  : true,
-	                getIntersectionHeight: true,
-	                getIntersectionWidth : true,
-	                getUnion             : true
-	            }
-	            var thisProto = REGION.prototype
-	            var newName
-
-	            var exportHasOwn = hasOwn(exportAsNonStatic)
-	            var methodName
-
-	            for (methodName in exportAsNonStatic) if (exportHasOwn(methodName)) {
-	                newName = exportAsNonStatic[methodName]
-	                if (typeof newName != 'string'){
-	                    newName = methodName
-	                }
-
-	                ;(function(proto, methodName, protoMethodName){
-
-	                    proto[methodName] = function(region){
-	                        //<debug>
-	                        if (!REGION[protoMethodName]){
-	                            console.warn('cannot find method ', protoMethodName,' on ', REGION)
-	                        }
-	                        //</debug>
-	                        return REGION[protoMethodName](this, region)
-	                    }
-
-	                })(thisProto, newName, methodName);
-	            }
-	        },
-
-	        validate: VALIDATE,
-
-	        /**
-	         * Returns the region corresponding to the documentElement
-	         * @return {Region} The region corresponding to the documentElement. This region is the maximum region visible on the screen.
-	         */
-	        getDocRegion: function(){
-	            return REGION.fromDOM(document.documentElement)
-	        },
-
-	        from: function(reg){
-	            if (reg.__IS_REGION){
-	                return reg
-	            }
-
-	            if (typeof document != 'undefined'){
-	                if (typeof HTMLElement != 'undefined' && reg instanceof HTMLElement){
-	                    return REGION.fromDOM(reg)
-	                }
-
-	                if (reg.type && typeof reg.pageX !== 'undefined' && typeof reg.pageY !== 'undefined'){
-	                    return REGION.fromEvent(reg)
-	                }
-	            }
-
-	            return REGION(reg)
-	        },
-
-	        fromEvent: function(event){
-	            return REGION.fromPoint({
-	                x: event.pageX,
-	                y: event.pageY
-	            })
-	        },
-
-	        fromDOM: function(dom){
-	            var rect = dom.getBoundingClientRect()
-	            // var docElem = document.documentElement
-	            // var win     = window
-
-	            // var top  = rect.top + win.pageYOffset - docElem.clientTop
-	            // var left = rect.left + win.pageXOffset - docElem.clientLeft
-
-	            return new REGION({
-	                top   : rect.top,
-	                left  : rect.left,
-	                bottom: rect.bottom,
-	                right : rect.right
-	            })
-	        },
-
-	        /**
-	         * @static
-	         * Returns a region that is the intersection of the given two regions
-	         * @param  {Region} first  The first region
-	         * @param  {Region} second The second region
-	         * @return {Region/Boolean}        The intersection region or false if no intersection found
-	         */
-	        getIntersection: function(first, second){
-
-	            var area = this.getIntersectionArea(first, second)
-
-	            if (area){
-	                return new REGION(area)
-	            }
-
-	            return false
-	        },
-
-	        getIntersectionWidth: function(first, second){
-	            var minRight  = MIN(first.right, second.right)
-	            var maxLeft   = MAX(first.left,  second.left)
-
-	            if (maxLeft < minRight){
-	                return minRight  - maxLeft
-	            }
-
-	            return 0
-	        },
-
-	        getIntersectionHeight: function(first, second){
-	            var maxTop    = MAX(first.top,   second.top)
-	            var minBottom = MIN(first.bottom,second.bottom)
-
-	            if (maxTop  < minBottom){
-	                return minBottom - maxTop
-	            }
-
-	            return 0
-	        },
-
-	        getIntersectionArea: function(first, second){
-	            var maxTop    = MAX(first.top,   second.top)
-	            var minRight  = MIN(first.right, second.right)
-	            var minBottom = MIN(first.bottom,second.bottom)
-	            var maxLeft   = MAX(first.left,  second.left)
-
-	            if (
-	                    maxTop  < minBottom &&
-	                    maxLeft < minRight
-	                ){
-	                return {
-	                    top    : maxTop,
-	                    right  : minRight,
-	                    bottom : minBottom,
-	                    left   : maxLeft,
-
-	                    width  : minRight  - maxLeft,
-	                    height : minBottom - maxTop
-	                }
-	            }
-
-	            return false
-	        },
-
-	        /**
-	         * @static
-	         * Returns a region that is the union of the given two regions
-	         * @param  {Region} first  The first region
-	         * @param  {Region} second The second region
-	         * @return {Region}        The union region. The smallest region that contains both given regions.
-	         */
-	        getUnion: function(first, second){
-	            var top    = MIN(first.top,   second.top)
-	            var right  = MAX(first.right, second.right)
-	            var bottom = MAX(first.bottom,second.bottom)
-	            var left   = MIN(first.left,  second.left)
-
-	            return new REGION(top, right, bottom, left)
-	        },
-
-	        /**
-	         * @static
-	         * Returns a region. If the reg argument is a region, returns it, otherwise return a new region built from the reg object.
-	         *
-	         * @param  {Region} reg A region or an object with either top, left, bottom, right or
-	         * with top, left, width, height
-	         * @return {Region} A region
-	         */
-	        getRegion: function(reg){
-	            return REGION.from(reg)
-	        },
-
-	        /**
-	         * Creates a region that corresponds to a point.
-	         *
-	         * @param  {Object} xy The point
-	         * @param  {Number} xy.x
-	         * @param  {Number} xy.y
-	         *
-	         * @return {Region}    The new region, with top==xy.y, bottom = xy.y and left==xy.x, right==xy.x
-	         */
-	        fromPoint: function(xy){
-	            return new REGION({
-	                        top    : xy.y,
-	                        bottom : xy.y,
-	                        left   : xy.x,
-	                        right  : xy.x
-	                    })
-	        }
-	    }
-
-	    Object.keys(statics).forEach(function(key){
-	        REGION[key] = statics[key]
-	    })
-
-	    REGION.init()
-	}
-
-/***/ },
 /* 632 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	var ReactDOM = __webpack_require__(246);
-	var Region = __webpack_require__(623);
-	var assign = __webpack_require__(619);
-	var DragHelper = __webpack_require__(633);
-	var toHsv = __webpack_require__(620).toHsv;
+	var convert = __webpack_require__(633);
+	var tinyColor = __webpack_require__(631);
 
-	function emptyFn() {}
+	var colorFunc = {
+	  isDark: function isDark(color) {
+	    return color[0] * 0.299 + color[1] * 0.587 + color[2] * 0.114 > 186 || color[3] < 0.5;
+	  },
+	  getColor: function getColor(cssColor) {
+	    // With tinyColor, invalid colors are treated as black
+	    var color = tinyColor(cssColor),
+	        rgba = color.toRgb(),
+	        hsv = color.toHsv(),
+	        hex = color.toHex();
 
-	exports['default'] = {
+	    //check if full length color is entered, if so don't convert to short hand even if possible to.
+	    var isSixDigitHexColor = cssColor.length === 7;
 
-	    toColorValue: function toColorValue(value) {
-	        if (typeof value == 'string') {
-	            return toHsv(value);
-	        }
-
-	        return {
-	            h: value.h,
-	            s: value.s,
-	            v: value.v,
-	            a: value.a
-	        };
-	    },
-
-	    onMouseDown: function onMouseDown(event) {
-	        event.preventDefault();
-
-	        var region = Region.fromDOM(ReactDOM.findDOMNode(this));
-	        var info = this.getEventInfo(event, region);
-
-	        DragHelper(event, {
-	            scope: this,
-
-	            constrainTo: region,
-
-	            onDragStart: function onDragStart(event, config) {
-	                config.initialPoint = info;
-
-	                config.minLeft = 0;
-	                config.maxLeft = region.width;
-
-	                this.handleDragStart(event);
-	            },
-	            onDrag: function onDrag(event, config) {
-	                var info = this.getEventInfo(event, region);
-
-	                this.updateColor(info);
-	                this.handleDrag(event, config);
-	            },
-	            onDrop: function onDrop(event, config) {
-	                var info = this.getEventInfo(event, region);
-
-	                this.updateColor(info);
-
-	                this.handleDrop(event, config);
-	            }
-	        });
-
-	        this.updateColor(info);
-	        this.handleMouseDown(event, { initialPoint: info });
-	    },
-
-	    handleMouseDown: function handleMouseDown(event, config) {
-
-	        ;(this.props.onMouseDown || emptyFn).apply(this, this.getColors());
-	        this.handleDrag(event, config);
-	    },
-
-	    handleUpdate: function handleUpdate(event, config) {
-
-	        var diff = config.diff || { top: 0, left: 0 };
-	        var initialPoint = config.initialPoint;
-
-	        if (initialPoint) {
-
-	            var top;
-	            var left;
-
-	            left = initialPoint.x + diff.left;
-	            top = initialPoint.y + diff.top;
-
-	            left = Math.max(left, config.minLeft);
-	            left = Math.min(left, config.maxLeft);
-
-	            this.state.top = top;
-	            this.state.left = left;
-
-	            this.state.mouseDown = {
-	                x: left,
-	                y: top,
-	                width: initialPoint.width,
-	                height: initialPoint.height
-	            };
-	        }
-
-	        if (this.props.inPicker) {
-	            //the picker handles the values
-	            return;
-	        }
-
-	        if (!this.props.value) {
-	            this.setState({
-	                value: this.hsv
-	            });
-	        }
-	    },
-
-	    handleDragStart: function handleDragStart(event) {},
-
-	    handleDrag: function handleDrag(event, config) {
-	        this.handleUpdate(event, config);(this.props.onDrag || emptyFn).apply(this, this.getColors());
-	    },
-
-	    handleDrop: function handleDrop(event, config) {
-	        this.handleUpdate(event, config);
-	        this.state.mouseDown = false;(this.props.onChange || emptyFn).apply(this, this.getColors());
-	    },
-
-	    getColors: function getColors() {
-	        var first = this.props.inPicker ? this.hsv : this.toStringValue(this.hsv);
-	        var args = [first];
-
-	        if (!this.props.inPicker) {
-	            args.push(assign({}, this.hsv));
-	        }
-
-	        return args;
-	    },
-
-	    getEventInfo: function getEventInfo(event, region) {
-	        region = region || Region.fromDOM(ReactDOM.findDOMNode(this));
-
-	        var x = event.clientX - region.left;
-	        var y = event.clientY - region.top;
-
-	        return {
-	            x: x,
-	            y: y,
-	            width: region.getWidth(),
-	            height: region.getHeight()
-	        };
-	    }
-	};
-	module.exports = exports['default'];
-
-/***/ },
-/* 633 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var assign = __webpack_require__(628)
-	var Region = __webpack_require__(634)
-	var hasTouch = __webpack_require__(639)
-	var once   = __webpack_require__(640)
-
-	var Helper = function(config){
-	    this.config = config
-	}
-
-	var EVENTS = {
-	    move: hasTouch? 'touchmove': 'mousemove',
-	    up  : hasTouch? 'touchend': 'mouseup'
-	}
-
-	function emptyFn(){}
-
-	function getPageCoords(event){
-	    var firstTouch
-
-	    var pageX = event.pageX
-	    var pageY = event.pageY
-
-	    if (hasTouch && event.touches && (firstTouch = event.touches[0])){
-	        pageX = firstTouch.pageX
-	        pageY = firstTouch.pageY
+	    // Convert to shorthand hex if applicable
+	    if (!isSixDigitHexColor && hex[0] === hex[1] && hex[2] === hex[3] && hex[4] === hex[5]) {
+	      hex = [hex[0], hex[2], hex[4]].join('');
 	    }
 
 	    return {
-	        pageX: pageX,
-	        pageY: pageY
+	      h: Math.round(hsv.h),
+	      s: Math.round(hsv.s * 100),
+	      v: Math.round(hsv.v * 100),
+	      r: Math.round(rgba.r),
+	      g: Math.round(rgba.g),
+	      b: Math.round(rgba.b),
+	      a: rgba.a,
+	      hex: hex
+	    };
+	  },
+	  rgbaColor: function rgbaColor(r, g, b, a) {
+	    return 'rgba(' + [r, g, b, a / 100].join(',') + ')';
+	  },
+	  hsv2hex: function hsv2hex(h, s, v) {
+	    var rgb = convert.hsv.rgb([h, s, v]);
+	    return convert.rgb.hex([Math.round(rgb[0]), Math.round(rgb[1]), Math.round(rgb[2])]).slice(1);
+	  },
+	  hsv2rgb: function hsv2rgb(h, s, v) {
+	    var rgb = convert.hsv.rgb([h, s, v]);
+	    return {
+	      r: Math.round(rgb[0]),
+	      g: Math.round(rgb[1]),
+	      b: Math.round(rgb[2])
+	    };
+	  },
+	  rgb2hex: function rgb2hex(r, g, b) {
+	    return convert.rgb.hex([r, g, b]).slice(1);
+	  },
+	  rgb2hsv: function rgb2hsv(r, g, b) {
+	    var hsv = convert.rgb.hsv([r, g, b]);
+	    return {
+	      h: Math.round(hsv[0]),
+	      s: Math.round(hsv[1]),
+	      v: Math.round(hsv[2])
+	    };
+	  },
+
+
+	  /**
+	   * Determine x y coordinates based on color mode.
+	   *
+	   * R: x = b, y = g
+	   * G: x = b, y = r
+	   * B: x = r, y = g
+	   *
+	   * H: x = s, y = v
+	   * S: x = h, y = v
+	   * V: x = h, y = s
+	   *
+	   * @param {string} mode one of `r`, `g`, `b`, `h`, `s`, or `v`
+	   * @param {Object} color a color object of current values associated to key
+	   * @return {Object} coordinates
+	   */
+	  colorCoords: function colorCoords(mode, color) {
+	    var x, y, xmax, ymax;
+	    if (mode === 'r' || mode === 'g' || mode === 'b') {
+	      xmax = 255;ymax = 255;
+	      if (mode === 'r') {
+	        x = color.b;
+	        y = 255 - color.g;
+	      } else if (mode === 'g') {
+	        x = color.b;
+	        y = 255 - color.r;
+	      } else {
+	        x = color.r;
+	        y = 255 - color.g;
+	      }
+	    } else if (mode === 'h') {
+	      xmax = 100;ymax = 100;
+	      x = color.s;
+	      y = 100 - color.v;
+	    } else if (mode === 's') {
+	      xmax = 359;ymax = 100;
+	      x = color.h;
+	      y = 100 - color.v;
+	    } else if (mode === 'v') {
+	      xmax = 359;ymax = 100;
+	      x = color.h;
+	      y = 100 - color.s;
 	    }
+
+	    return {
+	      x: x,
+	      y: y,
+	      xmax: xmax,
+	      ymax: ymax
+	    };
+	  },
+
+
+	  /**
+	   * Takes a mode and returns its sibling values based on x,y positions
+	   *
+	   * R: x = b, y = g
+	   * G: x = b, y = r
+	   * B: x = r, y = g
+	   *
+	   * H: x = s, y = v
+	   * S: x = h, y = v
+	   * V: x = h, y = s
+	   *
+	   * @param {string} mode one of `r`, `g`, `b`, `h`, `s`, or `v`
+	   * @param {Object} pos x, y coordinates
+	   * @return {Object} Changed sibling values
+	   */
+	  colorCoordValue: function colorCoordValue(mode, pos) {
+	    var color = {};
+	    pos.x = Math.round(pos.x);
+	    pos.y = Math.round(pos.y);
+
+	    switch (mode) {
+	      case 'r':
+	        color.b = pos.x;
+	        color.g = 255 - pos.y;
+	        break;
+	      case 'g':
+	        color.b = pos.x;
+	        color.r = 255 - pos.y;
+	        break;
+	      case 'b':
+	        color.r = pos.x;
+	        color.g = 255 - pos.y;
+	        break;
+	      case 'h':
+	        color.s = pos.x;
+	        color.v = 100 - pos.y;
+	        break;
+	      case 's':
+	        color.h = pos.x;
+	        color.v = 100 - pos.y;
+	        break;
+	      case 'v':
+	        color.h = pos.x;
+	        color.s = 100 - pos.y;
+	        break;
+	    }
+
+	    return color;
+	  }
+	};
+
+	module.exports = colorFunc;
+
+/***/ },
+/* 633 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = {
+	  grayscale: {
+	    rgb: grayscale2rgb
+	  },
+	  hex: {
+	    rgb: hex2rgb,
+	  },
+	  rgb: {
+	    hsl: rgb2hsl,
+	    hsv: rgb2hsv,
+	    hex: rgb2hex,
+	    grayscale: rgb2grayscale
+	  },
+	  hsl: {
+	    rgb: hsl2rgb,
+	    hsv: hsl2hsv,
+	  },
+	  hsv: {
+	    rgb: hsv2rgb,
+	    hsl: hsv2hsl,
+	  },
+	};
+
+	// convert a charcode to a hex val
+	function hexVal (c) {
+	  return (
+	    c < 58 ? c - 48 : // 0 - 9
+	    c < 71 ? c - 55 : // A - F
+	    c - 87            // a - f
+	  );
 	}
 
-	assign(Helper.prototype, {
+	function hex2rgb (hex) {
+	  var i = hex[0] === '#' ? 1 : 0;
+	  var len = hex.length;
 
-	    /**
-	     * Should be called on a mousedown event
-	     *
-	     * @param  {Event} event
-	     * @return {[type]}       [description]
-	     */
-	    initDrag: function(event) {
+	  if (len - i < 3) {
+	    throw new Error('hex input must be at least three chars long');
+	  }
 
-	        this.onDragInit(event)
+	  var r, g, b;
 
-	        var onDragStart = once(this.onDragStart, this)
-	        var target = hasTouch?
-	                        event.target:
-	                        window
+	  var h1 = hexVal(hex.charCodeAt(0+i));
+	  var h2 = hexVal(hex.charCodeAt(1+i));
+	  var h3 = hexVal(hex.charCodeAt(2+i));
 
-	        var mouseMoveListener = (function(event){
-	            onDragStart(event)
-	            this.onDrag(event)
-	        }).bind(this)
+	  if (len - i >= 6) {
+	    r = (h1 << 4) + h2;
+	    g = (h3 << 4) + hexVal(hex.charCodeAt(3+i));
+	    b = (hexVal(hex.charCodeAt(4+i)) << 4) + hexVal(hex.charCodeAt(5+i));
+	  } else {
+	    r = (h1 << 4) + h1;
+	    g = (h2 << 4) + h2;
+	    b = (h3 << 4) + h3;
+	  }
 
-	        var mouseUpListener = (function(event){
+	  if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+	    throw new Error('hex input is invalid');
+	  }
 
-	            this.onDrop(event)
-
-	            target.removeEventListener(EVENTS.move, mouseMoveListener)
-	            target.removeEventListener(EVENTS.up, mouseUpListener)
-	        }).bind(this)
-
-	        target.addEventListener(EVENTS.move, mouseMoveListener, false)
-	        target.addEventListener(EVENTS.up, mouseUpListener)
-	    },
-
-	    onDragInit: function(event){
-
-	        var config = {
-	            diff: {
-	                left: 0,
-	                top : 0
-	            }
-	        }
-	        this.state = {
-	            config: config
-	        }
-
-	        if (this.config.region){
-	            this.state.initialRegion = Region.from(this.config.region)
-	            this.state.dragRegion =
-	                config.dragRegion =
-	                    this.state.initialRegion.clone()
-	        }
-	        if (this.config.constrainTo){
-	            this.state.constrainTo = Region.from(this.config.constrainTo)
-	        }
-
-	        this.callConfig('onDragInit', event)
-	    },
-
-	    /**
-	     * Called when the first mousemove event occurs after drag is initialized
-	     * @param  {Event} event
-	     */
-	    onDragStart: function(event){
-	        this.state.initPageCoords = getPageCoords(event)
-
-	        this.state.didDrag = this.state.config.didDrag = true
-	        this.callConfig('onDragStart', event)
-	    },
-
-	    /**
-	     * Called on all mousemove events after drag is initialized.
-	     *
-	     * @param  {Event} event
-	     */
-	    onDrag: function(event){
-
-	        var config = this.state.config
-
-	        var initPageCoords = this.state.initPageCoords
-	        var eventCoords = getPageCoords(event)
-
-	        var diff = config.diff = {
-	            left: eventCoords.pageX - initPageCoords.pageX,
-	            top : eventCoords.pageY - initPageCoords.pageY
-	        }
-
-	        if (this.state.initialRegion){
-	            var dragRegion = config.dragRegion
-
-	            //set the dragRegion to initial coords
-	            dragRegion.set(this.state.initialRegion)
-
-	            //shift it to the new position
-	            dragRegion.shift(diff)
-
-	            if (this.state.constrainTo){
-	                //and finally constrain it if it's the case
-	                dragRegion.constrainTo(this.state.constrainTo)
-
-	                diff.left = dragRegion.left - this.state.initialRegion.left
-	                diff.top  = dragRegion.top - this.state.initialRegion.top
-	            }
-
-	            config.dragRegion = dragRegion
-	        }
-
-	        this.callConfig('onDrag', event)
-	    },
-
-	    /**
-	     * Called on the mouseup event on window
-	     *
-	     * @param  {Event} event
-	     */
-	    onDrop: function(event){
-	        this.callConfig('onDrop', event)
-
-	        this.state = null
-	    },
-
-	    callConfig: function(fnName, event){
-	        var config = this.state.config
-	        var args   = [event, config]
-
-	        var fn = this.config[fnName]
-
-	        if (fn){
-	            fn.apply(this, args)
-	        }
-	    }
-
-	})
-
-	module.exports = function(event, config){
-
-	    if (config.scope){
-	        var skippedKeys = {
-	            scope      : 1,
-	            region     : 1,
-	            constrainTo: 1
-	        }
-
-	        Object.keys(config).forEach(function(key){
-	            var value = config[key]
-
-	            if (key in skippedKeys){
-	                return
-	            }
-
-	            if (typeof value == 'function'){
-	                config[key] = value.bind(config.scope)
-	            }
-	        })
-	    }
-	    var helper = new Helper(config)
-
-	    helper.initDrag(event)
-
-	    return helper
+	  return [r, g, b];
 	}
+
+
+	function rgb2hex (rgb) {
+	  return '#' + (
+	    '000000' +
+	    ((rgb[0] << 16) +
+	     (rgb[1] << 8) +
+	      rgb[2]
+	    ).toString(16)
+	  ).slice(-6);
+	}
+
+	function rgb2hsl (rgb) {
+	  var r = rgb[0] / 255;
+	  var g = rgb[1] / 255;
+	  var b = rgb[2] / 255;
+
+	  var min = Math.min(r, g, b);
+	  var max = Math.max(r, g, b);
+	  var delta = max - min;
+	  var h, s, l;
+
+	  if (max === min) {
+	    h = 0;
+	  } else if (r === max) {
+	    h = (g - b) / delta;
+	  } else if (g === max) {
+	    h = 2 + (b - r) / delta;
+	  } else if (b === max) {
+	    h = 4 + (r - g) / delta;
+	  }
+
+	  h = Math.min(h * 60, 360);
+
+	  if (h < 0) {
+	    h += 360;
+	  }
+
+	  l = (min + max) / 2;
+
+	  if (max === min) {
+	    s = 0;
+	  } else if (l <= 0.5) {
+	    s = delta / (max + min);
+	  } else {
+	    s = delta / (2 - max - min);
+	  }
+
+	  return [h, s * 100, l * 100];
+	}
+
+	function rgb2hsv(rgb) {
+	  var r = rgb[0];
+	  var g = rgb[1];
+	  var b = rgb[2];
+	  var min = Math.min(r, g, b);
+	  var max = Math.max(r, g, b);
+	  var delta = max - min;
+	  var h, s, v;
+
+	  if (max === 0) {
+	    s = 0;
+	  } else {
+	    s = delta / max * 100;
+	  }
+
+	  if (max === min) {
+	    h = 0;
+	  } else if (r === max) {
+	    h = (g - b) / delta;
+	  } else if (g === max) {
+	    h = 2 + (b - r) / delta;
+	  } else if (b === max) {
+	    h = 4 + (r - g) / delta;
+	  }
+
+	  h = Math.min(h * 60, 360);
+
+	  if (h < 0) {
+	    h += 360;
+	  }
+
+	  v = (max / 255) * 100;
+
+	  return [h, s, v];
+	}
+
+	function hsl2rgb (hsl) {
+	  var h = hsl[0] / 360;
+	  var s = hsl[1] / 100;
+	  var l = hsl[2] / 100;
+
+	  var r, g, b;
+
+	  if (s === 0) { // monochrome
+	    r = g = b = l;
+
+	  } else {
+	    var q = l < 0.5 ? l * (s + 1) : l + s - l * s;
+	    var p = 2 * l - q;
+	    var t;
+
+	    // red
+	    t = h + 1/3;
+	    if      (t < 0) { t += 1; }
+	    else if (t > 1) { t -= 1; }
+	    if      (t < 1/6)  { r = p + (q - p) * t * 6; }
+	    else if (t < 1/2 ) { r = q; }
+	    else if (t < 2/3 ) { r = p + (q - p) * (2/3 - t) * 6; }
+	    else               { r = p; }
+
+	    // green
+	    t = h;
+	    if      (t < 0) { t += 1; }
+	    else if (t > 1) { t -= 1; }
+	    if      (t < 1/6)  { g = p + (q - p) * t * 6; }
+	    else if (t < 1/2 ) { g = q; }
+	    else if (t < 2/3 ) { g = p + (q - p) * (2/3 - t) * 6; }
+	    else               { g = p; }
+
+	    // blue
+	    t = h - 1/3;
+	    if      (t < 0) { t += 1; }
+	    else if (t > 1) { t -= 1; }
+	    if      (t < 1/6)  { b = p + (q - p) * t * 6; }
+	    else if (t < 1/2 ) { b = q; }
+	    else if (t < 2/3 ) { b = p + (q - p) * (2/3 - t) * 6; }
+	    else               { b = p; }
+	  }
+
+	  return [r * 255, g * 255, b * 255];
+	}
+
+	function hsl2hsv(hsl) {
+	  var h = hsl[0];
+	  var s = hsl[1] / 100;
+	  var l = hsl[2] / 100;
+	  var sv, v;
+
+	  if (s === 0) {
+	    return [h, 0, l * 100];
+	  }
+
+	  if (l === 0) {
+	    return [h, 0, 0];
+	  }
+
+	  l *= 2;
+	  s *= (l <= 1) ? l : 2 - l;
+	  v = (l + s) / 2;
+	  sv = (2 * s) / (l + s);
+	  return [h, sv * 100, v * 100];
+	}
+
+	function hsv2rgb(hsv) {
+	  var h = hsv[0] / 60;
+	  var s = hsv[1] / 100;
+	  var v = hsv[2] / 100;
+
+	  var hi = Math.floor(h) % 6;
+
+	  var f = h - Math.floor(h);
+	  var p = 255 * v * (1 - s);
+	  var q = 255 * v * (1 - (s * f));
+	  var t = 255 * v * (1 - (s * (1 - f)));
+	      v = 255 * v;
+
+	  switch(hi) {
+	    case 0:
+	      return [v, t, p];
+	    case 1:
+	      return [q, v, p];
+	    case 2:
+	      return [p, v, t];
+	    case 3:
+	      return [p, q, v];
+	    case 4:
+	      return [t, p, v];
+	    case 5:
+	      return [v, p, q];
+	  }
+	}
+
+	function hsv2hsl(hsv) {
+	  var h = hsv[0];
+	  var s = hsv[1] / 100;
+	  var v = hsv[2] / 100;
+	  var sl, l;
+
+	  if (s === 0) {
+	    return [h, 0, v * 100];
+	  }
+
+	  if (v === 0) {
+	    return [h, 0, 0];
+	  }
+
+	  l = (2 - s) * v;
+	  sl = s * v;
+	  sl /= (l <= 1) ? l : 2 - l;
+	  l /= 2;
+	  return [h, sl * 100, l * 100];
+	}
+
+	function grayscale2rgb (value) {
+	  return [value, value, value];
+	}
+
+	function rgb2grayscale (rgb) {
+	  return (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+	}
+
 
 /***/ },
 /* 634 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var Region = __webpack_require__(623)
-
-	__webpack_require__(635)
-	__webpack_require__(636)
-
-	var COMPUTE_ALIGN_REGION = __webpack_require__(637)
-
-	/**
-	 * region-align module exposes methods for aligning {@link Element} and {@link Region} instances
-	 *
-	 * The #alignTo method aligns this to the target element/region using the specified positions. See #alignTo for a graphical example.
-	 *
-	 *
-	 *      var div = Element.select('div.first')
-	 *
-	 *      div.alignTo(Element.select('body') , 'br-br')
-	 *
-	 *      //aligns the div to be in the bottom-right corner of the body
-	 *
-	 * Other useful methods
-	 *
-	 *  * {@link #alignRegions} - aligns a given source region to a target region
-	 *  * {@link #COMPUTE_ALIGN_REGION} - given a source region and a target region, and alignment positions, returns a clone of the source region, but aligned to satisfy the given alignments
-	 */
-
-
-	/**
-	 * Aligns sourceRegion to targetRegion. It modifies the sourceRegion in order to perform the correct alignment.
-	 * See #COMPUTE_ALIGN_REGION for details and examples.
-	 *
-	 * This method calls #COMPUTE_ALIGN_REGION passing to it all its arguments. The #COMPUTE_ALIGN_REGION method returns a region that is properly aligned.
-	 * If this returned region position/size differs from sourceRegion, then the sourceRegion is modified to be an exact copy of the aligned region.
-	 *
-	 * @inheritdoc #COMPUTE_ALIGN_REGION
-	 * @return {String} the position used for alignment
-	 */
-	Region.alignRegions = function(sourceRegion, targetRegion, positions, config){
-
-	    var result        = COMPUTE_ALIGN_REGION(sourceRegion, targetRegion, positions, config)
-	    var alignedRegion = result.region
-
-	    if ( !alignedRegion.equals(sourceRegion) ) {
-	        sourceRegion.setRegion(alignedRegion)
-	    }
-
-	    return result.position
-
-	}
-
-	    /**
-	     *
-	     * The #alignTo method aligns this to the given target region, using the specified alignment position(s).
-	     * You can also specify a constrain for the alignment.
-	     *
-	     * Example
-	     *
-	     *      BIG
-	     *      ________________________
-	     *      |  _______              |
-	     *      | |       |             |
-	     *      | |   A   |             |
-	     *      | |       |      _____  |
-	     *      | |_______|     |     | |
-	     *      |               |  B  | |
-	     *      |               |     | |
-	     *      |_______________|_____|_|
-	     *
-	     * Assume the *BIG* outside rectangle is our constrain region, and you want to align the *A* rectangle
-	     * to the *B* rectangle. Ideally, you'll want their tops to be aligned, and *A* to be placed at the right side of *B*
-	     *
-	     *
-	     *      //so we would align them using
-	     *
-	     *      A.alignTo(B, 'tl-tr', { constrain: BIG })
-	     *
-	     * But this would result in
-	     *
-	     *       BIG
-	     *      ________________________
-	     *      |                       |
-	     *      |                       |
-	     *      |                       |
-	     *      |                _____ _|_____
-	     *      |               |     | .     |
-	     *      |               |  B  | . A   |
-	     *      |               |     | .     |
-	     *      |_______________|_____|_._____|
-	     *
-	     *
-	     * Which is not what we want. So we specify an array of options to try
-	     *
-	     *      A.alignTo(B, ['tl-tr', 'tr-tl'], { constrain: BIG })
-	     *
-	     * So by this we mean: try to align A(top,left) with B(top,right) and stick to the BIG constrain. If this is not possible,
-	     * try the next option: align A(top,right) with B(top,left)
-	     *
-	     * So this is what we end up with
-	     *
-	     *      BIG
-	     *      ________________________
-	     *      |                       |
-	     *      |                       |
-	     *      |                       |
-	     *      |        _______ _____  |
-	     *      |       |       |     | |
-	     *      |       |   A   |  B  | |
-	     *      |       |       |     | |
-	     *      |_______|_______|_____|_|
-	     *
-	     *
-	     * Which is a lot better!
-	     *
-	     * @param {Element/Region} target The target to which to align this alignable.
-	     *
-	     * @param {String[]/String} positions The positions for the alignment.
-	     *
-	     * Example:
-	     *
-	     *      'br-tl'
-	     *      ['br-tl','br-tr','cx-tc']
-	     *
-	     * This method will try to align using the first position. But if there is a constrain region, that position might not satisfy the constrain.
-	     * If this is the case, the next positions will be tried. If one of them satifies the constrain, it will be used for aligning and it will be returned from this method.
-	     *
-	     * If no position matches the contrain, the one with the largest intersection of the source region with the constrain will be used, and this alignable will be resized to fit the constrain region.
-	     *
-	     * @param {Object} config A config object with other configuration for this method
-	     *
-	     * @param {Array[]/Object[]/Object} config.offset The offset to use for aligning. If more that one offset is specified, then offset at a given index is used with the position at the same index.
-	     *
-	     * An offset can have the following form:
-	     *
-	     *      [left_offset, top_offset]
-	     *      {left: left_offset, top: top_offset}
-	     *      {x: left_offset, y: top_offset}
-	     *
-	     * You can pass one offset or an array of offsets. In case you pass just one offset,
-	     * it cannot have the array form, so you cannot call
-	     *
-	     *      this.alignTo(target, positions, [10, 20])
-	     *
-	     * If you do, it will not be considered. Instead, please use
-	     *
-	     *      this.alignTo(target, positions, {x: 10, y: 20})
-	     *
-	     * Or
-	     *
-	     *      this.alignTo(target, positions, [[10, 20]] )
-	     *
-	     * @param {Boolean/Element/Region} config.constrain If boolean, target will be constrained to the document region, otherwise,
-	     * getRegion will be called on this argument to determine the region we need to constrain to.
-	     *
-	     * @param {Boolean/Object} config.sync Either boolean or an object with {width, height}. If it is boolean,
-	     * both width and height will be synced. If directions are specified, will only sync the direction which is specified as true
-	     *
-	     * @return {String}
-	     *
-	     */
-	Region.prototype.alignTo = function(target, positions, config){
-
-	    config = config || {}
-
-	    var sourceRegion = this
-	    var targetRegion = Region.from(target)
-
-	    var result = COMPUTE_ALIGN_REGION(sourceRegion, targetRegion, positions, config)
-	    var resultRegion = result.region
-
-	    if (!resultRegion.equalsSize(sourceRegion)){
-	        this.setSize(resultRegion.getSize())
-	    }
-	    if (!resultRegion.equalsPosition(sourceRegion)){
-	        this.setPosition(resultRegion.getPosition(), { absolute: !!config.absolute })
-	    }
-
-	    return result.position
-	}
-
-	module.exports = Region
-
-/***/ },
-/* 635 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var Region = __webpack_require__(623)
-
-	/**
-	 * @static
-	 * Aligns the source region to the target region, so as to correspond to the given alignment.
-	 *
-	 * NOTE that this method makes changes on the sourceRegion in order for it to be aligned as specified.
-	 *
-	 * @param {Region} sourceRegion
-	 * @param {Region} targetRegion
-	 *
-	 * @param {String} align A string with 2 valid align positions, eg: 'tr-bl'.
-	 * For valid positions, see {@link Region#getPoint}
-	 *
-	 * Having 2 regions, we need to be able to align them as we wish:
-	 *
-	 * for example, if we have
-	 *
-	 *       source    target
-	 *       ________________
-	 *       ____
-	 *      |    |     ________
-	 *      |____|    |        |
-	 *                |        |
-	 *                |________|
-	 *
-	 * and we align 't-t', we get:
-	 *
-	 *       source    target
-	 *       _________________
-	 *
-	 *       ____      ________
-	 *      |    |    |        |
-	 *      |____|    |        |
-	 *                |________|
-	 *
-	 *  In this case, the source was moved down to be aligned to the top of the target
-	 *
-	 *
-	 * and if we align 'tc-tc' we get
-	 *
-	 *       source     target
-	 *       __________________
-	 *
-	 *                 ________
-	 *                | |    | |
-	 *                | |____| |
-	 *                |________|
-	 *
-	 *  Since the source was moved to have the top-center point to be the same with target top-center
-	 *
-	 *
-	 *
-	 * @return {RegionClass} The Region class
-	 */
-	Region.align = function(sourceRegion, targetRegion, align){
-
-	    targetRegion = Region.from(targetRegion)
-
-	    align = (align || 'c-c').split('-')
-
-	    //<debug>
-	    if (align.length != 2){
-	        console.warn('Incorrect region alignment! The align parameter need to be in the form \'br-c\', that is, a - separated string!', align)
-	    }
-	    //</debug>
-
-	    return Region.alignToPoint(sourceRegion, targetRegion.getPoint(align[1]), align[0])
-	}
-
-	/**
-	 * Modifies the given region to be aligned to the point, as specified by anchor
-	 *
-	 * @param {Region} region The region to align to the point
-	 * @param {Object} point The point to be used as a reference
-	 * @param {Number} point.x
-	 * @param {Number} point.y
-	 * @param {String} anchor The position where to anchor the region to the point. See {@link #getPoint} for available options/
-	 *
-	 * @return {Region} the given region
-	 */
-	Region.alignToPoint = function(region, point, anchor){
-
-	    region = Region.from(region)
-
-	    var sourcePoint = region.getPoint(anchor)
-	    var count       = 0
-	    var shiftObj    = {}
-
-	    if (
-	            sourcePoint.x != null &&
-	            point.x != null
-	        ){
-
-	            count++
-	            shiftObj.left = point.x - sourcePoint.x
-	    }
-
-	    if (
-	            sourcePoint.y != null &&
-	            point.y != null
-	        ){
-	            count++
-	            shiftObj.top = point.y - sourcePoint.y
-	    }
-
-	    if (count){
-
-	        region.shift(shiftObj)
-
-	    }
-
-	    return region
-	}
-
-/***/ },
-/* 636 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var Region = __webpack_require__(623)
-
-	/**
-	 *
-	 * Aligns this region to the given region
-	 * @param {Region} region
-	 * @param {String} alignPositions For available positions, see {@link #getPoint}
-	 *
-	 *     eg: 'tr-bl'
-	 *
-	 * @return this
-	 */
-	Region.prototype.alignToRegion = function(region, alignPositions){
-	    Region.align(this, region, alignPositions)
-
-	    return this
-	}
-
-	/**
-	 * Aligns this region to the given point, in the anchor position
-	 * @param {Object} point eg: {x: 20, y: 600}
-	 * @param {Number} point.x
-	 * @param {Number} point.y
-	 *
-	 * @param {String} anchor For available positions, see {@link #getPoint}
-	 *
-	 *     eg: 'bl'
-	 *
-	 * @return this
-	 */
-	 Region.prototype.alignToPoint = function(point, anchor){
-	    Region.alignToPoint(this, point, anchor)
-
-	    return this
-	}
-
-/***/ },
-/* 637 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var ALIGN_TO_NORMALIZED = __webpack_require__(638)
-
-	var Region = __webpack_require__(623)
-
-	/**
-	 * @localdoc Given source and target regions, and the given alignments required, returns a region that is the resulting allignment.
-	 * Does not modify the sourceRegion.
-	 *
-	 * Example
-	 *
-	 *      var sourceRegion = zippy.getInstance({
-	 *          alias  : 'z.region',
-	 *          top    : 10,
-	 *          left   : 10,
-	 *          bottom : 40,
-	 *          right  : 100
-	 *      })
-	 *
-	 *      var targetRegion = zippy.getInstance({
-	 *          alias  : 'z.region',
-	 *          top    : 10,
-	 *          left   : 10,
-	 *          bottom : 40,
-	 *          right  : 100
-	 *      })
-	 *      //has top-left at (10,10)
-	 *      //and bottom-right at (40, 100)
-	 *
-	 *      var alignRegion = alignable.COMPUTE_ALIGN_REGION(sourceRegion, targetRegion, 'tl-br')
-	 *
-	 *      //alignRegion will be a clone of sourceRegion, but will have the
-	 *      //top-left corner aligned with bottom-right of targetRegion
-	 *
-	 *      alignRegion.get() // => { top: 40, left: 100, bottom: 70, right: 190 }
-	 *
-	 * @param  {Region} sourceRegion The source region to align to targetRegion
-	 * @param  {Region} targetRegion The target region to which to align the sourceRegion
-	 * @param  {String/String[]} positions    A string ( delimited by "-" characters ) or an array of strings with the position to try, in the order of their priority.
-	 * See Region#getPoint for a list of available positions. They can be combined in any way.
-	 * @param  {Object} config      A config object with other configuration for the alignment
-	 * @param  {Object/Object[]} config.offset      Optional offsets. Either an object or an array with a different offset for each position
-	 * @param  {Element/Region/Boolean} config.constrain  The constrain to region or element. If the boolean true, Region.getDocRegion() will be used
-	 * @param  {Object/Boolean} config.sync   A boolean object that indicates whether to sync sourceRegion and targetRegion sizes (width/height or both). Can be
-	 *
-	 *  * true - in order to sync both width and height
-	 *  * { width: true }  - to only sync width
-	 *  * { height: true } - to only sync height
-	 *  * { size: true }   - to sync both width and height
-	 *
-	 * @return {Object} an object with the following keys:
-	 *
-	 *  * position - the position where the alignment was made. One of the given positions
-	 *  * region   - the region where the alignment is in place
-	 *  * positionChanged - boolean value indicating if the position of the returned region is different from the position of sourceRegion
-	 *  * widthChanged    - boolean value indicating if the width of the returned region is different from the width of sourceRegion
-	 *  * heightChanged   - boolean value indicating if the height of the returned region is different from the height of sourceRegion
-	 */
-	function COMPUTE_ALIGN_REGION(sourceRegion, targetRegion, positions, config){
-	    sourceRegion = Region.from(sourceRegion)
-
-	    var sourceClone = sourceRegion.clone()
-	    var position    = ALIGN_TO_NORMALIZED(sourceClone, targetRegion, positions, config)
-
-	    return {
-	        position        : position,
-	        region          : sourceClone,
-	        widthChanged    : sourceClone.getWidth() != sourceRegion.getWidth(),
-	        heightChanged   : sourceClone.getHeight() != sourceRegion.getHeight(),
-	        positionChanged : sourceClone.equalsPosition(sourceRegion)
-	    }
-	}
-
-
-	module.exports = COMPUTE_ALIGN_REGION
-
-/***/ },
-/* 638 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var Region = __webpack_require__(623)
-
-	/**
-	 *
-	 * This method is trying to align the sourceRegion to the targetRegion, given the alignment positions
-	 * and the offsets. It only modifies the sourceRegion
-	 *
-	 * This is all well and easy, but if there is a constrainTo region, the algorithm has to take it into account.
-	 * In this case, it works as follows.
-	 *
-	 *  * start with the first alignment position. Aligns the region, adds the offset and then check for the constraint.
-	 *  * if the constraint condition is ok, return the position.
-	 *  * otherwise, remember the intersection area, if the regions are intersecting.
-	 *  * then go to the next specified align position, and so on, computing the maximum intersection area.
-	 *
-	 * If no alignment fits the constrainRegion, the sourceRegion will be resized to match it,
-	 * using the position with the maximum intersection area.
-	 *
-	 * Since we have computed the index of the position with the max intersection area, take that position,
-	 * and align the sourceRegion accordingly. Then resize the sourceRegion to the intersection, and reposition
-	 * it again, since resizing it might have destroyed the alignment.
-	 *
-	 * Return the position.
-	 *
-	 * @param {Region} sourceRegion
-	 * @param {Region} targetRegion
-	 * @param {String[]} positions
-	 * @param {Object} config
-	 * @param {Array} config.offset
-	 * @param {Region} config.constrain
-	 * @param {Boolean/Object} config.sync
-	 *
-	 * @return {String/Undefined} the chosen position for the alignment, or undefined if no position found
-	 */
-	function ALIGN_TO_NORMALIZED(sourceRegion, targetRegion, positions, config){
-
-	    targetRegion = Region.from(targetRegion)
-
-	    config = config  || {}
-
-	    var constrainTo = config.constrain,
-	        syncOption  = config.sync,
-	        offsets     = config.offset || [],
-	        syncWidth   = false,
-	        syncHeight  = false,
-	        sourceClone = sourceRegion.clone()
-
-	    /*
-	     * Prepare the method arguments: positions, offsets, constrain and sync options
-	     */
-	    if (!Array.isArray(positions)){
-	        positions = positions? [positions]: []
-	    }
-
-	    if (!Array.isArray(offsets)){
-	        offsets = offsets? [offsets]: []
-	    }
-
-	    if (constrainTo){
-	        constrainTo = constrainTo === true?
-	                                Region.getDocRegion():
-	                                constrainTo.getRegion()
-	    }
-
-	    if (syncOption){
-
-	        if (syncOption.size){
-	            syncWidth  = true
-	            syncHeight = true
-	        } else {
-	            syncWidth  = syncOption === true?
-	                            true:
-	                            syncOption.width || false
-
-	            syncHeight = syncOption === true?
-	                            true:
-	                            syncOption.height || false
-	        }
-	    }
-
-	    if (syncWidth){
-	        sourceClone.setWidth(targetRegion.getWidth())
-	    }
-	    if (syncHeight){
-	        sourceClone.setHeight(targetRegion.getHeight())
-
-	    }
-
-	    var offset,
-	        i = 0,
-	        len = positions.length,
-	        pos,
-	        intersection,
-	        itArea,
-	        maxArea = -1,
-	        maxAreaIndex = -1
-
-	    for (; i < len; i++){
-	        pos     = positions[i]
-	        offset  = offsets[i]
-
-	        sourceClone.alignToRegion(targetRegion, pos)
-
-	        if (offset){
-	            if (!Array.isArray(offset)){
-	                offset = offsets[i] = [offset.x || offset.left, offset.y || offset.top]
-	            }
-
-	            sourceClone.shift({
-	                left: offset[0],
-	                top : offset[1]
-	            })
-	        }
-
-	        //the source region is already aligned in the correct position
-
-	        if (constrainTo){
-	            //if we have a constrain region, test for the constrain
-	            intersection = sourceClone.getIntersection(constrainTo)
-
-	            if ( intersection && intersection.equals(sourceClone) ) {
-	                //constrain respected, so return (the aligned position)
-
-	                sourceRegion.set(sourceClone)
-	                return pos
-	            } else {
-
-	                //the constrain was not respected, so continue trying
-	                if (intersection && ((itArea = intersection.getArea()) > maxArea)){
-	                    maxArea      = itArea
-	                    maxAreaIndex = i
-	                }
-	            }
-
-	        } else {
-	            sourceRegion.set(sourceClone)
-	            return pos
-	        }
-	    }
-
-	    //no alignment respected the constraints
-	    if (~maxAreaIndex){
-	        pos     = positions[maxAreaIndex]
-	        offset  = offsets[maxAreaIndex]
-
-	        sourceClone.alignToRegion(targetRegion, pos)
-
-	        if (offset){
-	            sourceClone.shift({
-	                left: offset[0],
-	                top : offset[1]
-	            })
-	        }
-
-	        //we are sure an intersection exists, because of the way the maxAreaIndex was computed
-	        intersection = sourceClone.getIntersection(constrainTo)
-
-	        sourceClone.setRegion(intersection)
-	        sourceClone.alignToRegion(targetRegion, pos)
-
-	        if (offset){
-	            sourceClone.shift({
-	                left: offset[0],
-	                top : offset[1]
-	            })
-	        }
-
-	        sourceRegion.set(sourceClone)
-
-	        return pos
-	    }
-
-	}
-
-	module.exports = ALIGN_TO_NORMALIZED
-
-/***/ },
-/* 639 */
-/***/ function(module, exports) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 640 */
-/***/ function(module, exports) {
-
-	'use once'
-
-	module.exports = function once(fn, scope){
-
-	    var called
-	    var result
-
-	    return function(){
-	        if (called){
-	            return result
-	        }
-
-	        called = true
-
-	        return result = fn.apply(scope || this, arguments)
-	    }
-	}
-
-/***/ },
-/* 641 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function validate(info) {
-	    var height = info.height;
-	    var width = info.width;
-
-	    if (info.x < 0) {
-	        info.x = 0;
-	    }
-
-	    if (info.x >= width) {
-	        info.x = width;
-	    }
-
-	    if (info.y < 0) {
-	        info.y = 0;
-	    }
-
-	    if (info.y >= height) {
-	        info.y = height;
-	    }
-
-	    return info;
-	};
-
-/***/ },
-/* 642 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = 'red';
-
-/***/ },
-/* 643 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var assign = __webpack_require__(619);
-	var toColor = __webpack_require__(620).toColor;
-
-	module.exports = function toStringValue(color) {
-	    color = toColor(assign({}, color));
-
-	    return color.toRgb().a == 1 ? color.toHexString() : color.toRgbString();
-	};
-
-/***/ },
-/* 644 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	var React = __webpack_require__(138);
-	var ReactDOM = __webpack_require__(246);
-	var Region = __webpack_require__(623);
-	var assign = __webpack_require__(619);
-	var fromRatio = __webpack_require__(620).fromRatio;
-	var common = __webpack_require__(632);
-
-	var VALIDATE = __webpack_require__(641);
-
-	exports['default'] = React.createClass(assign({
-
-	    displayName: 'SaturationSpectrum',
-
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            height: 300,
-	            width: 300,
-	            pointerSize: 7,
-	            defaultColor: __webpack_require__(642)
-	        };
-	    },
-
-	    getInitialState: function getInitialState() {
-	        return {
-	            pointerTop: null,
-	            pointerLeft: null
-	        };
-	    },
-
-	    componentDidUpdate: function componentDidUpdate() {
-	        // this.updateDragPositionIf()
-	    },
-
-	    componentDidMount: function componentDidMount() {
-	        this.updateDragPositionIf();
-	    },
-
-	    updateDragPositionIf: function updateDragPositionIf() {
-	        if (!this.props.height || !this.props.width) {
-	            this.setState({});
-	        }
-	    },
-
-	    getDragPosition: function getDragPosition(hsv) {
-	        hsv = hsv || this.hsv;
-
-	        var width = this.props.width;
-	        var height = this.props.height;
-	        var sizeDefined = width && height;
-
-	        if (!sizeDefined && !this.isMounted()) {
-	            return null;
-	        }
-
-	        var region;
-
-	        if (!sizeDefined) {
-	            region = Region.fromDOM(ReactDOM.findDOMNode(this));
-	            height = height || region.getHeight();
-	            width = width || region.getWidth();
-	        }
-
-	        var x = hsv.s * width;
-	        var y = height - hsv.v * height;
-	        var size = this.props.pointerSize;
-	        var diff = Math.floor(size / 2);
-
-	        if (this.props.value && this.state.mouseDown && !isNaN(this.state.mouseDown.x)) {
-	            x = this.state.mouseDown.x;
-	        }
-
-	        return {
-	            left: x - diff,
-	            top: y - diff
-	        };
-	    },
-
-	    prepareBackgroundColor: function prepareBackgroundColor(color) {
-	        var hsv = color;
-
-	        var col = fromRatio({
-	            h: hsv.h % 360 / 360,
-	            s: 1,
-	            v: 1
-	        });
-
-	        return col.toRgbString();
-	    },
-
-	    prepareProps: function prepareProps(thisProps, state) {
-	        var props = assign({}, thisProps);
-
-	        var color = state.value || props.value || props.defaultValue || props.defaultColor;
-
-	        props.color = color;
-
-	        this.hsv = this.toColorValue(color);
-
-	        props.style = this.prepareStyle(props);
-	        props.className = this.prepareClassName(props);
-
-	        return props;
-	    },
-
-	    prepareClassName: function prepareClassName(props) {
-	        var className = props.className || '';
-
-	        className += ' react-color-picker__saturation-spectrum';
-
-	        return className;
-	    },
-
-	    prepareStyle: function prepareStyle(props) {
-	        var style = assign({}, props.style);
-
-	        if (props.height) {
-	            style.height = props.height;
-	        }
-	        if (props.width) {
-	            style.width = props.width;
-	        }
-
-	        style.backgroundColor = this.prepareBackgroundColor(this.hsv);
-
-	        return style;
-	    },
-
-	    render: function render() {
-
-	        var props = this.p = this.prepareProps(this.props, this.state);
-
-	        var dragStyle = {
-	            width: this.props.pointerSize,
-	            height: this.props.pointerSize
-	        };
-
-	        var dragPos = this.getDragPosition();
-
-	        if (dragPos) {
-	            dragStyle.top = dragPos.top;
-	            dragStyle.left = dragPos.left;
-	            dragStyle.display = 'block';
-	        }
-
-	        return React.createElement(
-	            'div',
-	            { className: props.className, style: props.style, onMouseDown: this.onMouseDown },
-	            React.createElement(
-	                'div',
-	                { className: 'react-color-picker__saturation-white' },
-	                React.createElement('div', { className: 'react-color-picker__saturation-black' })
-	            ),
-	            React.createElement(
-	                'div',
-	                { className: 'react-color-picker__saturation-drag', style: dragStyle },
-	                React.createElement('div', { className: 'react-color-picker__saturation-inner' })
-	            )
-	        );
-	    },
-
-	    getSaturationForPoint: function getSaturationForPoint(point) {
-	        return point.x / point.width;
-	    },
-
-	    getColorValueForPoint: function getColorValueForPoint(point) {
-	        return (point.height - point.y) / point.height;
-	    },
-
-	    updateColor: function updateColor(point) {
-	        point = VALIDATE(point);
-
-	        this.hsv.s = this.getSaturationForPoint(point);
-	        this.hsv.v = this.getColorValueForPoint(point);
-	    },
-
-	    toStringValue: __webpack_require__(643)
-	}, common));
-	module.exports = exports['default'];
-
-/***/ },
-/* 645 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var defaultClickRejectionStrategy = __webpack_require__(646);
+	var defaultClickRejectionStrategy = __webpack_require__(635);
 
 	module.exports = function injectTapEventPlugin (strategyOverrides) {
 	  strategyOverrides = strategyOverrides || {}
 	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
 
 	  __webpack_require__(92).injection.injectEventPluginsByName({
-	    "TapEventPlugin":       __webpack_require__(647)(shouldRejectClick)
+	    "TapEventPlugin":       __webpack_require__(636)(shouldRejectClick)
 	  });
 	};
 
 
 /***/ },
-/* 646 */
+/* 635 */
 /***/ function(module, exports) {
 
 	module.exports = function(lastTouchEvent, clickTimestamp) {
@@ -63565,7 +61814,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 647 */
+/* 636 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -63593,10 +61842,10 @@ webpackJsonp([0],[
 	var EventPluginUtils = __webpack_require__(94);
 	var EventPropagators = __webpack_require__(157);
 	var SyntheticUIEvent = __webpack_require__(171);
-	var TouchEventUtils = __webpack_require__(648);
+	var TouchEventUtils = __webpack_require__(637);
 	var ViewportMetrics = __webpack_require__(102);
 
-	var keyOf = __webpack_require__(649);
+	var keyOf = __webpack_require__(638);
 	var topLevelTypes = EventConstants.topLevelTypes;
 
 	var isStartish = EventPluginUtils.isStartish;
@@ -63742,7 +61991,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 648 */
+/* 637 */
 /***/ function(module, exports) {
 
 	/**
@@ -63790,7 +62039,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 649 */
+/* 638 */
 /***/ function(module, exports) {
 
 	/**
@@ -63830,7 +62079,7 @@ webpackJsonp([0],[
 	module.exports = keyOf;
 
 /***/ },
-/* 650 */
+/* 639 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {

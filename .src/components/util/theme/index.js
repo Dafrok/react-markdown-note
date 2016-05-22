@@ -1,25 +1,28 @@
 import React from 'react'
+import Reflux from 'reflux'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import MyRawTheme from './theme.js'
+import ThemeStore from '../../../stores/theme.js'
 
-const defaultTheme = getMuiTheme(MyRawTheme)
-// const defaultTheme = getMuiTheme({
-//   palette: {
-//     textColor: cyan500,
-//   },
-//   appBar: {
-//     height: 50,
-//   },
-// })
 class Theme extends React.Component {
   constructor (props) {
     super(props)
-    this.state = defaultTheme
+    this.state = {
+      theme: ThemeStore.theme
+    }
+    Reflux.listenTo(ThemeStore)
+  }
+  onStatusChange = theme => {
+    this.setState({theme: theme})
+  }
+  componentDidMount () {
+    this.unsubscribe = ThemeStore.listen(this.onStatusChange)
+  }
+  componentWillUnmount () {
+    this.unsubscribe()
   }
   render() {
     return (
-      <MuiThemeProvider muiTheme={this.state}>
+      <MuiThemeProvider muiTheme={this.state.theme}>
           {this.props.children}
       </MuiThemeProvider>
     );

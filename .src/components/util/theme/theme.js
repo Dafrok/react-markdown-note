@@ -1,17 +1,28 @@
-import {grey100, grey300, grey500, cyan500, cyan700, lightBlack, darkBlack, white} from 'material-ui/styles/colors'
+import {grey100, grey300, grey400, grey500, cyan500, cyan700, pinkA200, fullBlack, lightBlack, darkBlack, white} from 'material-ui/styles/colors'
 import ColorManipulator, {fade} from 'material-ui/utils/colorManipulator'
 import Spacing from 'material-ui/styles/spacing'
 import zIndex from 'material-ui/styles/zIndex'
 
 export default {
-  spacing: Spacing,
-  zIndex: zIndex,
-  fontFamily: 'helvetica neue, arial, hiragino sans gb, stheiti, wenquanyi micro hei, \\5FAE\\8F6F\\96C5\\9ED1, \\5B8B\\4F53, sans-serif',
+  spacing: {
+    iconSize: 24,
+    desktopGutter: 24,
+    desktopGutterMore: 32,
+    desktopGutterLess: 16,
+    desktopGutterMini: 8,
+    desktopKeylineIncrement: 64,
+    desktopDropDownMenuItemHeight: 32,
+    desktopDropDownMenuFontSize: 15,
+    desktopDrawerMenuItemHeight: 48,
+    desktopSubheaderHeight: 48,
+    desktopToolbarHeight: 56,
+  },
+  fontFamily: 'Roboto, sans-serif',
   palette: {
-    primary1Color: '#3366cc',
+    primary1Color: cyan500,
     primary2Color: cyan700,
-    primary3Color: lightBlack,
-    accent1Color: '#ff66cc',
+    primary3Color: grey400,
+    accent1Color: pinkA200,
     accent2Color: grey100,
     accent3Color: grey500,
     textColor: darkBlack,
@@ -20,5 +31,7 @@ export default {
     borderColor: grey300,
     disabledColor: fade(darkBlack, 0.3),
     pickerHeaderColor: cyan500,
-  }
-};
+    clockCircleColor: fade(darkBlack, 0.07),
+    shadowColor: fullBlack,
+  },
+}

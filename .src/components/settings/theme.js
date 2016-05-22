@@ -7,9 +7,10 @@ import {List, ListItem} from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 import TextField from 'material-ui/TextField'
 import RaisedButton from 'material-ui/RaisedButton'
+import ImageLens from 'material-ui/svg-icons/image/lens'
 import ColorPicker from './theme-color-picker.js'
 import {changePassword} from '../../lib/connect.js'
-import {Actions as ThemeActions} from '../../stores/theme.js'
+import ThemeStore, {Actions as ThemeActions} from '../../stores/theme.js'
 
 export default class Theme extends React.Component {
   static contextTypes = {
@@ -43,13 +44,6 @@ export default class Theme extends React.Component {
   closeColorPicker = () => {
     this.openColorPicker(-1)
   }
-  changeTheme () {
-    ThemeActions.changeTheme({
-      palette: {
-        primary1Color: ['red', 'blue', 'yellow'][0 | Math.random() * 3]
-      }
-    })
-  }
   resetTheme () {
     ThemeActions.changeTheme()
   }
@@ -62,7 +56,7 @@ export default class Theme extends React.Component {
       </StatusBar>
       <List>
         {this.state.themeOptions.map((item, index) => {
-          return <ListItem primaryText={item.text} key={index} onClick={() => {this.openColorPicker(index)}}>
+          return <ListItem primaryText={item.text} key={index} onClick={() => {this.openColorPicker(index)}} rightIcon={<ImageLens style={{fill: ThemeStore.theme.palette[item.key]}}/>}>
             <ColorPicker open={index === this.state.activeOption} handleClose={this.closeColorPicker} option={item}/>
           </ListItem>
         })}

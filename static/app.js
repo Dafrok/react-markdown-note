@@ -5472,7 +5472,7 @@ webpackJsonp([0],[
 
 	var _theme2 = _interopRequireDefault(_theme);
 
-	var _reactTapEventPlugin = __webpack_require__(634);
+	var _reactTapEventPlugin = __webpack_require__(637);
 
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 
@@ -5482,7 +5482,7 @@ webpackJsonp([0],[
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var FastClick = __webpack_require__(639);
+	var FastClick = __webpack_require__(642);
 	FastClick.attach(document.body);
 	(0, _reactTapEventPlugin2.default)();
 
@@ -59114,17 +59114,19 @@ webpackJsonp([0],[
 
 	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
 
-	var _Dialog = __webpack_require__(606);
+	var _lens = __webpack_require__(617);
 
-	var _Dialog2 = _interopRequireDefault(_Dialog);
+	var _lens2 = _interopRequireDefault(_lens);
 
-	var _themeColorPicker = __webpack_require__(617);
+	var _themeColorPicker = __webpack_require__(618);
 
 	var _themeColorPicker2 = _interopRequireDefault(_themeColorPicker);
 
 	var _connect = __webpack_require__(498);
 
 	var _theme = __webpack_require__(412);
+
+	var _theme2 = _interopRequireDefault(_theme);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59140,19 +59142,29 @@ webpackJsonp([0],[
 	  function Theme(props) {
 	    _classCallCheck(this, Theme);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Theme).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Theme).call(this, props));
+
+	    _this.openColorPicker = function (index) {
+	      _this.setState({ activeOption: index });
+	    };
+
+	    _this.closeColorPicker = function () {
+	      _this.openColorPicker(-1);
+	    };
+
+	    _this.state = {
+	      activeOption: -1,
+	      themeOptions: [{ key: 'primary1Color', text: 'Primary Color 1' }, { key: 'primary2Color', text: 'Primary Color 2' }, { key: 'primary3Color', text: 'Primary Color 3' }, { key: 'accent1Color', text: 'Accent Color 1' }, { key: 'accent2Color', text: 'Accent Color 2' }, { key: 'accent3Color', text: 'Accent Color 3' }, { key: 'textColor', text: 'Text Color' }, { key: 'alternateTextColor', text: 'Alternate Text Color' },
+	      // {key: 'canvasColor', text: 'Canvas Color'},
+	      { key: 'borderColor', text: 'Border Color' }, { key: 'disabledColor', text: 'Disabled Color' },
+	      // {key: 'pickerHeaderColor', text: 'Picker Header Color'},
+	      // {key: 'clockCircleColor', text: 'Clock Circle Color'},
+	      { key: 'shadowColor', text: 'Shadow Color' }]
+	    };
+	    return _this;
 	  }
 
 	  _createClass(Theme, [{
-	    key: 'changeTheme',
-	    value: function changeTheme() {
-	      _theme.Actions.changeTheme({
-	        palette: {
-	          primary1Color: ['red', 'blue', 'yellow'][0 | Math.random() * 3]
-	        }
-	      });
-	    }
-	  }, {
 	    key: 'resetTheme',
 	    value: function resetTheme() {
 	      _theme.Actions.changeTheme();
@@ -59160,6 +59172,8 @@ webpackJsonp([0],[
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -59170,16 +59184,16 @@ webpackJsonp([0],[
 	          _react2.default.createElement(_header2.default, null)
 	        ),
 	        _react2.default.createElement(
-	          _Dialog2.default,
-	          { open: true, contentStyle: { textAlign: 'center', paddingLeft: 0, paddingRight: 0 } },
-	          _react2.default.createElement(_themeColorPicker2.default, null)
-	        ),
-	        _react2.default.createElement(
 	          _List.List,
 	          null,
-	          _react2.default.createElement(_List.ListItem, {
-	            primaryText: 'Primary Color 1',
-	            initiallyOpen: true
+	          this.state.themeOptions.map(function (item, index) {
+	            return _react2.default.createElement(
+	              _List.ListItem,
+	              { primaryText: item.text, key: index, onClick: function onClick() {
+	                  _this2.openColorPicker(index);
+	                }, rightIcon: _react2.default.createElement(_lens2.default, { style: { fill: _theme2.default.theme.palette[item.key] } }) },
+	              _react2.default.createElement(_themeColorPicker2.default, { open: index === _this2.state.activeOption, handleClose: _this2.closeColorPicker, option: item })
+	            );
 	          })
 	        ),
 	        _react2.default.createElement(
@@ -59188,7 +59202,6 @@ webpackJsonp([0],[
 	          _react2.default.createElement(
 	            _Card.CardActions,
 	            null,
-	            _react2.default.createElement(_RaisedButton2.default, { label: 'Change Theme', fullWidth: true, type: 'button', onClick: this.changeTheme }),
 	            _react2.default.createElement(_RaisedButton2.default, { label: 'Reset Theme', fullWidth: true, type: 'button', onClick: this.resetTheme })
 	          )
 	        )
@@ -59209,6 +59222,42 @@ webpackJsonp([0],[
 /* 617 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(138);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _pure = __webpack_require__(453);
+
+	var _pure2 = _interopRequireDefault(_pure);
+
+	var _SvgIcon = __webpack_require__(461);
+
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ImageLens = function ImageLens(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z' })
+	  );
+	};
+	ImageLens = (0, _pure2.default)(ImageLens);
+	ImageLens.displayName = 'ImageLens';
+
+	exports.default = ImageLens;
+
+/***/ },
+/* 618 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(76), RootInstanceProvider = __webpack_require__(84), ReactMount = __webpack_require__(86), React = __webpack_require__(138); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 
 	'use strict';
@@ -59222,17 +59271,35 @@ webpackJsonp([0],[
 
 	var _class, _temp;
 
-	__webpack_require__(618);
+	__webpack_require__(619);
 
 	var _react = __webpack_require__(138);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactColorpickr = __webpack_require__(620);
+	var _Dialog = __webpack_require__(606);
+
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+
+	var _FlatButton = __webpack_require__(597);
+
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+	var _Slider = __webpack_require__(621);
+
+	var _Slider2 = _interopRequireDefault(_Slider);
+
+	var _reactColorpickr = __webpack_require__(623);
 
 	var _reactColorpickr2 = _interopRequireDefault(_reactColorpickr);
 
+	var _theme = __webpack_require__(412);
+
+	var _theme2 = _interopRequireDefault(_theme);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -59246,21 +59313,48 @@ webpackJsonp([0],[
 	  function Color(props) {
 	    _classCallCheck(this, Color);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Color).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Color).call(this, props));
+
+	    _this.onChange = function (color) {
+	      _this.setState(_defineProperty({}, _this.props.option.key, 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')'));
+	    };
+
+	    _this.handleChangeColor = function () {
+	      _theme.Actions.changeTheme({
+	        palette: _this.state
+	      });
+	      _this.props.handleClose();
+	    };
+
+	    _this.state = _defineProperty({}, _this.props.option.key, _theme2.default.theme.palette[_this.props.option.key]);
+	    return _this;
 	  }
 
 	  _createClass(Color, [{
-	    key: 'onChange',
-	    value: function onChange(color) {
-	      console.log(color);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(_reactColorpickr2.default, { onChange: this.onChange })
+	        _Dialog2.default,
+	        {
+	          open: this.props.open,
+	          autoScrollBodyContent: true,
+	          onRequestClose: this.props.handleClose,
+	          onClick: function onClick(e) {
+	            e.stopPropagation();
+	          },
+	          bodyStyle: { textAlign: 'center', paddingLeft: 0, paddingRight: 0, overflowX: 'hidden' },
+	          actions: [_react2.default.createElement(_FlatButton2.default, {
+	            label: 'Cancel',
+	            onTouchTap: this.props.handleClose
+	          }), _react2.default.createElement(_FlatButton2.default, {
+	            label: 'OK',
+	            primary: true,
+	            keyboardFocused: true,
+	            onTouchTap: this.handleChangeColor
+	          })] },
+	        _react2.default.createElement(_Slider2.default, null),
+	        _react2.default.createElement(_Slider2.default, null),
+	        _react2.default.createElement(_Slider2.default, null)
 	      );
 	    }
 	  }]);
@@ -59275,13 +59369,13 @@ webpackJsonp([0],[
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ },
-/* 618 */
+/* 619 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(619);
+	var content = __webpack_require__(620);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(245)(content, {});
@@ -59290,8 +59384,8 @@ webpackJsonp([0],[
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(619, function() {
-				var newContent = __webpack_require__(619);
+			module.hot.accept(620, function() {
+				var newContent = __webpack_require__(620);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -59301,7 +59395,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 619 */
+/* 620 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(244)();
@@ -59309,13 +59403,722 @@ webpackJsonp([0],[
 
 
 	// module
-	exports.push([module.id, ".colorpickr,\n.colorpickr *,\n.colorpickr *:after,\n.colorpickr *:before {\n  box-sizing: border-box;\n}\n.colorpickr {\n  width: 200px;\n  display: inline-block;\n  z-index: 1;\n  border-radius: 4px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n      user-select: none;\n}\n.colorpickr,\n.colorpickr input[type='number'],\n.colorpickr input[type='text'] {\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  color: #404040;\n  font-size: 12px;\n  line-height: 1;\n  -webkit-font-smoothing: antialiased;\n  outline: 0;\n}\n/* Clearfix rule */\n.colorpickr .cp-floor:after,\n.colorpickr .cp-body:after {\n  content: '';\n  display: block;\n  height: 0;\n  clear: both;\n  visibility: hidden;\n}\n.colorpickr .cp-relative {\n  position: relative;\n}\n.colorpickr .cp-inputs > div {\n  margin-bottom: 10px;\n}\n.colorpickr fieldset {\n  padding: 0;\n  margin: 0 0 5px;\n  border: 0;\n}\n.colorpickr fieldset input[type=radio] {\n  position: relative;\n  top: 3px;\n  cursor: pointer;\n}\n.colorpickr fieldset div:first-child {\n  display: none;\n  width: 25px;\n  height: 26px;\n}\n.colorpickr fieldset div:last-child {\n  width: 100%;\n  display: block;\n  position: relative;\n}\n/* Inputs */\n.colorpickr fieldset label {\n  position: absolute;\n  color: rgba(0,0,0,0.25);\n  font-weight: 600;\n  top: 7px;\n  left: 5px;\n}\n.colorpickr fieldset.cp-active label {\n  color: rgba(0,0,0,0.75);\n}\n.colorpickr fieldset input[type='number'],\n.colorpickr fieldset input[type='text'] {\n  width: 100%;\n  height: 26px;\n  margin: 0;\n  border: 0;\n  box-shadow: 0 0 1px #808080 inset;\n  padding: 5px 5px 5px 20px;\n  border-radius: 3px;\n  -webkit-appearance: none;\n}\n.colorpickr input:invalid {\n  border-color: #e55e5e;\n}\n.colorpickr button {\n  background-color: rgba(0,0,0,0.25);\n  text-align: center;\n  color: #fff;\n  font-size: 11px;\n  line-height: 14px;\n  font-weight: bold;\n  display: inline-block;\n  height: auto;\n  padding: 5px 10px;\n  width: 50px;\n  margin: 0;\n  border: none;\n  cursor: pointer;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n/* The button element needs to be forced this */\n  -webkit-font-smoothing: antialiased;\n}\n.colorpickr button:not(.cp-active):hover {\n  box-shadow: inset 0 0 0 3px rgba(0,0,0,0.1);\n}\n.colorpickr button.cp-active {\n  background-color: rgba(0,0,0,0.75);\n}\n.colorpickr .cp-col {\n  position: relative;\n}\n.colorpickr .cp-col:first-child {\n  width: 200px;\n  padding-right: 0;\n}\n.colorpickr .cp-col:last-child {\n  width: 200px;\n  margin-top: 10px;\n  z-index: 1;\n}\n.colorpickr .cp-mode-tabs {\n  margin: 0 0 10px;\n}\n.colorpickr .cp-mode-tabs button {\n  width: 50%;\n}\n.colorpickr .cp-mode-tabs button:first-child {\n  border-radius: 3px 0 0 3px;\n}\n.colorpickr .cp-mode-tabs button:last-child {\n  border-radius: 0 3px 3px 0;\n}\n.colorpickr .cp-selector {\n  position: relative;\n  width: 190px;\n  height: 190px;\n  z-index: 1;\n}\n.colorpickr .cp-gradient {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n}\n.colorpickr .cp-light-left {\n  background: -webkit-linear-gradient(left, #fff 0%, transparent 100%);\n  background: linear-gradient(to right, #fff 0%, transparent 100%);\n}\n.colorpickr .cp-light-bottom {\n  background: -webkit-linear-gradient(top, transparent 0%, #fff 100%);\n  background: linear-gradient(to bottom, transparent 0%, #fff 100%);\n}\n.colorpickr .cp-dark-bottom {\n  background: -webkit-linear-gradient(top, transparent 0%, #000 100%);\n  background: linear-gradient(to bottom, transparent 0%, #000 100%);\n}\n/* r-ne = white\n * r-nw = yellow\n * r-sw = red\n * r-se = violet\n */\n.colorpickr .cp-gradient.cp-rgb {\n  background-repeat: no-repeat;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-r-high {\n  background-position: 0 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-r-low {\n  background-position: -190px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-g-high {\n  background-position: -380px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-g-low {\n  background-position: -570px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-b-high {\n  background-position: -760px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-b-low {\n  background-position: -950px 0;\n}\n.colorpickr input[type=range],\n.colorpickr input[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none;\n  margin: 0;\n  padding: 0;\n  border: 0;\n}\n.colorpickr input[type=range] {\n  display: block !important;\n  height: 10px;\n  width: 100%;\n  padding: 0 2px;\n  margin: 0;\n  min-width: 100px;\n  overflow: hidden;\n  cursor: pointer;\n}\n.colorpickr input[type=range]::-ms-fill-upper {\n  background: transparent;\n}\n.colorpickr input[type=range]::-ms-fill-lower {\n  background: rgba(255,255,255,0.25);\n}\n/* Vendor specific thingies */\n.colorpickr input[type=range]::-moz-range-track {\n  opacity: 0;\n}\n.colorpickr input[type=range]::-ms-track {\n  opacity: 0;\n}\n.colorpickr input[type=range]::-ms-tooltip {\n  display: none;\n}\n/* For whatever reason, these need to be defined\n * on their own so dont group them */\n.colorpickr input[type=range]::-webkit-slider-thumb {\n  background: rgba(255,255,255,0.75);\n  border: 1px solid rgba(0,0,0,0.75);\n  height: 10px;\n  width: 5px;\n  cursor: ew-resize;\n  box-shadow: none;\n}\n.colorpickr input[type=range]::-ms-thumb {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  background: rgba(255,255,255,0.75);\n  border: 1px solid rgba(0,0,0,0.75);\n  height: 10px;\n  width: 5px;\n  cursor: ew-resize;\n  box-shadow: none;\n}\n.colorpickr input[type=range]::-moz-range-thumb {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  background: rgba(255,255,255,0.75);\n  border: 1px solid rgba(0,0,0,0.75);\n  height: 10px;\n  width: 5px;\n  cursor: ew-resize;\n  box-shadow: none;\n}\n/* Hue slider */\n.colorpickr .cp-colormode-slider {\n  position: absolute;\n  top: 90px;\n  right: -90px;\n  z-index: 1;\n}\n.colorpickr .cp-colormode-slider input[type=range] {\n  margin: 0;\n  width: 190px;\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.colorpickr .cp-gradient.cp-s-high,\n.colorpickr .cp-gradient.cp-v-high,\n.colorpickr .cp-colormode-slider.h input[type=range] {\n  background: -webkit-linear-gradient(right, #f00 0%, #f09 10%, #cd00ff 20%, #3200ff 30%, #06f 40%, #00fffd 50%, #0f6 60%, #35ff00 70%, #cdff00 80%, #f90 90%, #f00 100%);\n  background: linear-gradient(to left, #f00 0%, #f09 10%, #cd00ff 20%, #3200ff 30%, #06f 40%, #00fffd 50%, #0f6 60%, #35ff00 70%, #cdff00 80%, #f90 90%, #f00 100%);\n}\n.colorpickr .cp-gradient.cp-s-low {\n  background: -webkit-linear-gradient(top, #fff 0%, #bbb 100%);\n  background: linear-gradient(to bottom, #fff 0%, #bbb 100%);\n}\n.colorpickr .cp-gradient.cp-v-low {\n  background-color: #000;\n}\n.colorpickr .cp-colormode-slider.r input[type=range] {\n  background: -webkit-linear-gradient(right, #f00 0%, #000 100%);\n  background: linear-gradient(to left, #f00 0%, #000 100%);\n}\n.colorpickr .cp-colormode-slider.g input[type=range] {\n  background: -webkit-linear-gradient(right, #0f0 0%, #000 100%);\n  background: linear-gradient(to left, #0f0 0%, #000 100%);\n}\n.colorpickr .cp-colormode-slider.b input[type=range] {\n  background: -webkit-linear-gradient(right, #00f 0%, #000 100%);\n  background: linear-gradient(to left, #00f 0%, #000 100%);\n}\n.colorpickr .cp-colormode-slider input[type=range]::-webkit-slider-thumb {\n  cursor: ns-resize;\n}\n.colorpickr .cp-colormode-slider input[type=range]::-ms-thumb {\n  cursor: ns-resize;\n}\n.colorpickr .cp-colormode-slider input[type=range]::-moz-range-thumb {\n  cursor: ns-resize;\n}\n.colorpickr .cp-fill-tile {\n  background-image: url(\"data:image/png;base64,R0lGODdhCgAKAPAAAOXl5f///ywAAAAACgAKAEACEIQdqXt9GxyETrI279OIgwIAOw==\");\n  background-repeat: repeat;\n}\n.colorpickr .cp-floor {\n  display: none;\n  padding: 5px 10px 0;\n  position: relative;\n  width: 100%;\n  clear: both;\n}\n.colorpickr .cp-swatch {\n  width: 36px;\n  height: 24px;\n}\n.colorpickr .cp-actions .cp-fill-tile:only-of-type > .cp-swatch {\n  border-radius: 3px;\n}\n.colorpickr .cp-actions .cp-fill-tile,\n.colorpickr .cp-actions .cp-swatch {\n  border-radius: 3px 0 0 3px;\n}\n.colorpickr .cp-actions .cp-fill-tile + .cp-fill-tile,\n.colorpickr .cp-actions .cp-fill-tile + .cp-fill-tile .cp-swatch {\n  border-radius: 0 3px 3px 0;\n}\n.colorpickr .cp-actions .cp-fill-tile + .cp-fill-tile {\n  margin-left: 1px;\n}\n.colorpickr .cp-actions:after,\n.colorpickr .cp-actions:before {\n  display: block;\n  color: rgba(0,0,0,0.4);\n  vertical-align: top;\n  line-height: 20px;\n  float: left;\n  margin-top: 3px;\n  padding: 0 5px;\n  content: 'Current';\n}\n.colorpickr .cp-actions:before {\n  content: 'New';\n}\n.colorpickr .cp-fl {\n  float: left;\n}\n.colorpickr .cp-fr {\n  float: right;\n}\n.colorpickr .cp-floor .cp-output {\n  display: none;\n  width: 100px;\n}\n.colorpickr .cp-output {\n  width: 50%;\n  margin: 0;\n}\n/* xy controler for background selection */\n.colorpickr .slider-xy {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  cursor: pointer;\n}\n.colorpickr .slider-xy.dragging-xy {\n  cursor: move;\n  cursor: -webkit-grabbing;\n  cursor: -moz-grabbing;\n}\n.colorpickr .slider-xy .handle-xy {\n  position: absolute;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n   -ms-user-select: none;\n       user-select: none;\n}\n.colorpickr .slider-xy .handle-xy:after {\n  content: '';\n  background-color: rgba(255,255,255,0.1);\n  border: 1px solid #000;\n  display: block;\n  border-radius: 50%;\n  position: relative;\n  width: 10px;\n  height: 10px;\n  top: -5px;\n  left: -5px;\n}\n.colorpickr .slider-xy .handle-xy.dark:after {\n  border-color: #fff;\n}\n.colorpickr .cp-gradient.cp-rgb {\n  background-image: url(\"data:image/png;base64,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\");\n}\n", ""]);
+	exports.push([module.id, ".colorpickr,\n.colorpickr *,\n.colorpickr *:after,\n.colorpickr *:before {\n  box-sizing: border-box;\n}\n.colorpickr {\n  width: 200px;\n  display: inline-block;\n  z-index: 1;\n  border-radius: 4px;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n      user-select: none;\n}\n.colorpickr,\n.colorpickr input[type='number'],\n.colorpickr input[type='text'] {\n  font-family: 'Helvetica Neue', Helvetica, sans-serif;\n  color: #404040;\n  font-size: 12px;\n  line-height: 1;\n  -webkit-font-smoothing: antialiased;\n  outline: 0;\n}\n/* Clearfix rule */\n.colorpickr .cp-floor:after,\n.colorpickr .cp-body:after {\n  content: '';\n  display: block;\n  height: 0;\n  clear: both;\n  visibility: hidden;\n}\n.colorpickr .cp-relative {\n  position: relative;\n}\n.colorpickr fieldset {\n  padding: 0;\n  border: 0;\n}\n.colorpickr fieldset input[type=radio] {\n  position: relative;\n  top: 3px;\n  cursor: pointer;\n}\n.colorpickr fieldset div:first-child {\n  display: none;\n  width: 25px;\n  height: 26px;\n}\n.colorpickr fieldset div:last-child {\n  width: 100%;\n  display: block;\n  position: relative;\n}\n/* Inputs */\n.colorpickr fieldset label {\n  position: absolute;\n  color: rgba(0,0,0,0.25);\n  font-weight: 600;\n  top: 7px;\n  left: 5px;\n}\n.colorpickr fieldset.cp-active label {\n  color: rgba(0,0,0,0.75);\n}\n.colorpickr fieldset input[type='number'],\n.colorpickr fieldset input[type='text'] {\n  width: 100%;\n  height: 26px;\n  margin: 0;\n  border: 0;\n  border-bottom: 1px dotted #ddd;\n  padding: 5px 5px 5px 20px;\n  -webkit-appearance: none;\n}\n.colorpickr input:invalid {\n  border-color: #e55e5e;\n}\n.colorpickr button {\n  background-color: rgba(0,0,0,0.25);\n  text-align: center;\n  color: #fff;\n  font-size: 11px;\n  line-height: 14px;\n  font-weight: bold;\n  display: inline-block;\n  height: auto;\n  padding: 5px 10px;\n  width: 50px;\n  margin: 0;\n  border: none;\n  cursor: pointer;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n/* The button element needs to be forced this */\n  -webkit-font-smoothing: antialiased;\n}\n.colorpickr button:not(.cp-active):hover {\n  box-shadow: inset 0 0 0 3px rgba(0,0,0,0.1);\n}\n.colorpickr button.cp-active {\n  background-color: rgba(0,0,0,0.75);\n}\n.colorpickr .cp-col {\n  position: relative;\n}\n.colorpickr .cp-col:first-child {\n  width: 200px;\n  padding-right: 0;\n}\n.colorpickr .cp-col:last-child {\n  width: 200px;\n  margin-top: 10px;\n  z-index: 1;\n}\n.colorpickr .cp-mode-tabs button {\n  width: 50%;\n}\n.colorpickr .cp-mode-tabs button:first-child {\n  border-radius: 3px 0 0 3px;\n}\n.colorpickr .cp-mode-tabs button:last-child {\n  border-radius: 0 3px 3px 0;\n}\n.colorpickr .cp-selector {\n  position: relative;\n  width: 190px;\n  height: 190px;\n  z-index: 1;\n}\n.colorpickr .cp-gradient {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n}\n.colorpickr .cp-light-left {\n  background: -webkit-linear-gradient(left, #fff 0%, transparent 100%);\n  background: linear-gradient(to right, #fff 0%, transparent 100%);\n}\n.colorpickr .cp-light-bottom {\n  background: -webkit-linear-gradient(top, transparent 0%, #fff 100%);\n  background: linear-gradient(to bottom, transparent 0%, #fff 100%);\n}\n.colorpickr .cp-dark-bottom {\n  background: -webkit-linear-gradient(top, transparent 0%, #000 100%);\n  background: linear-gradient(to bottom, transparent 0%, #000 100%);\n}\n/* r-ne = white\n * r-nw = yellow\n * r-sw = red\n * r-se = violet\n */\n.colorpickr .cp-gradient.cp-rgb {\n  background-repeat: no-repeat;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-r-high {\n  background-position: 0 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-r-low {\n  background-position: -190px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-g-high {\n  background-position: -380px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-g-low {\n  background-position: -570px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-b-high {\n  background-position: -760px 0;\n}\n.colorpickr .cp-gradient.cp-rgb.cp-b-low {\n  background-position: -950px 0;\n}\n.colorpickr input[type=range],\n.colorpickr input[type=range]::-webkit-slider-thumb {\n  -webkit-appearance: none;\n  margin: 0;\n  padding: 0;\n  border: 0;\n}\n.colorpickr input[type=range] {\n  display: block !important;\n  height: 10px;\n  width: 100%;\n  padding: 0 2px;\n  margin: 0;\n  min-width: 100px;\n  overflow: hidden;\n  cursor: pointer;\n}\n.colorpickr input[type=range]::-ms-fill-upper {\n  background: transparent;\n}\n.colorpickr input[type=range]::-ms-fill-lower {\n  background: rgba(255,255,255,0.25);\n}\n/* Vendor specific thingies */\n.colorpickr input[type=range]::-moz-range-track {\n  opacity: 0;\n}\n.colorpickr input[type=range]::-ms-track {\n  opacity: 0;\n}\n.colorpickr input[type=range]::-ms-tooltip {\n  display: none;\n}\n/* For whatever reason, these need to be defined\n * on their own so dont group them */\n.colorpickr input[type=range]::-webkit-slider-thumb {\n  background: rgba(255,255,255,0.75);\n  border: 1px solid rgba(0,0,0,0.75);\n  height: 10px;\n  width: 5px;\n  cursor: ew-resize;\n  box-shadow: none;\n}\n.colorpickr input[type=range]::-ms-thumb {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  background: rgba(255,255,255,0.75);\n  border: 1px solid rgba(0,0,0,0.75);\n  height: 10px;\n  width: 5px;\n  cursor: ew-resize;\n  box-shadow: none;\n}\n.colorpickr input[type=range]::-moz-range-thumb {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  background: rgba(255,255,255,0.75);\n  border: 1px solid rgba(0,0,0,0.75);\n  height: 10px;\n  width: 5px;\n  cursor: ew-resize;\n  box-shadow: none;\n}\n/* Hue slider */\n.colorpickr .cp-colormode-slider {\n  position: absolute;\n  top: 90px;\n  right: -90px;\n  z-index: 1;\n}\n.colorpickr .cp-colormode-slider input[type=range] {\n  margin: 0;\n  width: 190px;\n  -webkit-transform: rotate(-90deg);\n  transform: rotate(-90deg);\n}\n.colorpickr .cp-gradient.cp-s-high,\n.colorpickr .cp-gradient.cp-v-high,\n.colorpickr .cp-colormode-slider.h input[type=range] {\n  background: -webkit-linear-gradient(right, #f00 0%, #f09 10%, #cd00ff 20%, #3200ff 30%, #06f 40%, #00fffd 50%, #0f6 60%, #35ff00 70%, #cdff00 80%, #f90 90%, #f00 100%);\n  background: linear-gradient(to left, #f00 0%, #f09 10%, #cd00ff 20%, #3200ff 30%, #06f 40%, #00fffd 50%, #0f6 60%, #35ff00 70%, #cdff00 80%, #f90 90%, #f00 100%);\n}\n.colorpickr .cp-gradient.cp-s-low {\n  background: -webkit-linear-gradient(top, #fff 0%, #bbb 100%);\n  background: linear-gradient(to bottom, #fff 0%, #bbb 100%);\n}\n.colorpickr .cp-gradient.cp-v-low {\n  background-color: #000;\n}\n.colorpickr .cp-colormode-slider.r input[type=range] {\n  background: -webkit-linear-gradient(right, #f00 0%, #000 100%);\n  background: linear-gradient(to left, #f00 0%, #000 100%);\n}\n.colorpickr .cp-colormode-slider.g input[type=range] {\n  background: -webkit-linear-gradient(right, #0f0 0%, #000 100%);\n  background: linear-gradient(to left, #0f0 0%, #000 100%);\n}\n.colorpickr .cp-colormode-slider.b input[type=range] {\n  background: -webkit-linear-gradient(right, #00f 0%, #000 100%);\n  background: linear-gradient(to left, #00f 0%, #000 100%);\n}\n.colorpickr .cp-colormode-slider input[type=range]::-webkit-slider-thumb {\n  cursor: ns-resize;\n}\n.colorpickr .cp-colormode-slider input[type=range]::-ms-thumb {\n  cursor: ns-resize;\n}\n.colorpickr .cp-colormode-slider input[type=range]::-moz-range-thumb {\n  cursor: ns-resize;\n}\n.colorpickr .cp-fill-tile {\n  background-image: url(\"data:image/png;base64,R0lGODdhCgAKAPAAAOXl5f///ywAAAAACgAKAEACEIQdqXt9GxyETrI279OIgwIAOw==\");\n  background-repeat: repeat;\n}\n.colorpickr .cp-floor {\n  display: none;\n  padding: 5px 10px 0;\n  position: relative;\n  width: 100%;\n  clear: both;\n}\n.colorpickr .cp-swatch {\n  width: 36px;\n  height: 24px;\n}\n.colorpickr .cp-actions .cp-fill-tile:only-of-type > .cp-swatch {\n  border-radius: 3px;\n}\n.colorpickr .cp-actions .cp-fill-tile,\n.colorpickr .cp-actions .cp-swatch {\n  border-radius: 3px 0 0 3px;\n}\n.colorpickr .cp-actions .cp-fill-tile + .cp-fill-tile,\n.colorpickr .cp-actions .cp-fill-tile + .cp-fill-tile .cp-swatch {\n  border-radius: 0 3px 3px 0;\n}\n.colorpickr .cp-actions .cp-fill-tile + .cp-fill-tile {\n  margin-left: 1px;\n}\n.colorpickr .cp-actions:after,\n.colorpickr .cp-actions:before {\n  display: block;\n  color: rgba(0,0,0,0.4);\n  vertical-align: top;\n  line-height: 20px;\n  float: left;\n  margin-top: 3px;\n  padding: 0 5px;\n  content: 'Current';\n}\n.colorpickr .cp-actions:before {\n  content: 'New';\n}\n.colorpickr .cp-fl {\n  float: left;\n}\n.colorpickr .cp-fr {\n  float: right;\n}\n.colorpickr .cp-floor .cp-output {\n  display: none;\n  width: 100px;\n}\n.colorpickr .cp-output {\n  width: 50%;\n  margin: 0;\n}\n/* xy controler for background selection */\n.colorpickr .slider-xy {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  cursor: pointer;\n}\n.colorpickr .slider-xy.dragging-xy {\n  cursor: move;\n  cursor: -webkit-grabbing;\n  cursor: -moz-grabbing;\n}\n.colorpickr .slider-xy .handle-xy {\n  position: absolute;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n   -ms-user-select: none;\n       user-select: none;\n}\n.colorpickr .slider-xy .handle-xy:after {\n  content: '';\n  background-color: rgba(255,255,255,0.1);\n  border: 1px solid #000;\n  display: block;\n  border-radius: 50%;\n  position: relative;\n  width: 10px;\n  height: 10px;\n  top: -5px;\n  left: -5px;\n}\n.colorpickr .slider-xy .handle-xy.dark:after {\n  border-color: #fff;\n}\n.colorpickr .cp-gradient.cp-rgb {\n  background-image: url(\"data:image/png;base64,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\");\n}\n@media (min-width: 639px) {\n  .colorpickr {\n    width: auto;\n  }\n  .colorpickr .cp-col {\n    vertical-align: text-top;\n    display: inline-block;\n  }\n  .colorpickr .cp-col:last-child {\n    margin-left: 20px;\n    width: 200px;\n    z-index: 1;\n  }\n  .colorpickr fieldset {\n    padding: 0;\n    margin: 0 0 5px;\n    border: 0;\n  }\n  .colorpickr fieldset input[type='number'],\n  .colorpickr fieldset input[type='text'] {\n    box-shadow: 0 0 1px #808080 inset;\n    padding: 5px 5px 5px 20px;\n    border-radius: 3px;\n    border: 0;\n  }\n  .colorpickr .cp-mode-tabs {\n    margin: 0 0 10px;\n  }\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 620 */
+/* 621 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+
+	var _Slider = __webpack_require__(622);
+
+	var _Slider2 = _interopRequireDefault(_Slider);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _Slider2.default;
+
+/***/ },
+/* 622 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _simpleAssign = __webpack_require__(421);
+
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+
+	var _react = __webpack_require__(138);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _keycode = __webpack_require__(434);
+
+	var _keycode2 = _interopRequireDefault(_keycode);
+
+	var _transitions = __webpack_require__(428);
+
+	var _transitions2 = _interopRequireDefault(_transitions);
+
+	var _FocusRipple = __webpack_require__(435);
+
+	var _FocusRipple2 = _interopRequireDefault(_FocusRipple);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * Verifies min/max range.
+	 * @param   {Object} props         Properties of the React component.
+	 * @param   {String} propName      Name of the property to validate.
+	 * @param   {String} componentName Name of the component whose property is being validated.
+	 * @returns {Object} Returns an Error if min >= max otherwise null.
+	 */
+	var minMaxPropType = function minMaxPropType(props, propName, componentName) {
+	  var error = _react.PropTypes.number(props, propName, componentName);
+	  if (error !== null) return error;
+
+	  if (props.min >= props.max) {
+	    var errorMsg = propName === 'min' ? 'min should be less than max' : 'max should be greater than min';
+	    return new Error(errorMsg);
+	  }
+	};
+
+	/**
+	 * Verifies value is within the min/max range.
+	 * @param   {Object} props         Properties of the React component.
+	 * @param   {String} propName      Name of the property to validate.
+	 * @param   {String} componentName Name of the component whose property is being validated.
+	 * @returns {Object} Returns an Error if the value is not within the range otherwise null.
+	 */
+	var valueInRangePropType = function valueInRangePropType(props, propName, componentName) {
+	  var error = _react.PropTypes.number(props, propName, componentName);
+	  if (error !== null) return error;
+
+	  var value = props[propName];
+	  if (value < props.min || props.max < value) {
+	    return new Error(propName + ' should be within the range specified by min and max');
+	  }
+	};
+
+	var getStyles = function getStyles(props, context, state) {
+	  var slider = context.muiTheme.slider;
+
+	  var fillGutter = slider.handleSize / 2;
+	  var disabledGutter = slider.trackSize + slider.handleSizeDisabled / 2;
+	  var calcDisabledSpacing = props.disabled ? ' - ' + disabledGutter + 'px' : '';
+
+	  var styles = {
+	    slider: {
+	      touchCallout: 'none',
+	      userSelect: 'none',
+	      cursor: 'default',
+	      height: slider.handleSizeActive,
+	      position: 'relative',
+	      marginTop: 24,
+	      marginBottom: 48
+	    },
+	    track: {
+	      position: 'absolute',
+	      top: (slider.handleSizeActive - slider.trackSize) / 2,
+	      left: 0,
+	      width: '100%',
+	      height: slider.trackSize
+	    },
+	    filledAndRemaining: {
+	      position: 'absolute',
+	      top: 0,
+	      height: '100%',
+	      transition: _transitions2.default.easeOut(null, 'margin')
+	    },
+	    handle: {
+	      boxSizing: 'border-box',
+	      position: 'absolute',
+	      cursor: 'pointer',
+	      pointerEvents: 'inherit',
+	      top: 0,
+	      left: state.percent === 0 ? '0%' : state.percent * 100 + '%',
+	      zIndex: 1,
+	      margin: slider.trackSize / 2 + 'px 0 0 0',
+	      width: slider.handleSize,
+	      height: slider.handleSize,
+	      backgroundColor: slider.selectionColor,
+	      backgroundClip: 'padding-box',
+	      border: '0px solid transparent',
+	      borderRadius: '50%',
+	      transform: 'translate(-50%, -50%)',
+	      transition: _transitions2.default.easeOut('450ms', 'background') + ', ' + _transitions2.default.easeOut('450ms', 'border-color') + ', ' + _transitions2.default.easeOut('450ms', 'width') + ', ' + _transitions2.default.easeOut('450ms', 'height'),
+	      overflow: 'visible',
+	      outline: 'none'
+	    },
+	    handleWhenDisabled: {
+	      boxSizing: 'content-box',
+	      cursor: 'not-allowed',
+	      backgroundColor: slider.trackColor,
+	      width: slider.handleSizeDisabled,
+	      height: slider.handleSizeDisabled,
+	      border: 'none'
+	    },
+	    handleWhenPercentZero: {
+	      border: slider.trackSize + 'px solid ' + slider.handleColorZero,
+	      backgroundColor: slider.handleFillColor,
+	      boxShadow: 'none'
+	    },
+	    handleWhenPercentZeroAndDisabled: {
+	      cursor: 'not-allowed',
+	      width: slider.handleSizeDisabled,
+	      height: slider.handleSizeDisabled
+	    },
+	    handleWhenPercentZeroAndFocused: {
+	      border: slider.trackSize + 'px solid ' + slider.trackColorSelected
+	    },
+	    handleWhenActive: {
+	      width: slider.handleSizeActive,
+	      height: slider.handleSizeActive
+	    },
+	    ripple: {
+	      height: slider.handleSize,
+	      width: slider.handleSize,
+	      overflow: 'visible'
+	    },
+	    rippleWhenPercentZero: {
+	      top: -slider.trackSize,
+	      left: -slider.trackSize
+	    },
+	    rippleInner: {
+	      height: '300%',
+	      width: '300%',
+	      top: -slider.handleSize,
+	      left: -slider.handleSize
+	    },
+	    rippleColor: {
+	      fill: state.percent === 0 ? slider.handleColorZero : slider.rippleColor
+	    }
+	  };
+	  styles.filled = (0, _simpleAssign2.default)({}, styles.filledAndRemaining, {
+	    left: 0,
+	    backgroundColor: props.disabled ? slider.trackColor : slider.selectionColor,
+	    marginRight: fillGutter,
+	    width: 'calc(' + state.percent * 100 + '%' + calcDisabledSpacing + ')'
+	  });
+	  styles.remaining = (0, _simpleAssign2.default)({}, styles.filledAndRemaining, {
+	    right: 0,
+	    backgroundColor: (state.hovered || state.focused) && !props.disabled ? slider.trackColorSelected : slider.trackColor,
+	    marginLeft: fillGutter,
+	    width: 'calc(' + (1 - state.percent) * 100 + '%' + calcDisabledSpacing + ')'
+	  });
+
+	  return styles;
+	};
+
+	var Slider = function (_Component) {
+	  _inherits(Slider, _Component);
+
+	  function Slider() {
+	    var _Object$getPrototypeO;
+
+	    var _temp, _this, _ret;
+
+	    _classCallCheck(this, Slider);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Slider)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
+	      active: false,
+	      dragging: false,
+	      focused: false,
+	      hovered: false,
+	      percent: 0,
+	      value: 0
+	    }, _this.onHandleTouchStart = function (event) {
+	      if (document) {
+	        document.addEventListener('touchmove', _this.dragTouchHandler, false);
+	        document.addEventListener('touchup', _this.dragTouchEndHandler, false);
+	        document.addEventListener('touchend', _this.dragTouchEndHandler, false);
+	        document.addEventListener('touchcancel', _this.dragTouchEndHandler, false);
+	      }
+	      _this.onDragStart(event);
+
+	      // Cancel scroll and context menu
+	      event.preventDefault();
+	    }, _this.onHandleMouseDown = function (event) {
+	      if (document) {
+	        document.addEventListener('mousemove', _this.dragHandler, false);
+	        document.addEventListener('mouseup', _this.dragEndHandler, false);
+
+	        // Cancel text selection
+	        event.preventDefault();
+
+	        // Set focus manually since we called preventDefault()
+	        _this.refs.handle.focus();
+	      }
+	      _this.onDragStart(event);
+	    }, _this.onHandleKeyDown = function (event) {
+	      var _this$props = _this.props;
+	      var min = _this$props.min;
+	      var max = _this$props.max;
+	      var step = _this$props.step;
+
+	      var action = void 0;
+
+	      switch ((0, _keycode2.default)(event)) {
+	        case 'page down':
+	        case 'left':
+	        case 'down':
+	          action = 'decrease';
+	          break;
+	        case 'page up':
+	        case 'right':
+	        case 'up':
+	          action = 'increase';
+	          break;
+	        case 'home':
+	          action = 'home';
+	          break;
+	        case 'end':
+	          action = 'end';
+	          break;
+	      }
+
+	      if (action) {
+	        var newValue = void 0;
+	        var newPercent = void 0;
+
+	        // Cancel scroll
+	        event.preventDefault();
+
+	        // When pressing home or end the handle should be taken to the
+	        // beginning or end of the track respectively
+	        switch (action) {
+	          case 'decrease':
+	            newValue = Math.max(min, _this.state.value - step);
+	            newPercent = (newValue - min) / (max - min);
+	            break;
+	          case 'increase':
+	            newValue = Math.min(max, _this.state.value + step);
+	            newPercent = (newValue - min) / (max - min);
+	            break;
+	          case 'home':
+	            newValue = min;
+	            newPercent = 0;
+	            break;
+	          case 'end':
+	            newValue = max;
+	            newPercent = 1;
+	            break;
+	        }
+
+	        // We need to use toFixed() because of float point errors.
+	        // For example, 0.01 + 0.06 = 0.06999999999999999
+	        if (_this.state.value !== newValue) {
+	          _this.setState({
+	            percent: newPercent,
+	            value: parseFloat(newValue.toFixed(5))
+	          }, function () {
+	            if (_this.props.onChange) _this.props.onChange(event, _this.state.value);
+	          });
+	        }
+	      }
+	    }, _this.dragHandler = function (event) {
+	      if (_this.dragRunning) {
+	        return;
+	      }
+	      _this.dragRunning = true;
+	      requestAnimationFrame(function () {
+	        _this.onDragUpdate(event, event.clientX - _this.getTrackLeft());
+	        _this.dragRunning = false;
+	      });
+	    }, _this.dragTouchHandler = function (event) {
+	      if (_this.dragRunning) {
+	        return;
+	      }
+	      _this.dragRunning = true;
+	      requestAnimationFrame(function () {
+	        _this.onDragUpdate(event, event.touches[0].clientX - _this.getTrackLeft());
+	        _this.dragRunning = false;
+	      });
+	    }, _this.dragEndHandler = function (event) {
+	      if (document) {
+	        document.removeEventListener('mousemove', _this.dragHandler, false);
+	        document.removeEventListener('mouseup', _this.dragEndHandler, false);
+	      }
+
+	      _this.onDragStop(event);
+	    }, _this.dragTouchEndHandler = function (event) {
+	      if (document) {
+	        document.removeEventListener('touchmove', _this.dragTouchHandler, false);
+	        document.removeEventListener('touchup', _this.dragTouchEndHandler, false);
+	        document.removeEventListener('touchend', _this.dragTouchEndHandler, false);
+	        document.removeEventListener('touchcancel', _this.dragTouchEndHandler, false);
+	      }
+
+	      _this.onDragStop(event);
+	    }, _this.handleTouchStart = function (event) {
+	      if (!_this.props.disabled && !_this.state.dragging) {
+	        var pos = event.touches[0].clientX - _this.getTrackLeft();
+	        _this.dragX(event, pos);
+
+	        // Since the touch event fired for the track and handle is child of
+	        // track, we need to manually propagate the event to the handle.
+	        _this.onHandleTouchStart(event);
+	      }
+	    }, _this.handleFocus = function (event) {
+	      _this.setState({ focused: true });
+	      if (_this.props.onFocus) _this.props.onFocus(event);
+	    }, _this.handleBlur = function (event) {
+	      _this.setState({ focused: false, active: false });
+	      if (_this.props.onBlur) _this.props.onBlur(event);
+	    }, _this.handleMouseDown = function (event) {
+	      if (!_this.props.disabled && !_this.state.dragging) {
+	        var pos = event.clientX - _this.getTrackLeft();
+	        _this.dragX(event, pos);
+
+	        // Since the click event fired for the track and handle is child of
+	        // track, we need to manually propagate the event to the handle.
+	        _this.onHandleMouseDown(event);
+	      }
+	    }, _this.handleMouseUp = function () {
+	      if (!_this.props.disabled) _this.setState({ active: false });
+	    }, _this.handleMouseEnter = function () {
+	      _this.setState({ hovered: true });
+	    }, _this.handleMouseLeave = function () {
+	      _this.setState({ hovered: false });
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+
+	  _createClass(Slider, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      var value = this.props.value;
+	      if (value === undefined) {
+	        value = this.props.defaultValue !== undefined ? this.props.defaultValue : this.props.min;
+	      }
+	      var percent = (value - this.props.min) / (this.props.max - this.props.min);
+	      if (isNaN(percent)) percent = 0;
+
+	      this.setState({
+	        percent: percent,
+	        value: value
+	      });
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.value !== undefined && !this.state.dragging) {
+	        this.setValue(nextProps.value);
+	      }
+	    }
+	  }, {
+	    key: 'getValue',
+	    value: function getValue() {
+	      return this.state.value;
+	    }
+	  }, {
+	    key: 'setValue',
+	    value: function setValue(i) {
+	      // calculate percentage
+	      var percent = (i - this.props.min) / (this.props.max - this.props.min);
+	      if (isNaN(percent)) percent = 0;
+	      // update state
+	      this.setState({
+	        value: i,
+	        percent: percent
+	      });
+	    }
+	  }, {
+	    key: 'getPercent',
+	    value: function getPercent() {
+	      return this.state.percent;
+	    }
+	  }, {
+	    key: 'setPercent',
+	    value: function setPercent(percent, callback) {
+	      var value = this.alignValue(this.percentToValue(percent));
+	      var _props = this.props;
+	      var min = _props.min;
+	      var max = _props.max;
+
+	      var alignedPercent = (value - min) / (max - min);
+	      if (this.state.value !== value) {
+	        this.setState({ value: value, percent: alignedPercent }, callback);
+	      }
+	    }
+	  }, {
+	    key: 'clearValue',
+	    value: function clearValue() {
+	      this.setValue(this.props.min);
+	    }
+	  }, {
+	    key: 'alignValue',
+	    value: function alignValue(val) {
+	      var _props2 = this.props;
+	      var step = _props2.step;
+	      var min = _props2.min;
+
+	      var alignValue = Math.round((val - min) / step) * step + min;
+	      return parseFloat(alignValue.toFixed(5));
+	    }
+	  }, {
+	    key: 'getTrackLeft',
+	    value: function getTrackLeft() {
+	      return this.refs.track.getBoundingClientRect().left;
+	    }
+	  }, {
+	    key: 'onDragStart',
+	    value: function onDragStart(event) {
+	      this.setState({
+	        dragging: true,
+	        active: true
+	      });
+	      if (this.props.onDragStart) this.props.onDragStart(event);
+	    }
+	  }, {
+	    key: 'onDragStop',
+	    value: function onDragStop(event) {
+	      this.setState({
+	        dragging: false,
+	        active: false
+	      });
+	      if (this.props.onDragStop) this.props.onDragStop(event);
+	    }
+	  }, {
+	    key: 'onDragUpdate',
+	    value: function onDragUpdate(event, pos) {
+	      if (!this.state.dragging) return;
+	      if (!this.props.disabled) this.dragX(event, pos);
+	    }
+	  }, {
+	    key: 'dragX',
+	    value: function dragX(event, pos) {
+	      var max = this.refs.track.clientWidth;
+	      if (pos < 0) pos = 0;else if (pos > max) pos = max;
+	      this.updateWithChangeEvent(event, pos / max);
+	    }
+	  }, {
+	    key: 'updateWithChangeEvent',
+	    value: function updateWithChangeEvent(event, percent) {
+	      var _this2 = this;
+
+	      this.setPercent(percent, function () {
+	        if (_this2.props.onChange) _this2.props.onChange(event, _this2.state.value);
+	      });
+	    }
+	  }, {
+	    key: 'percentToValue',
+	    value: function percentToValue(percent) {
+	      return percent * (this.props.max - this.props.min) + this.props.min;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props3 = this.props;
+	      var description = _props3.description;
+	      var disabled = _props3.disabled;
+	      var disableFocusRipple = _props3.disableFocusRipple;
+	      var error = _props3.error;
+	      var max = _props3.max;
+	      var min = _props3.min;
+	      var name = _props3.name;
+	      var required = _props3.required;
+	      var step = _props3.step;
+	      var style = _props3.style;
+
+	      var others = _objectWithoutProperties(_props3, ['description', 'disabled', 'disableFocusRipple', 'error', 'max', 'min', 'name', 'required', 'step', 'style']);
+
+	      var prepareStyles = this.context.muiTheme.prepareStyles;
+
+	      var styles = getStyles(this.props, this.context, this.state);
+	      var sliderStyles = styles.slider;
+
+	      var handleStyles = {};
+	      var percent = this.state.percent;
+	      if (percent > 1) percent = 1;else if (percent < 0) percent = 0;
+
+	      if (percent === 0) {
+	        handleStyles = (0, _simpleAssign2.default)({}, styles.handle, styles.handleWhenPercentZero, this.state.active && styles.handleWhenActive, (this.state.hovered || this.state.focused) && !disabled && styles.handleWhenPercentZeroAndFocused, disabled && styles.handleWhenPercentZeroAndDisabled);
+	      } else {
+	        handleStyles = (0, _simpleAssign2.default)({}, styles.handle, this.state.active && styles.handleWhenActive, disabled && styles.handleWhenDisabled);
+	      }
+
+	      var rippleStyle = (0, _simpleAssign2.default)({}, styles.ripple, percent === 0 && styles.rippleWhenPercentZero);
+
+	      var rippleShowCondition = (this.state.hovered || this.state.focused) && !this.state.active;
+
+	      var focusRipple = void 0;
+	      if (!disabled && !disableFocusRipple) {
+	        focusRipple = _react2.default.createElement(_FocusRipple2.default, {
+	          ref: 'focusRipple',
+	          key: 'focusRipple',
+	          style: rippleStyle,
+	          innerStyle: styles.rippleInner,
+	          show: rippleShowCondition,
+	          muiTheme: this.context.muiTheme,
+	          color: styles.rippleColor.fill
+	        });
+	      }
+
+	      var handleDragProps = void 0;
+	      if (!disabled) {
+	        handleDragProps = {
+	          onTouchStart: this.onHandleTouchStart,
+	          onMouseDown: this.onHandleMouseDown,
+	          onKeyDown: this.onHandleKeyDown
+	        };
+	      }
+
+	      return _react2.default.createElement(
+	        'div',
+	        _extends({}, others, { style: prepareStyles((0, _simpleAssign2.default)({}, style)) }),
+	        _react2.default.createElement(
+	          'span',
+	          null,
+	          description
+	        ),
+	        _react2.default.createElement(
+	          'span',
+	          null,
+	          error
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          {
+	            style: prepareStyles(sliderStyles),
+	            onFocus: this.handleFocus,
+	            onBlur: this.handleBlur,
+	            onMouseDown: this.handleMouseDown,
+	            onMouseEnter: this.handleMouseEnter,
+	            onMouseLeave: this.handleMouseLeave,
+	            onMouseUp: this.handleMouseUp,
+	            onTouchStart: this.handleTouchStart
+	          },
+	          _react2.default.createElement(
+	            'div',
+	            { ref: 'track', style: prepareStyles(styles.track) },
+	            _react2.default.createElement('div', { style: prepareStyles(styles.filled) }),
+	            _react2.default.createElement('div', { style: prepareStyles(styles.remaining) }),
+	            _react2.default.createElement(
+	              'div',
+	              _extends({
+	                ref: 'handle',
+	                style: prepareStyles(handleStyles),
+	                tabIndex: 0
+	              }, handleDragProps),
+	              focusRipple
+	            )
+	          )
+	        ),
+	        _react2.default.createElement('input', {
+	          ref: 'input',
+	          type: 'hidden',
+	          name: name,
+	          value: this.state.value,
+	          required: required,
+	          min: min,
+	          max: max,
+	          step: step
+	        })
+	      );
+	    }
+	  }]);
+
+	  return Slider;
+	}(_react.Component);
+
+	Slider.propTypes = {
+	  /**
+	   * The default value of the slider.
+	   */
+	  defaultValue: valueInRangePropType,
+	  /**
+	   * Describe the slider.
+	   */
+	  description: _react.PropTypes.string,
+	  /**
+	   * Disables focus ripple if set to true.
+	   */
+	  disableFocusRipple: _react.PropTypes.bool,
+	  /**
+	   * If true, the slider will not be interactable.
+	   */
+	  disabled: _react.PropTypes.bool,
+	  /**
+	   * An error message for the slider.
+	   */
+	  error: _react.PropTypes.string,
+	  /**
+	   * The maximum value the slider can slide to on
+	   * a scale from 0 to 1 inclusive. Cannot be equal to min.
+	   */
+	  max: minMaxPropType,
+	  /**
+	   * The minimum value the slider can slide to on a scale
+	   * from 0 to 1 inclusive. Cannot be equal to max.
+	   */
+	  min: minMaxPropType,
+	  /**
+	   * The name of the slider. Behaves like the name attribute
+	   * of an input element.
+	   */
+	  name: _react.PropTypes.string,
+	  /**
+	   * Callback function that is fired when the focus has left the slider.
+	   */
+	  onBlur: _react.PropTypes.func,
+	  /**
+	   * Callback function that is fired when the user changes the slider's value.
+	   */
+	  onChange: _react.PropTypes.func,
+	  /**
+	   * Callback function that is fired when the slider has begun to move.
+	   */
+	  onDragStart: _react.PropTypes.func,
+	  /**
+	   * Callback function that is fried when the slide has stopped moving.
+	   */
+	  onDragStop: _react.PropTypes.func,
+	  /**
+	   * Callback fired when the user has focused on the slider.
+	   */
+	  onFocus: _react.PropTypes.func,
+	  /**
+	   * Whether or not the slider is required in a form.
+	   */
+	  required: _react.PropTypes.bool,
+	  /**
+	   * The granularity the slider can step through values.
+	   */
+	  step: _react.PropTypes.number,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object,
+	  /**
+	   * The value of the slider.
+	   */
+	  value: valueInRangePropType
+	};
+	Slider.defaultProps = {
+	  disabled: false,
+	  disableFocusRipple: false,
+	  max: 1,
+	  min: 0,
+	  required: true,
+	  step: 0.01,
+	  style: {}
+	};
+	Slider.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	exports.default = Slider;
+
+/***/ },
+/* 623 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59324,17 +60127,17 @@ webpackJsonp([0],[
 
 	var React = __webpack_require__(138);
 
-	var XYControl = __webpack_require__(621);
-	var ModeInput = __webpack_require__(623);
-	var RGBInput = __webpack_require__(624);
-	var HInput = __webpack_require__(626);
-	var SVAlphaInput = __webpack_require__(627);
-	var RGBGradient = __webpack_require__(628);
-	var HGradient = __webpack_require__(629);
-	var SVGradient = __webpack_require__(630);
-	var tinyColor = __webpack_require__(631);
+	var XYControl = __webpack_require__(624);
+	var ModeInput = __webpack_require__(626);
+	var RGBInput = __webpack_require__(627);
+	var HInput = __webpack_require__(629);
+	var SVAlphaInput = __webpack_require__(630);
+	var RGBGradient = __webpack_require__(631);
+	var HGradient = __webpack_require__(632);
+	var SVGradient = __webpack_require__(633);
+	var tinyColor = __webpack_require__(634);
 
-	var _require = __webpack_require__(632);
+	var _require = __webpack_require__(635);
 
 	var rgbaColor = _require.rgbaColor;
 	var rgb2hsv = _require.rgb2hsv;
@@ -59812,14 +60615,16 @@ webpackJsonp([0],[
 	});
 
 /***/ },
-/* 621 */
+/* 624 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(138);
 	var ReactDOM = __webpack_require__(246);
-	var clamp = __webpack_require__(622);
+	var clamp = __webpack_require__(625);
+
+	var isMobile = 'ontouchstart' in document;
 
 	var XYControl = React.createClass({
 	  displayName: 'XYControl',
@@ -59847,10 +60652,11 @@ webpackJsonp([0],[
 	  getOwnBoundingRect: function getOwnBoundingRect() {
 	    return ReactDOM.findDOMNode(this).getBoundingClientRect();
 	  },
-	  _onMouseDown: function _onMouseDown(e) {
+	  _dragStart: function _dragStart(e) {
+	    e.preventDefault();
 	    var rect = this.getOwnBoundingRect();
-	    var x = e.clientX,
-	        y = e.clientY;
+	    var x = isMobile ? e.changedTouches[0].clientX : e.clientX,
+	        y = isMobile ? e.changedTouches[0].clientY : e.clientY;
 
 	    var offset = {
 	      left: x - rect.left,
@@ -59865,13 +60671,14 @@ webpackJsonp([0],[
 	      offset: { x: x, y: y }
 	    });
 
-	    window.addEventListener('mousemove', this._drag);
-	    window.addEventListener('mouseup', this._dragEnd);
+	    window.addEventListener(isMobile ? 'touchmove' : 'mousemove', this._drag);
+	    window.addEventListener(isMobile ? 'touchend' : 'mouseup', this._dragEnd);
 	  },
 	  _drag: function _drag(e) {
+	    e.preventDefault();
 	    this.setState({ dragging: true });
-	    var posX = e.clientX + this.state.start.x - this.state.offset.x;
-	    var posY = e.clientY + this.state.start.y - this.state.offset.y;
+	    var posX = (isMobile ? e.changedTouches[0].clientX : e.clientX) + this.state.start.x - this.state.offset.x;
+	    var posY = (isMobile ? e.changedTouches[0].clientY : e.clientY) + this.state.start.y - this.state.offset.y;
 
 	    this.change({
 	      left: posX,
@@ -59880,14 +60687,15 @@ webpackJsonp([0],[
 	  },
 	  _dragEnd: function _dragEnd() {
 	    this.setState({ dragging: false });
-	    window.removeEventListener('mousemove', this._drag);
-	    window.removeEventListener('mouseup', this._dragEnd);
+	    window.removeEventListener(isMobile ? 'touchmove' : 'mousemove', this._drag);
+	    window.removeEventListener(isMobile ? 'touchend' : 'mouseup', this._dragEnd);
 	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      {
-	        onMouseDown: this._onMouseDown,
+	        onTouchStart: this._dragStart,
+	        onMouseDown: this._dragStart,
 	        className: 'slider-xy ' + (this.state.dragging ? 'dragging-xy' : '') },
 	      React.createElement('div', {
 	        className: 'handle-xy ' + this.props.handleClass,
@@ -59901,8 +60709,9 @@ webpackJsonp([0],[
 
 	module.exports = XYControl;
 
+
 /***/ },
-/* 622 */
+/* 625 */
 /***/ function(module, exports) {
 
 	module.exports = clamp
@@ -59915,7 +60724,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 623 */
+/* 626 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59948,7 +60757,7 @@ webpackJsonp([0],[
 	module.exports = ModeInput;
 
 /***/ },
-/* 624 */
+/* 627 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59956,7 +60765,7 @@ webpackJsonp([0],[
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(138);
-	var NumberInput = __webpack_require__(625);
+	var NumberInput = __webpack_require__(628);
 
 	function RGBInput(props) {
 	  return React.createElement(NumberInput, _extends({}, props, { min: 0, max: 255 }));
@@ -59971,7 +60780,7 @@ webpackJsonp([0],[
 	module.exports = RGBInput;
 
 /***/ },
-/* 625 */
+/* 628 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60015,7 +60824,7 @@ webpackJsonp([0],[
 	module.exports = NumberInput;
 
 /***/ },
-/* 626 */
+/* 629 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60023,7 +60832,7 @@ webpackJsonp([0],[
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(138);
-	var NumberInput = __webpack_require__(625);
+	var NumberInput = __webpack_require__(628);
 
 	function HInput(props) {
 	  return React.createElement(NumberInput, _extends({}, props, { min: 0, max: 359 }));
@@ -60038,7 +60847,7 @@ webpackJsonp([0],[
 	module.exports = HInput;
 
 /***/ },
-/* 627 */
+/* 630 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60046,7 +60855,7 @@ webpackJsonp([0],[
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	var React = __webpack_require__(138);
-	var NumberInput = __webpack_require__(625);
+	var NumberInput = __webpack_require__(628);
 
 	function SVAlphaInput(props) {
 	  return React.createElement(NumberInput, _extends({}, props, { min: 0, max: 100 }));
@@ -60061,7 +60870,7 @@ webpackJsonp([0],[
 	module.exports = SVAlphaInput;
 
 /***/ },
-/* 628 */
+/* 631 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60096,7 +60905,7 @@ webpackJsonp([0],[
 	module.exports = RGBGradient;
 
 /***/ },
-/* 629 */
+/* 632 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60127,7 +60936,7 @@ webpackJsonp([0],[
 	module.exports = HGradient;
 
 /***/ },
-/* 630 */
+/* 633 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60162,7 +60971,7 @@ webpackJsonp([0],[
 	module.exports = SVGradient;
 
 /***/ },
-/* 631 */
+/* 634 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;// TinyColor v1.3.0
@@ -61334,13 +62143,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 632 */
+/* 635 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var convert = __webpack_require__(633);
-	var tinyColor = __webpack_require__(631);
+	var convert = __webpack_require__(636);
+	var tinyColor = __webpack_require__(634);
 
 	var colorFunc = {
 	  isDark: function isDark(color) {
@@ -61506,7 +62315,7 @@ webpackJsonp([0],[
 	module.exports = colorFunc;
 
 /***/ },
-/* 633 */
+/* 636 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -61787,23 +62596,23 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 634 */
+/* 637 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var defaultClickRejectionStrategy = __webpack_require__(635);
+	var defaultClickRejectionStrategy = __webpack_require__(638);
 
 	module.exports = function injectTapEventPlugin (strategyOverrides) {
 	  strategyOverrides = strategyOverrides || {}
 	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
 
 	  __webpack_require__(92).injection.injectEventPluginsByName({
-	    "TapEventPlugin":       __webpack_require__(636)(shouldRejectClick)
+	    "TapEventPlugin":       __webpack_require__(639)(shouldRejectClick)
 	  });
 	};
 
 
 /***/ },
-/* 635 */
+/* 638 */
 /***/ function(module, exports) {
 
 	module.exports = function(lastTouchEvent, clickTimestamp) {
@@ -61814,7 +62623,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 636 */
+/* 639 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -61842,10 +62651,10 @@ webpackJsonp([0],[
 	var EventPluginUtils = __webpack_require__(94);
 	var EventPropagators = __webpack_require__(157);
 	var SyntheticUIEvent = __webpack_require__(171);
-	var TouchEventUtils = __webpack_require__(637);
+	var TouchEventUtils = __webpack_require__(640);
 	var ViewportMetrics = __webpack_require__(102);
 
-	var keyOf = __webpack_require__(638);
+	var keyOf = __webpack_require__(641);
 	var topLevelTypes = EventConstants.topLevelTypes;
 
 	var isStartish = EventPluginUtils.isStartish;
@@ -61991,7 +62800,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 637 */
+/* 640 */
 /***/ function(module, exports) {
 
 	/**
@@ -62039,7 +62848,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 638 */
+/* 641 */
 /***/ function(module, exports) {
 
 	/**
@@ -62079,7 +62888,7 @@ webpackJsonp([0],[
 	module.exports = keyOf;
 
 /***/ },
-/* 639 */
+/* 642 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;;(function () {

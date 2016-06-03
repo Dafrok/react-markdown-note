@@ -1,8 +1,9 @@
 import React from 'react'
 import AppBar from 'material-ui/AppBar'
 import IconButton from 'material-ui/IconButton'
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
+import ContentAdd from 'material-ui/svg-icons/content/add'
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu'
+import Search from './search.js'
 import {Actions} from '../../stores/nav.js'
 
 export default class MainHeader extends React.Component {
@@ -23,7 +24,7 @@ export default class MainHeader extends React.Component {
   render() {
     return (
         <AppBar
-          title='Markdown Note'
+          title={<Search filter={this.props.filter}/>}
           iconElementLeft={<IconButton onClick={this.toggleNav}><NavigationMenu /></IconButton>}
           iconElementRight={<IconButton onClick={this.newNote}><ContentAdd /></IconButton>}
           />

@@ -35,11 +35,11 @@ export default class ArticleList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      articles: []
+      articles: [],
+      originList: []
     }
   }
   delete = id => {
-    // console.log(id)
     connect.child('note').child(connect.getAuth().auth.uid).child(id).once('value', snapshot => {
         connect.child('recycle').child(connect.getAuth().auth.uid).push(snapshot.val())
         connect.child('note').child(connect.getAuth().auth.uid).child(id).remove()
@@ -54,7 +54,10 @@ export default class ArticleList extends React.Component {
         value.id = snap.key()
         list.unshift(value)
       })
-      this.setState({articles: list})
+      this.setState({
+        originList: list,
+        articles: list
+      })
     }, errorObject => {
       console.log("The read failed: " + errorObject.code);
     })
@@ -62,12 +65,21 @@ export default class ArticleList extends React.Component {
   componentDidMount = () => {
     this.getList()
   }
+  articlesFilter = (keyword) => {
+    const newList = []
+    this.state.originList.forEach(item => {
+      if (~item.note.indexOf(keyword) || ~item.title.indexOf(keyword)) {
+        newList.push(item)
+      }
+    })
+    this.setState({articles: newList})
+  }
   render () {
     return (
       <div>
       <Navigator />
       <StatusBar>
-        <Header />
+        <Header filter={this.articlesFilter}/>
       </StatusBar>
       <List>
         {

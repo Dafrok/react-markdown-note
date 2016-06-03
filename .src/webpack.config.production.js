@@ -37,6 +37,12 @@ module.exports = {
       title: 'React Markdown Notepad',
       template: './static/index.html',
       favicon: './static/icon.png'
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: false,
+      compress: {
+        warnings: false
+      }
     })
   ]
 }
